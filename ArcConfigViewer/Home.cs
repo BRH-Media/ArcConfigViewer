@@ -19,6 +19,7 @@ namespace ArcConfigViewer
     {
         public string CurrentFile { get; set; } = @"";
         public const string ExtractDir = @"config";
+        public DataTable OriginalData { get; set; } = null;
 
         public Home()
         {
@@ -248,6 +249,13 @@ namespace ArcConfigViewer
                     txtMain.Visible = true;
 
                     itmExport.Enabled = false;
+
+                    itmSearch.Enabled = true;
+                    CancelSearch();
+
+                    lnkCopy.Enabled = true;
+                    lnkCopy.Visible = true;
+                    CopyLabelPosition();
                 });
             }
             else
@@ -261,6 +269,13 @@ namespace ArcConfigViewer
                 txtMain.Visible = true;
 
                 itmExport.Enabled = false;
+
+                itmSearch.Enabled = true;
+                CancelSearch();
+
+                lnkCopy.Enabled = true;
+                lnkCopy.Visible = true;
+                CopyLabelPosition();
             }
         }
 
@@ -279,6 +294,12 @@ namespace ArcConfigViewer
                     dgvMain.DataSource = table;
 
                     itmExport.Enabled = true;
+
+                    itmSearch.Enabled = true;
+                    CancelSearch();
+
+                    lnkCopy.Enabled = false;
+                    lnkCopy.Visible = false;
                 });
             }
             else
@@ -292,7 +313,16 @@ namespace ArcConfigViewer
                 dgvMain.DataSource = table;
 
                 itmExport.Enabled = true;
+
+                itmSearch.Enabled = true;
+                CancelSearch();
+
+                lnkCopy.Enabled = false;
+                lnkCopy.Visible = false;
             }
+
+            //set global values
+            OriginalData = table;
         }
 
         private void SetClear()
@@ -310,6 +340,9 @@ namespace ArcConfigViewer
                     txtMain.Visible = true;
 
                     itmExport.Enabled = false;
+
+                    itmSearch.Enabled = false;
+                    CancelSearch();
                 });
             }
             else
@@ -323,6 +356,9 @@ namespace ArcConfigViewer
                 txtMain.Visible = true;
 
                 itmExport.Enabled = false;
+
+                itmSearch.Enabled = false;
+                CancelSearch();
             }
         }
 
@@ -339,6 +375,76 @@ namespace ArcConfigViewer
             var newY = (txtPos.Y + txtSze.Height) - lblSze.Height - offset;
 
             lnkCopy.Location = new Point(newX, newY);
+        }
+
+        private void CancelSearch()
+        {
+            if (dgvMain.Visible)
+            {
+                if (dgvMain.DataSource != null)
+                    dgvMain.DataSource = OriginalData;
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(txtMain.Text))
+                {
+                    txtMain.SelectionStart = 0;
+                    txtMain.SelectAll();
+                    txtMain.SelectionBackColor = SystemColors.Control;
+                }
+            }
+
+            itmSearch.Text = @"Search";
+        }
+
+        private void StartSearch()
+        {
+            if (dgvMain.Visible)
+            {
+                var cxt = Search.StartSearch(SearchMode.Grid, (DataTable)dgvMain.DataSource);
+                if (cxt.SearchSubmitted)
+                    DoGridSearch(cxt);
+            }
+            else
+            {
+                var cxt = Search.StartSearch(SearchMode.Text);
+                if (cxt.SearchSubmitted)
+                    DoTextSearch(cxt);
+            }
+
+            itmSearch.Text = @"Cancel Search";
+        }
+
+        private void DoTextSearch(SearchContext cxt)
+        {
+            var startIndex = 0;
+
+            while (startIndex < txtMain.TextLength)
+            {
+                var wordStartIndex = txtMain.Find(cxt.SearchTerm, startIndex, RichTextBoxFinds.None);
+                if (wordStartIndex > -1)
+                {
+                    txtMain.SelectionStart = wordStartIndex;
+                    txtMain.SelectionLength = cxt.SearchTerm.Length;
+                    txtMain.SelectionBackColor = Color.Yellow;
+                }
+                else
+                    break;
+
+                startIndex += wordStartIndex + cxt.SearchTerm.Length;
+            }
+        }
+
+        private void DoGridSearch(SearchContext cxt)
+        {
+            var query = $"`{cxt.SearchColumn}` LIKE '%{cxt.SearchTerm}%'";
+            var table = OriginalData.Copy();
+            var filteredTable = table.Select(query);
+
+            if (filteredTable.Length > 0)
+                dgvMain.DataSource = filteredTable.CopyToDataTable();
+            else
+                UiMessages.Error($"Nothing found for '{cxt.SearchTerm}'", @"No Results");
         }
 
         private void TxtMain_Resize(object sender, EventArgs e)
@@ -397,6 +503,14 @@ namespace ArcConfigViewer
                 var t = (DataTable)dgvMain.DataSource;
                 t.ExportThis(ExportFormat.Json);
             }
+        }
+
+        private void ItmSearch_Click(object sender, EventArgs e)
+        {
+            if (itmSearch.Text == @"Search")
+                StartSearch();
+            else
+                CancelSearch();
         }
     }
 }

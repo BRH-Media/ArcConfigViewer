@@ -35,6 +35,7 @@ namespace ArcConfigViewer
             this.menuMain = new System.Windows.Forms.MenuStrip();
             this.itmFile = new System.Windows.Forms.ToolStripMenuItem();
             this.itmFileOpenConfig = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmSearch = new System.Windows.Forms.ToolStripMenuItem();
             this.itmRefreshConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.itmExport = new System.Windows.Forms.ToolStripMenuItem();
             this.itmExportJson = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,6 +61,7 @@ namespace ArcConfigViewer
             // 
             this.menuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.itmFile,
+            this.itmSearch,
             this.itmRefreshConfig,
             this.itmExport});
             this.menuMain.Location = new System.Drawing.Point(0, 0);
@@ -83,6 +85,15 @@ namespace ArcConfigViewer
             this.itmFileOpenConfig.Size = new System.Drawing.Size(185, 22);
             this.itmFileOpenConfig.Text = "Open Config";
             this.itmFileOpenConfig.Click += new System.EventHandler(this.ItmFileOpenConfig_Click);
+            // 
+            // itmSearch
+            // 
+            this.itmSearch.Enabled = false;
+            this.itmSearch.Name = "itmSearch";
+            this.itmSearch.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
+            this.itmSearch.Size = new System.Drawing.Size(54, 20);
+            this.itmSearch.Text = "Search";
+            this.itmSearch.Click += new System.EventHandler(this.ItmSearch_Click);
             // 
             // itmRefreshConfig
             // 
@@ -285,6 +296,7 @@ namespace ArcConfigViewer
         private System.Windows.Forms.SaveFileDialog sfdExport;
         private System.Windows.Forms.LinkLabel lnkCopy;
         private System.Windows.Forms.ImageList imgMain;
+        private System.Windows.Forms.ToolStripMenuItem itmSearch;
     }
 }
 
