@@ -30,13 +30,15 @@
         {
             this.dgvMain = new System.Windows.Forms.DataGridView();
             this.menuMain = new System.Windows.Forms.MenuStrip();
-            this.itmAuthorise = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmFileOpenConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.itmRefreshConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.itmExport = new System.Windows.Forms.ToolStripMenuItem();
             this.itmExportJson = new System.Windows.Forms.ToolStripMenuItem();
             this.itmExportXml = new System.Windows.Forms.ToolStripMenuItem();
-            this.itmExportRaw = new System.Windows.Forms.ToolStripMenuItem();
             this.itmExportCsv = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmExportRaw = new System.Windows.Forms.ToolStripMenuItem();
+            this.ofdRouterConfiguration = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMain)).BeginInit();
             this.menuMain.SuspendLayout();
             this.SuspendLayout();
@@ -53,7 +55,7 @@
             // menuMain
             // 
             this.menuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.itmAuthorise,
+            this.itmFile,
             this.itmRefreshConfig,
             this.itmExport});
             this.menuMain.Location = new System.Drawing.Point(0, 0);
@@ -62,16 +64,27 @@
             this.menuMain.TabIndex = 1;
             this.menuMain.Text = "menuStrip1";
             // 
-            // itmAuthorise
+            // itmFile
             // 
-            this.itmAuthorise.Name = "itmAuthorise";
-            this.itmAuthorise.Size = new System.Drawing.Size(70, 20);
-            this.itmAuthorise.Text = "Authorise";
+            this.itmFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.itmFileOpenConfig});
+            this.itmFile.Name = "itmFile";
+            this.itmFile.Size = new System.Drawing.Size(37, 20);
+            this.itmFile.Text = "File";
+            // 
+            // itmFileOpenConfig
+            // 
+            this.itmFileOpenConfig.Name = "itmFileOpenConfig";
+            this.itmFileOpenConfig.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.itmFileOpenConfig.Size = new System.Drawing.Size(185, 22);
+            this.itmFileOpenConfig.Text = "Open Config";
+            this.itmFileOpenConfig.Click += new System.EventHandler(this.ItmFileOpenConfig_Click);
             // 
             // itmRefreshConfig
             // 
             this.itmRefreshConfig.Enabled = false;
             this.itmRefreshConfig.Name = "itmRefreshConfig";
+            this.itmRefreshConfig.ShortcutKeys = System.Windows.Forms.Keys.F5;
             this.itmRefreshConfig.Size = new System.Drawing.Size(97, 20);
             this.itmRefreshConfig.Text = "Refresh Config";
             // 
@@ -90,28 +103,32 @@
             // itmExportJson
             // 
             this.itmExportJson.Name = "itmExportJson";
-            this.itmExportJson.Size = new System.Drawing.Size(180, 22);
+            this.itmExportJson.Size = new System.Drawing.Size(102, 22);
             this.itmExportJson.Text = "JSON";
             // 
             // itmExportXml
             // 
             this.itmExportXml.Name = "itmExportXml";
-            this.itmExportXml.Size = new System.Drawing.Size(180, 22);
+            this.itmExportXml.Size = new System.Drawing.Size(102, 22);
             this.itmExportXml.Text = "XML";
-            // 
-            // itmExportRaw
-            // 
-            this.itmExportRaw.Name = "itmExportRaw";
-            this.itmExportRaw.Size = new System.Drawing.Size(180, 22);
-            this.itmExportRaw.Text = "Raw";
             // 
             // itmExportCsv
             // 
             this.itmExportCsv.Name = "itmExportCsv";
-            this.itmExportCsv.Size = new System.Drawing.Size(180, 22);
+            this.itmExportCsv.Size = new System.Drawing.Size(102, 22);
             this.itmExportCsv.Text = "CSV";
             // 
-            // Form1
+            // itmExportRaw
+            // 
+            this.itmExportRaw.Name = "itmExportRaw";
+            this.itmExportRaw.Size = new System.Drawing.Size(102, 22);
+            this.itmExportRaw.Text = "Raw";
+            // 
+            // ofdRouterConfiguration
+            // 
+            this.ofdRouterConfiguration.Filter = "LH1000 Config File|*.cfg";
+            // 
+            // Home
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -119,7 +136,7 @@
             this.Controls.Add(this.dgvMain);
             this.Controls.Add(this.menuMain);
             this.MainMenuStrip = this.menuMain;
-            this.Name = "Form1";
+            this.Name = "Home";
             this.Text = "LH1000 Configuration Viewer";
             ((System.ComponentModel.ISupportInitialize)(this.dgvMain)).EndInit();
             this.menuMain.ResumeLayout(false);
@@ -133,13 +150,15 @@
 
         private System.Windows.Forms.DataGridView dgvMain;
         private System.Windows.Forms.MenuStrip menuMain;
-        private System.Windows.Forms.ToolStripMenuItem itmAuthorise;
+        private System.Windows.Forms.ToolStripMenuItem itmFile;
         private System.Windows.Forms.ToolStripMenuItem itmRefreshConfig;
         private System.Windows.Forms.ToolStripMenuItem itmExport;
         private System.Windows.Forms.ToolStripMenuItem itmExportJson;
         private System.Windows.Forms.ToolStripMenuItem itmExportXml;
         private System.Windows.Forms.ToolStripMenuItem itmExportCsv;
         private System.Windows.Forms.ToolStripMenuItem itmExportRaw;
+        private System.Windows.Forms.ToolStripMenuItem itmFileOpenConfig;
+        private System.Windows.Forms.OpenFileDialog ofdRouterConfiguration;
     }
 }
 
