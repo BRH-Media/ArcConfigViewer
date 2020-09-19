@@ -5,16 +5,32 @@ VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcConfigViewer", "ArcConfigViewer\ArcConfigViewer.csproj", "{4743A6E2-A4D9-40B6-82A7-C2DDD5B2D16D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaitWindow", "WaitWindow\WaitWindow.csproj", "{9DA0E57E-16C2-4F74-9669-24FF0CDDC268}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{4743A6E2-A4D9-40B6-82A7-C2DDD5B2D16D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4743A6E2-A4D9-40B6-82A7-C2DDD5B2D16D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4743A6E2-A4D9-40B6-82A7-C2DDD5B2D16D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4743A6E2-A4D9-40B6-82A7-C2DDD5B2D16D}.Debug|x86.Build.0 = Debug|Any CPU
 		{4743A6E2-A4D9-40B6-82A7-C2DDD5B2D16D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4743A6E2-A4D9-40B6-82A7-C2DDD5B2D16D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4743A6E2-A4D9-40B6-82A7-C2DDD5B2D16D}.Release|x86.ActiveCfg = Release|Any CPU
+		{4743A6E2-A4D9-40B6-82A7-C2DDD5B2D16D}.Release|x86.Build.0 = Release|Any CPU
+		{9DA0E57E-16C2-4F74-9669-24FF0CDDC268}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{9DA0E57E-16C2-4F74-9669-24FF0CDDC268}.Debug|Any CPU.Build.0 = Debug|x86
+		{9DA0E57E-16C2-4F74-9669-24FF0CDDC268}.Debug|x86.ActiveCfg = Debug|x86
+		{9DA0E57E-16C2-4F74-9669-24FF0CDDC268}.Debug|x86.Build.0 = Debug|x86
+		{9DA0E57E-16C2-4F74-9669-24FF0CDDC268}.Release|Any CPU.ActiveCfg = Release|x86
+		{9DA0E57E-16C2-4F74-9669-24FF0CDDC268}.Release|Any CPU.Build.0 = Release|x86
+		{9DA0E57E-16C2-4F74-9669-24FF0CDDC268}.Release|x86.ActiveCfg = Release|x86
+		{9DA0E57E-16C2-4F74-9669-24FF0CDDC268}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

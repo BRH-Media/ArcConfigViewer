@@ -1,4 +1,6 @@
-﻿namespace ArcConfigViewer
+﻿using System;
+
+namespace ArcConfigViewer
 {
     partial class Home
     {
@@ -28,7 +30,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.dgvMain = new System.Windows.Forms.DataGridView();
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Home));
             this.menuMain = new System.Windows.Forms.MenuStrip();
             this.itmFile = new System.Windows.Forms.ToolStripMenuItem();
             this.itmFileOpenConfig = new System.Windows.Forms.ToolStripMenuItem();
@@ -37,20 +40,21 @@
             this.itmExportJson = new System.Windows.Forms.ToolStripMenuItem();
             this.itmExportXml = new System.Windows.Forms.ToolStripMenuItem();
             this.itmExportCsv = new System.Windows.Forms.ToolStripMenuItem();
-            this.itmExportRaw = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmExportCfg = new System.Windows.Forms.ToolStripMenuItem();
             this.ofdRouterConfiguration = new System.Windows.Forms.OpenFileDialog();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMain)).BeginInit();
+            this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
+            this.trvMain = new System.Windows.Forms.TreeView();
+            this.imgMain = new System.Windows.Forms.ImageList(this.components);
+            this.pnlMain = new System.Windows.Forms.Panel();
+            this.lnkCopy = new System.Windows.Forms.LinkLabel();
+            this.txtMain = new System.Windows.Forms.RichTextBox();
+            this.dgvMain = new System.Windows.Forms.DataGridView();
+            this.sfdExport = new System.Windows.Forms.SaveFileDialog();
             this.menuMain.SuspendLayout();
+            this.tlpMain.SuspendLayout();
+            this.pnlMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvMain)).BeginInit();
             this.SuspendLayout();
-            // 
-            // dgvMain
-            // 
-            this.dgvMain.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvMain.Location = new System.Drawing.Point(0, 24);
-            this.dgvMain.Name = "dgvMain";
-            this.dgvMain.Size = new System.Drawing.Size(800, 426);
-            this.dgvMain.TabIndex = 0;
             // 
             // menuMain
             // 
@@ -85,8 +89,9 @@
             this.itmRefreshConfig.Enabled = false;
             this.itmRefreshConfig.Name = "itmRefreshConfig";
             this.itmRefreshConfig.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.itmRefreshConfig.Size = new System.Drawing.Size(97, 20);
-            this.itmRefreshConfig.Text = "Refresh Config";
+            this.itmRefreshConfig.Size = new System.Drawing.Size(94, 20);
+            this.itmRefreshConfig.Text = "Reload Config";
+            this.itmRefreshConfig.Click += new System.EventHandler(this.ItmRefreshConfig_Click);
             // 
             // itmExport
             // 
@@ -94,7 +99,7 @@
             this.itmExportJson,
             this.itmExportXml,
             this.itmExportCsv,
-            this.itmExportRaw});
+            this.itmExportCfg});
             this.itmExport.Enabled = false;
             this.itmExport.Name = "itmExport";
             this.itmExport.Size = new System.Drawing.Size(53, 20);
@@ -105,50 +110,163 @@
             this.itmExportJson.Name = "itmExportJson";
             this.itmExportJson.Size = new System.Drawing.Size(102, 22);
             this.itmExportJson.Text = "JSON";
+            this.itmExportJson.Click += new System.EventHandler(this.ItmExportJson_Click);
             // 
             // itmExportXml
             // 
             this.itmExportXml.Name = "itmExportXml";
             this.itmExportXml.Size = new System.Drawing.Size(102, 22);
             this.itmExportXml.Text = "XML";
+            this.itmExportXml.Click += new System.EventHandler(this.ItmExportXml_Click);
             // 
             // itmExportCsv
             // 
             this.itmExportCsv.Name = "itmExportCsv";
             this.itmExportCsv.Size = new System.Drawing.Size(102, 22);
             this.itmExportCsv.Text = "CSV";
+            this.itmExportCsv.Click += new System.EventHandler(this.ItmExportCsv_Click);
             // 
-            // itmExportRaw
+            // itmExportCfg
             // 
-            this.itmExportRaw.Name = "itmExportRaw";
-            this.itmExportRaw.Size = new System.Drawing.Size(102, 22);
-            this.itmExportRaw.Text = "Raw";
+            this.itmExportCfg.Name = "itmExportCfg";
+            this.itmExportCfg.Size = new System.Drawing.Size(102, 22);
+            this.itmExportCfg.Text = "CFG";
+            this.itmExportCfg.Click += new System.EventHandler(this.ItmExportCfg_Click);
             // 
             // ofdRouterConfiguration
             // 
             this.ofdRouterConfiguration.Filter = "LH1000 Config File|*.cfg";
+            // 
+            // tlpMain
+            // 
+            this.tlpMain.ColumnCount = 3;
+            this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpMain.Controls.Add(this.trvMain, 0, 0);
+            this.tlpMain.Controls.Add(this.pnlMain, 1, 0);
+            this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpMain.Location = new System.Drawing.Point(0, 24);
+            this.tlpMain.Name = "tlpMain";
+            this.tlpMain.RowCount = 2;
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpMain.Size = new System.Drawing.Size(800, 426);
+            this.tlpMain.TabIndex = 2;
+            // 
+            // trvMain
+            // 
+            this.trvMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trvMain.ImageIndex = 0;
+            this.trvMain.ImageList = this.imgMain;
+            this.trvMain.Location = new System.Drawing.Point(3, 3);
+            this.trvMain.Name = "trvMain";
+            this.tlpMain.SetRowSpan(this.trvMain, 2);
+            this.trvMain.SelectedImageIndex = 0;
+            this.trvMain.Size = new System.Drawing.Size(203, 420);
+            this.trvMain.TabIndex = 0;
+            this.trvMain.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TrvMain_AfterSelect);
+            // 
+            // imgMain
+            // 
+            this.imgMain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgMain.ImageStream")));
+            this.imgMain.TransparentColor = System.Drawing.Color.Transparent;
+            this.imgMain.Images.SetKeyName(0, "File");
+            this.imgMain.Images.SetKeyName(1, "Folder");
+            this.imgMain.Images.SetKeyName(2, "Config");
+            this.imgMain.Images.SetKeyName(3, "Database");
+            this.imgMain.Images.SetKeyName(4, "Metadata");
+            this.imgMain.Images.SetKeyName(5, "Keyfile");
+            this.imgMain.Images.SetKeyName(6, "Certificate");
+            this.imgMain.Images.SetKeyName(7, "Executable");
+            this.imgMain.Images.SetKeyName(8, "Script");
+            // 
+            // pnlMain
+            // 
+            this.tlpMain.SetColumnSpan(this.pnlMain, 2);
+            this.pnlMain.Controls.Add(this.lnkCopy);
+            this.pnlMain.Controls.Add(this.txtMain);
+            this.pnlMain.Controls.Add(this.dgvMain);
+            this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlMain.Location = new System.Drawing.Point(212, 3);
+            this.pnlMain.Name = "pnlMain";
+            this.tlpMain.SetRowSpan(this.pnlMain, 2);
+            this.pnlMain.Size = new System.Drawing.Size(585, 420);
+            this.pnlMain.TabIndex = 1;
+            // 
+            // lnkCopy
+            // 
+            this.lnkCopy.AutoSize = true;
+            this.lnkCopy.LinkColor = System.Drawing.Color.Blue;
+            this.lnkCopy.Location = new System.Drawing.Point(545, 401);
+            this.lnkCopy.Name = "lnkCopy";
+            this.lnkCopy.Size = new System.Drawing.Size(31, 13);
+            this.lnkCopy.TabIndex = 5;
+            this.lnkCopy.TabStop = true;
+            this.lnkCopy.Text = "Copy";
+            this.lnkCopy.VisitedLinkColor = System.Drawing.Color.Blue;
+            this.lnkCopy.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LnkCopy_LinkClicked);
+            // 
+            // txtMain
+            // 
+            this.txtMain.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtMain.Location = new System.Drawing.Point(0, 0);
+            this.txtMain.Name = "txtMain";
+            this.txtMain.ReadOnly = true;
+            this.txtMain.Size = new System.Drawing.Size(585, 420);
+            this.txtMain.TabIndex = 3;
+            this.txtMain.Text = "";
+            this.txtMain.Resize += new System.EventHandler(this.TxtMain_Resize);
+            // 
+            // dgvMain
+            // 
+            this.dgvMain.AllowUserToAddRows = false;
+            this.dgvMain.AllowUserToDeleteRows = false;
+            this.dgvMain.AllowUserToResizeRows = false;
+            this.dgvMain.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvMain.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvMain.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dgvMain.Location = new System.Drawing.Point(0, 0);
+            this.dgvMain.Name = "dgvMain";
+            this.dgvMain.ReadOnly = true;
+            this.dgvMain.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvMain.ShowCellErrors = false;
+            this.dgvMain.ShowCellToolTips = false;
+            this.dgvMain.ShowEditingIcon = false;
+            this.dgvMain.ShowRowErrors = false;
+            this.dgvMain.Size = new System.Drawing.Size(585, 420);
+            this.dgvMain.TabIndex = 4;
+            // 
+            // sfdExport
+            // 
+            this.sfdExport.Title = "Export Configuration";
             // 
             // Home
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.dgvMain);
+            this.Controls.Add(this.tlpMain);
             this.Controls.Add(this.menuMain);
             this.MainMenuStrip = this.menuMain;
             this.Name = "Home";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "LH1000 Configuration Viewer";
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMain)).EndInit();
+            this.Load += new System.EventHandler(this.Home_Load);
             this.menuMain.ResumeLayout(false);
             this.menuMain.PerformLayout();
+            this.tlpMain.ResumeLayout(false);
+            this.pnlMain.ResumeLayout(false);
+            this.pnlMain.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvMain)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.DataGridView dgvMain;
         private System.Windows.Forms.MenuStrip menuMain;
         private System.Windows.Forms.ToolStripMenuItem itmFile;
         private System.Windows.Forms.ToolStripMenuItem itmRefreshConfig;
@@ -156,9 +274,17 @@
         private System.Windows.Forms.ToolStripMenuItem itmExportJson;
         private System.Windows.Forms.ToolStripMenuItem itmExportXml;
         private System.Windows.Forms.ToolStripMenuItem itmExportCsv;
-        private System.Windows.Forms.ToolStripMenuItem itmExportRaw;
+        private System.Windows.Forms.ToolStripMenuItem itmExportCfg;
         private System.Windows.Forms.ToolStripMenuItem itmFileOpenConfig;
         private System.Windows.Forms.OpenFileDialog ofdRouterConfiguration;
+        private System.Windows.Forms.TableLayoutPanel tlpMain;
+        private System.Windows.Forms.TreeView trvMain;
+        private System.Windows.Forms.Panel pnlMain;
+        private System.Windows.Forms.RichTextBox txtMain;
+        private System.Windows.Forms.DataGridView dgvMain;
+        private System.Windows.Forms.SaveFileDialog sfdExport;
+        private System.Windows.Forms.LinkLabel lnkCopy;
+        private System.Windows.Forms.ImageList imgMain;
     }
 }
 

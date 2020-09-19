@@ -11,6 +11,9 @@ namespace ArcConfigViewer
         [STAThread]
         private static void Main()
         {
+            //handle missing assemblies
+            AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolve.HandleResolve;
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Home());
