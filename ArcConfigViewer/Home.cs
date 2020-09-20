@@ -203,6 +203,33 @@ namespace ArcConfigViewer
             return null;
         }
 
+        private void DoubleClickProcessor(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                var senderType = sender.GetType();
+                var gridType = typeof(DataGridView);
+                if (senderType == gridType)
+                {
+                    var gridView = (DataGridView)sender;
+
+                    if (gridView.Rows.Count <= 0) return;
+
+                    var value = gridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+
+                    if (!string.IsNullOrWhiteSpace(value))
+                    {
+                        Clipboard.SetText(value);
+                        //UiMessages.Info(value, @"Cell Content");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                UiMessages.Error(ex.ToString());
+            }
+        }
+
         private static byte[] DecryptDecompress(string filePath)
         {
             return DecompressBytes(LoadFileAndDecrypt(filePath));
@@ -418,12 +445,15 @@ namespace ArcConfigViewer
         private void DoTextSearch(SearchContext cxt)
         {
             var startIndex = 0;
+            var foundMatch = false;
 
             while (startIndex < txtMain.TextLength)
             {
                 var wordStartIndex = txtMain.Find(cxt.SearchTerm, startIndex, RichTextBoxFinds.None);
                 if (wordStartIndex > -1)
                 {
+                    foundMatch = true;
+
                     txtMain.SelectionStart = wordStartIndex;
                     txtMain.SelectionLength = cxt.SearchTerm.Length;
                     txtMain.SelectionBackColor = Color.Yellow;
@@ -432,6 +462,12 @@ namespace ArcConfigViewer
                     break;
 
                 startIndex += wordStartIndex + cxt.SearchTerm.Length;
+            }
+
+            if (!foundMatch)
+            {
+                UiMessages.Error($"Nothing found for '{cxt.SearchTerm}'", @"No Results");
+                CancelSearch();
             }
         }
 
@@ -444,7 +480,10 @@ namespace ArcConfigViewer
             if (filteredTable.Length > 0)
                 dgvMain.DataSource = filteredTable.CopyToDataTable();
             else
+            {
                 UiMessages.Error($"Nothing found for '{cxt.SearchTerm}'", @"No Results");
+                CancelSearch();
+            }
         }
 
         private void TxtMain_Resize(object sender, EventArgs e)

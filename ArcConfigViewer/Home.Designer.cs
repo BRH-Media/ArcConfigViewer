@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 
 namespace ArcConfigViewer
 {
@@ -249,6 +250,7 @@ namespace ArcConfigViewer
             this.dgvMain.ShowRowErrors = false;
             this.dgvMain.Size = new System.Drawing.Size(585, 420);
             this.dgvMain.TabIndex = 4;
+            this.dgvMain.CellDoubleClick += new DataGridViewCellEventHandler(this.DoubleClickProcessor);
             // 
             // sfdExport
             // 
