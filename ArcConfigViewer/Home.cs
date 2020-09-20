@@ -50,6 +50,17 @@ namespace ArcConfigViewer
             }
         }
 
+        private void TrvMain_AfterSelect(TreeNode n)
+        {
+            var eventArgs = new TreeViewEventArgs(n);
+            TrvMain_AfterSelect(eventArgs);
+        }
+
+        private void TrvMain_AfterSelect(TreeViewEventArgs e)
+        {
+            TrvMain_AfterSelect(null, e);
+        }
+
         private void TrvMain_AfterSelect(object sender, TreeViewEventArgs e)
         {
             if (File.Exists(e.Node.Name))
@@ -128,9 +139,23 @@ namespace ArcConfigViewer
                         trvMain.Nodes.Clear();
                         TreeBuilder.BuildTree(new DirectoryInfo(directory), trvMain.Nodes);
 
+                        //do node transform if any exist
                         if (trvMain.Nodes.Count > 0)
+                        {
+                            //reference root node
+                            var root = trvMain.Nodes[0];
+
                             //expand root node
-                            trvMain.Nodes[0].Expand();
+                            root.Expand();
+
+                            //select first sub node if there are any
+                            if (root.Nodes.Count > 0)
+                            {
+                                var firstSubNode = root.Nodes[0];
+                                trvMain.SelectedNode = firstSubNode;
+                                TrvMain_AfterSelect(firstSubNode);
+                            }
+                        }
                     });
                 }
                 else
@@ -139,9 +164,23 @@ namespace ArcConfigViewer
                     trvMain.Nodes.Clear();
                     TreeBuilder.BuildTree(new DirectoryInfo(directory), trvMain.Nodes);
 
+                    //do node transform if any exist
                     if (trvMain.Nodes.Count > 0)
+                    {
+                        //reference root node
+                        var root = trvMain.Nodes[0];
+
                         //expand root node
-                        trvMain.Nodes[0].Expand();
+                        root.Expand();
+
+                        //select first sub node if there are any
+                        if (root.Nodes.Count > 0)
+                        {
+                            var firstSubNode = root.Nodes[0];
+                            trvMain.SelectedNode = firstSubNode;
+                            TrvMain_AfterSelect(firstSubNode);
+                        }
+                    }
                 }
             }
         }
