@@ -19,7 +19,7 @@ namespace ArcConfigViewer
     {
         public string CurrentFile { get; set; } = @"";
         public const string ExtractDir = @"config";
-        public DataTable OriginalData { get; set; } = null;
+        public DataTable OriginalData { get; set; }
 
         public Home()
         {
@@ -465,6 +465,8 @@ namespace ArcConfigViewer
 
         private void StartSearch()
         {
+            itmSearch.Text = @"Cancel Search";
+
             if (dgvMain.Visible)
             {
                 var cxt = Search.StartSearch(SearchMode.Grid, (DataTable)dgvMain.DataSource);
@@ -477,8 +479,6 @@ namespace ArcConfigViewer
                 if (cxt.SearchSubmitted)
                     DoTextSearch(cxt);
             }
-
-            itmSearch.Text = @"Cancel Search";
         }
 
         private void DoTextSearch(SearchContext cxt)
