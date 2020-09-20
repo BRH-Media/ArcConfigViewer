@@ -250,7 +250,7 @@ namespace ArcConfigViewer
             this.dgvMain.ShowRowErrors = false;
             this.dgvMain.Size = new System.Drawing.Size(585, 420);
             this.dgvMain.TabIndex = 4;
-            this.dgvMain.CellDoubleClick += new DataGridViewCellEventHandler(this.DoubleClickProcessor);
+            this.dgvMain.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DoubleClickProcessor);
             // 
             // sfdExport
             // 
@@ -263,6 +263,7 @@ namespace ArcConfigViewer
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.tlpMain);
             this.Controls.Add(this.menuMain);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuMain;
             this.Name = "Home";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
