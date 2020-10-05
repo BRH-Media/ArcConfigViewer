@@ -82,6 +82,12 @@
       <DependentUpon>Home.cs</DependentUpon>
     </Compile>
     <Compile Include="OpenSslAes.cs" />
+    <Compile Include="PhoneLog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PhoneLog.Designer.cs">
+      <DependentUpon>PhoneLog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Search.cs">
@@ -99,8 +105,12 @@
     </Compile>
     <Compile Include="TreeBuilder.cs" />
     <Compile Include="UIMessages.cs" />
+    <Compile Include="ZipTreeBuilder.cs" />
     <EmbeddedResource Include="Home.resx">
       <DependentUpon>Home.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PhoneLog.resx">
+      <DependentUpon>PhoneLog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -132,6 +142,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ArcAuthentication\ArcAuthentication.csproj">
+      <Project>{d3f856bc-88d6-4b29-8601-45e57ecd75aa}</Project>
+      <Name>ArcAuthentication</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WaitWindow\WaitWindow.csproj">
       <Project>{9da0e57e-16c2-4f74-9669-24ff0cddc268}</Project>
       <Name>WaitWindow</Name>

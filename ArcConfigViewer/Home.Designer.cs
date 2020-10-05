@@ -36,6 +36,8 @@ namespace ArcConfigViewer
             this.menuMain = new System.Windows.Forms.MenuStrip();
             this.itmFile = new System.Windows.Forms.ToolStripMenuItem();
             this.itmFileOpenConfig = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmNetwork = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmConnectedDevicesList = new System.Windows.Forms.ToolStripMenuItem();
             this.itmSearch = new System.Windows.Forms.ToolStripMenuItem();
             this.itmRefreshConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.itmExport = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,6 +54,7 @@ namespace ArcConfigViewer
             this.txtMain = new System.Windows.Forms.RichTextBox();
             this.dgvMain = new System.Windows.Forms.DataGridView();
             this.sfdExport = new System.Windows.Forms.SaveFileDialog();
+            this.itmFetchFromModem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMain.SuspendLayout();
             this.tlpMain.SuspendLayout();
             this.pnlMain.SuspendLayout();
@@ -62,6 +65,7 @@ namespace ArcConfigViewer
             // 
             this.menuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.itmFile,
+            this.itmNetwork,
             this.itmSearch,
             this.itmRefreshConfig,
             this.itmExport});
@@ -86,6 +90,22 @@ namespace ArcConfigViewer
             this.itmFileOpenConfig.Size = new System.Drawing.Size(185, 22);
             this.itmFileOpenConfig.Text = "Open Config";
             this.itmFileOpenConfig.Click += new System.EventHandler(this.ItmFileOpenConfig_Click);
+            // 
+            // itmNetwork
+            // 
+            this.itmNetwork.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.itmConnectedDevicesList,
+            this.itmFetchFromModem});
+            this.itmNetwork.Name = "itmNetwork";
+            this.itmNetwork.Size = new System.Drawing.Size(64, 20);
+            this.itmNetwork.Text = "Network";
+            // 
+            // itmConnectedDevicesList
+            // 
+            this.itmConnectedDevicesList.Name = "itmConnectedDevicesList";
+            this.itmConnectedDevicesList.Size = new System.Drawing.Size(224, 22);
+            this.itmConnectedDevicesList.Text = "Grab Connected Devices List";
+            this.itmConnectedDevicesList.Click += new System.EventHandler(this.ItmConnectedDevicesList_Click);
             // 
             // itmSearch
             // 
@@ -256,6 +276,13 @@ namespace ArcConfigViewer
             // 
             this.sfdExport.Title = "Export Configuration";
             // 
+            // itmFetchFromModem
+            // 
+            this.itmFetchFromModem.Name = "itmFetchFromModem";
+            this.itmFetchFromModem.Size = new System.Drawing.Size(224, 22);
+            this.itmFetchFromModem.Text = "Fetch Config From Modem";
+            this.itmFetchFromModem.Click += new System.EventHandler(this.ItmFetchFromModem_Click);
+            // 
             // Home
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -300,6 +327,9 @@ namespace ArcConfigViewer
         private System.Windows.Forms.LinkLabel lnkCopy;
         private System.Windows.Forms.ImageList imgMain;
         private System.Windows.Forms.ToolStripMenuItem itmSearch;
+        private ToolStripMenuItem itmNetwork;
+        private ToolStripMenuItem itmConnectedDevicesList;
+        private ToolStripMenuItem itmFetchFromModem;
     }
 }
 

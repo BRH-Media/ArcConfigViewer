@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcConfigViewer", "ArcConfi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaitWindow", "WaitWindow\WaitWindow.csproj", "{9DA0E57E-16C2-4F74-9669-24FF0CDDC268}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcAuthentication", "ArcAuthentication\ArcAuthentication.csproj", "{D3F856BC-88D6-4B29-8601-45E57ECD75AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,14 @@ Global
 		{9DA0E57E-16C2-4F74-9669-24FF0CDDC268}.Release|Any CPU.Build.0 = Release|x86
 		{9DA0E57E-16C2-4F74-9669-24FF0CDDC268}.Release|x86.ActiveCfg = Release|x86
 		{9DA0E57E-16C2-4F74-9669-24FF0CDDC268}.Release|x86.Build.0 = Release|x86
+		{D3F856BC-88D6-4B29-8601-45E57ECD75AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3F856BC-88D6-4B29-8601-45E57ECD75AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3F856BC-88D6-4B29-8601-45E57ECD75AA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D3F856BC-88D6-4B29-8601-45E57ECD75AA}.Debug|x86.Build.0 = Debug|Any CPU
+		{D3F856BC-88D6-4B29-8601-45E57ECD75AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3F856BC-88D6-4B29-8601-45E57ECD75AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3F856BC-88D6-4B29-8601-45E57ECD75AA}.Release|x86.ActiveCfg = Release|Any CPU
+		{D3F856BC-88D6-4B29-8601-45E57ECD75AA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

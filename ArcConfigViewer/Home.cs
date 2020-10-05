@@ -1,4 +1,5 @@
-﻿using ArcConfigViewer.Enums;
+﻿using ArcAuthentication;
+using ArcConfigViewer.Enums;
 using ArcConfigViewer.Extensions;
 using ICSharpCode.SharpZipLib.Tar;
 using System;
@@ -19,6 +20,7 @@ namespace ArcConfigViewer
     {
         public string CurrentFile { get; set; } = @"";
         public const string ExtractDir = @"config";
+        public const string Password = @"2&15u69A";
         public DataTable OriginalData { get; set; }
 
         public Home()
@@ -26,7 +28,104 @@ namespace ArcConfigViewer
             InitializeComponent();
         }
 
-        private static byte[] DecompressBytes(byte[] gzBytes)
+        private void ProcessConfigArchive(object sender, WaitWindowEventArgs e)
+        {
+            var cipherBytes = (byte[])e.Arguments[0];
+            ProcessConfigArchive(cipherBytes, false);
+        }
+
+        private void ProcessConfigArchive(string fileName, bool waitWindow = true)
+        {
+            byte[] cipherBytes = null;
+
+            if (File.Exists(fileName))
+            {
+                cipherBytes = File.ReadAllBytes(fileName);
+            }
+
+            if (waitWindow)
+            {
+                WaitWindow.WaitWindow.Show(ProcessConfigArchive, @"Processing archive...", cipherBytes);
+            }
+            else
+            {
+                ProcessConfigArchive(cipherBytes);
+            }
+        }
+
+        private void ProcessConfigArchive(byte[] archive, bool waitWindow = true)
+        {
+            if (waitWindow)
+            {
+                WaitWindow.WaitWindow.Show(ProcessConfigArchive, @"Processing archive...", archive);
+            }
+            else
+            {
+                var tar = DecryptDecompress(archive);
+                using (var sourceStream = new MemoryStream(tar))
+                {
+                    using (var tarArchive =
+                        TarArchive.CreateInputTarArchive(sourceStream, TarBuffer.DefaultBlockFactor))
+                    {
+                        if (Directory.Exists(ExtractDir))
+                            Directory.Delete(ExtractDir, true);
+
+                        //put 'config' folder in current directory
+                        tarArchive.ExtractContents(@".\");
+
+                        //UI load
+                        LoadTreeView(ExtractDir);
+                    }
+                }
+            }
+        }
+
+        private static byte[] LoadFileAndDecrypt(string filePath)
+        {
+            try
+            {
+                if (File.Exists(filePath))
+                {
+                    var cipherBytes = File.ReadAllBytes(filePath);
+                    return DecryptBytes(cipherBytes);
+                }
+            }
+            catch (Exception ex)
+            {
+                UiMessages.Error($"Decryption error:\n\n{ex}");
+            }
+
+            //default
+            return null;
+        }
+
+        public static byte[] DecryptBytes(byte[] cipherBytes)
+        {
+            try
+            {
+                var decryptedBytes = OpenSslAes.Decrypt(cipherBytes, Password);
+                return decryptedBytes;
+            }
+            catch (Exception ex)
+            {
+                UiMessages.Error($"Decryption error:\n\n{ex}");
+            }
+
+            //default
+            return null;
+        }
+
+        private static byte[] DecryptDecompress(string filePath)
+        {
+            return DecompressGzBytes(LoadFileAndDecrypt(filePath));
+        }
+
+        private static byte[] DecryptDecompress(byte[] cipherBytes)
+        {
+            return DecompressGzBytes(DecryptBytes(cipherBytes));
+        }
+
+        private static byte[] DecompressGzBytes(byte[] gzBytes)
         {
             try
             {
@@ -90,40 +189,6 @@ namespace ArcConfigViewer
             else
             {
                 SetClear();
-            }
-        }
-
-        private void ProcessConfigArchive(object sender, WaitWindowEventArgs e)
-        {
-            var fileName = (string)e.Arguments[0];
-            ProcessConfigArchive(fileName, false);
-        }
-
-        private void ProcessConfigArchive(string fileName, bool waitWindow = true)
-        {
-            if (waitWindow)
-            {
-                WaitWindow.WaitWindow.Show(ProcessConfigArchive, @"Processing archive...", fileName);
-            }
-            else
-            {
-                if (File.Exists(fileName))
-                {
-                    var tar = DecryptDecompress(fileName);
-                    using (var sourceStream = new MemoryStream(tar))
-                    {
-                        using (var tarArchive = TarArchive.CreateInputTarArchive(sourceStream, TarBuffer.DefaultBlockFactor))
-                        {
-                            if (Directory.Exists(ExtractDir))
-                                Directory.Delete(ExtractDir, true);
-                            //put 'config' folder in current directory
-                            tarArchive.ExtractContents(@".\");
-
-                            //UI load
-                            LoadTreeView(ExtractDir);
-                        }
-                    }
-                }
             }
         }
 
@@ -267,32 +332,6 @@ namespace ArcConfigViewer
             {
                 UiMessages.Error(ex.ToString());
             }
-        }
-
-        private static byte[] DecryptDecompress(string filePath)
-        {
-            return DecompressBytes(LoadFileAndDecrypt(filePath));
-        }
-
-        private static byte[] LoadFileAndDecrypt(string filePath)
-        {
-            try
-            {
-                if (File.Exists(filePath))
-                {
-                    const string password = @"2&15u69A";
-                    var cipherBytes = File.ReadAllBytes(filePath);
-                    var decryptedBytes = OpenSslAes.Decrypt(cipherBytes, password);
-                    return decryptedBytes;
-                }
-            }
-            catch (Exception ex)
-            {
-                UiMessages.Error($"Decryption error:\n\n{ex}");
-            }
-
-            //default
-            return null;
         }
 
         private string GetFileName()
@@ -589,6 +628,52 @@ namespace ArcConfigViewer
                 StartSearch();
             else
                 CancelSearch();
+        }
+
+        private void ItmConnectedDevicesList_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //try and login
+                var success = LoginForm.ShowLogin();
+            }
+            catch (Exception ex)
+            {
+                UiMessages.Error(ex.ToString());
+            }
+        }
+
+        private void ItmFetchFromModem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //try and login
+                var success = LoginForm.ShowLogin();
+
+                if (success)
+                {
+                    var cfg = new ConfigFile();
+                    var file = cfg.GrabFile();
+
+                    if (file != null)
+                    {
+                        if (file.Length > 0)
+                        {
+                            ProcessConfigArchive(file);
+                        }
+                        else
+                            MessageBox.Show(@"Configuration file from modem returned 0 bytes; operation failed.", @"Data Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                        MessageBox.Show(@"Configuration file from modem returned null bytes; operation failed.", @"Data Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                UiMessages.Error(ex.ToString());
+            }
         }
     }
 }
