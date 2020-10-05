@@ -30,14 +30,17 @@
         {
             this.dgvMain = new System.Windows.Forms.DataGridView();
             this.statusMain = new System.Windows.Forms.StatusStrip();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.handsetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuMain = new System.Windows.Forms.MenuStrip();
+            this.itmFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmExport = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmImport = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmSearch = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmHandset = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmExportJson = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmExportCsv = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmExportXml = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMain)).BeginInit();
-            this.menuStrip1.SuspendLayout();
+            this.menuMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // dgvMain
@@ -68,50 +71,72 @@
             this.statusMain.TabIndex = 6;
             this.statusMain.Text = "statusStrip1";
             // 
-            // menuStrip1
+            // menuMain
             // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
-            this.searchToolStripMenuItem,
-            this.handsetToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
-            this.menuStrip1.TabIndex = 7;
-            this.menuStrip1.Text = "menuStrip1";
+            this.menuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.itmFile,
+            this.itmSearch,
+            this.itmHandset});
+            this.menuMain.Location = new System.Drawing.Point(0, 0);
+            this.menuMain.Name = "menuMain";
+            this.menuMain.Size = new System.Drawing.Size(800, 24);
+            this.menuMain.TabIndex = 7;
+            this.menuMain.Text = "menuStrip1";
             // 
-            // fileToolStripMenuItem
+            // itmFile
             // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.exportToolStripMenuItem,
-            this.importToolStripMenuItem});
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "File";
+            this.itmFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.itmExport,
+            this.itmImport});
+            this.itmFile.Name = "itmFile";
+            this.itmFile.Size = new System.Drawing.Size(37, 20);
+            this.itmFile.Text = "File";
             // 
-            // exportToolStripMenuItem
+            // itmExport
             // 
-            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.exportToolStripMenuItem.Text = "Export";
+            this.itmExport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.itmExportJson,
+            this.itmExportCsv,
+            this.itmExportXml});
+            this.itmExport.Name = "itmExport";
+            this.itmExport.Size = new System.Drawing.Size(180, 22);
+            this.itmExport.Text = "Export";
             // 
-            // importToolStripMenuItem
+            // itmImport
             // 
-            this.importToolStripMenuItem.Name = "importToolStripMenuItem";
-            this.importToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.importToolStripMenuItem.Text = "Import";
+            this.itmImport.Name = "itmImport";
+            this.itmImport.Size = new System.Drawing.Size(180, 22);
+            this.itmImport.Text = "Import";
             // 
-            // searchToolStripMenuItem
+            // itmSearch
             // 
-            this.searchToolStripMenuItem.Name = "searchToolStripMenuItem";
-            this.searchToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
-            this.searchToolStripMenuItem.Text = "Search";
+            this.itmSearch.Name = "itmSearch";
+            this.itmSearch.Size = new System.Drawing.Size(54, 20);
+            this.itmSearch.Text = "Search";
             // 
-            // handsetToolStripMenuItem
+            // itmHandset
             // 
-            this.handsetToolStripMenuItem.Name = "handsetToolStripMenuItem";
-            this.handsetToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
-            this.handsetToolStripMenuItem.Text = "Handset";
+            this.itmHandset.Name = "itmHandset";
+            this.itmHandset.Size = new System.Drawing.Size(63, 20);
+            this.itmHandset.Text = "Handset";
+            // 
+            // itmExportJson
+            // 
+            this.itmExportJson.Name = "itmExportJson";
+            this.itmExportJson.Size = new System.Drawing.Size(180, 22);
+            this.itmExportJson.Text = "JSON";
+            // 
+            // itmExportCsv
+            // 
+            this.itmExportCsv.Name = "itmExportCsv";
+            this.itmExportCsv.Size = new System.Drawing.Size(180, 22);
+            this.itmExportCsv.Text = "CSV";
+            // 
+            // itmExportXml
+            // 
+            this.itmExportXml.Name = "itmExportXml";
+            this.itmExportXml.Size = new System.Drawing.Size(180, 22);
+            this.itmExportXml.Text = "XML";
             // 
             // PhoneLog
             // 
@@ -120,8 +145,8 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.dgvMain);
             this.Controls.Add(this.statusMain);
-            this.Controls.Add(this.menuStrip1);
-            this.MainMenuStrip = this.menuStrip1;
+            this.Controls.Add(this.menuMain);
+            this.MainMenuStrip = this.menuMain;
             this.MinimizeBox = false;
             this.Name = "PhoneLog";
             this.ShowIcon = false;
@@ -130,8 +155,8 @@
             this.Text = "Call Log";
             this.Load += new System.EventHandler(this.PhoneLog_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvMain)).EndInit();
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.menuMain.ResumeLayout(false);
+            this.menuMain.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -141,11 +166,14 @@
 
         private System.Windows.Forms.DataGridView dgvMain;
         private System.Windows.Forms.StatusStrip statusMain;
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem searchToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem handsetToolStripMenuItem;
+        private System.Windows.Forms.MenuStrip menuMain;
+        private System.Windows.Forms.ToolStripMenuItem itmFile;
+        private System.Windows.Forms.ToolStripMenuItem itmExport;
+        private System.Windows.Forms.ToolStripMenuItem itmImport;
+        private System.Windows.Forms.ToolStripMenuItem itmSearch;
+        private System.Windows.Forms.ToolStripMenuItem itmHandset;
+        private System.Windows.Forms.ToolStripMenuItem itmExportJson;
+        private System.Windows.Forms.ToolStripMenuItem itmExportCsv;
+        private System.Windows.Forms.ToolStripMenuItem itmExportXml;
     }
 }
