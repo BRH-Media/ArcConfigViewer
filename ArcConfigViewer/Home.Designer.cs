@@ -39,6 +39,7 @@ namespace ArcConfigViewer
             this.itmNetwork = new System.Windows.Forms.ToolStripMenuItem();
             this.itmConnectedDevicesList = new System.Windows.Forms.ToolStripMenuItem();
             this.itmFetchFromModem = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmCallLog = new System.Windows.Forms.ToolStripMenuItem();
             this.itmSearch = new System.Windows.Forms.ToolStripMenuItem();
             this.itmRefreshConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.itmExport = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,7 +56,9 @@ namespace ArcConfigViewer
             this.txtMain = new System.Windows.Forms.RichTextBox();
             this.dgvMain = new System.Windows.Forms.DataGridView();
             this.sfdExport = new System.Windows.Forms.SaveFileDialog();
-            this.itmCallLog = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmAuthenticate = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmAuthenticateGrant = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmAuthenticateRevoke = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMain.SuspendLayout();
             this.tlpMain.SuspendLayout();
             this.pnlMain.SuspendLayout();
@@ -95,6 +98,7 @@ namespace ArcConfigViewer
             // itmNetwork
             // 
             this.itmNetwork.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.itmAuthenticate,
             this.itmConnectedDevicesList,
             this.itmFetchFromModem,
             this.itmCallLog});
@@ -105,8 +109,8 @@ namespace ArcConfigViewer
             // itmConnectedDevicesList
             // 
             this.itmConnectedDevicesList.Name = "itmConnectedDevicesList";
-            this.itmConnectedDevicesList.Size = new System.Drawing.Size(224, 22);
-            this.itmConnectedDevicesList.Text = "Grab Connected Devices List";
+            this.itmConnectedDevicesList.Size = new System.Drawing.Size(228, 22);
+            this.itmConnectedDevicesList.Text = "Fetch Connected Devices List";
             this.itmConnectedDevicesList.Click += new System.EventHandler(this.ItmConnectedDevicesList_Click);
             // 
             // itmFetchFromModem
@@ -115,6 +119,13 @@ namespace ArcConfigViewer
             this.itmFetchFromModem.Size = new System.Drawing.Size(224, 22);
             this.itmFetchFromModem.Text = "Fetch Config From Modem";
             this.itmFetchFromModem.Click += new System.EventHandler(this.ItmFetchFromModem_Click);
+            // 
+            // itmCallLog
+            // 
+            this.itmCallLog.Name = "itmCallLog";
+            this.itmCallLog.Size = new System.Drawing.Size(224, 22);
+            this.itmCallLog.Text = "Fetch Call Log";
+            this.itmCallLog.Click += new System.EventHandler(this.ItmCallLog_Click);
             // 
             // itmSearch
             // 
@@ -285,12 +296,27 @@ namespace ArcConfigViewer
             // 
             this.sfdExport.Title = "Export Configuration";
             // 
-            // itmCallLog
+            // itmAuthenticate
             // 
-            this.itmCallLog.Name = "itmCallLog";
-            this.itmCallLog.Size = new System.Drawing.Size(224, 22);
-            this.itmCallLog.Text = "Fetch Call Log";
-            this.itmCallLog.Click += new System.EventHandler(this.ItmCallLog_Click);
+            this.itmAuthenticate.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.itmAuthenticateGrant,
+            this.itmAuthenticateRevoke});
+            this.itmAuthenticate.Name = "itmAuthenticate";
+            this.itmAuthenticate.Size = new System.Drawing.Size(228, 22);
+            this.itmAuthenticate.Text = "Authenticate";
+            // 
+            // itmAuthenticateGrant
+            // 
+            this.itmAuthenticateGrant.Name = "itmAuthenticateGrant";
+            this.itmAuthenticateGrant.Size = new System.Drawing.Size(180, 22);
+            this.itmAuthenticateGrant.Text = "Grant";
+            // 
+            // itmAuthenticateRevoke
+            // 
+            this.itmAuthenticateRevoke.Enabled = false;
+            this.itmAuthenticateRevoke.Name = "itmAuthenticateRevoke";
+            this.itmAuthenticateRevoke.Size = new System.Drawing.Size(180, 22);
+            this.itmAuthenticateRevoke.Text = "Revoke";
             // 
             // Home
             // 
@@ -340,6 +366,9 @@ namespace ArcConfigViewer
         private ToolStripMenuItem itmConnectedDevicesList;
         private ToolStripMenuItem itmFetchFromModem;
         private ToolStripMenuItem itmCallLog;
+        private ToolStripMenuItem itmAuthenticate;
+        private ToolStripMenuItem itmAuthenticateGrant;
+        private ToolStripMenuItem itmAuthenticateRevoke;
     }
 }
 
