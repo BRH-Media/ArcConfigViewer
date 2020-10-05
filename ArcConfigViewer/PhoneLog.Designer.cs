@@ -126,7 +126,9 @@
             this.Name = "PhoneLog";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Call Log";
+            this.Load += new System.EventHandler(this.PhoneLog_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvMain)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

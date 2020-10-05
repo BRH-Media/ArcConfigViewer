@@ -679,5 +679,38 @@ namespace ArcConfigViewer
                 UiMessages.Error(ex.ToString());
             }
         }
+
+        private void ItmCallLog_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //try and login
+                var success = LoginForm.ShowLogin();
+
+                if (success)
+                {
+                    var log = new CallLog();
+                    var table = log.GrabTable();
+
+                    if (table != null)
+                    {
+                        if (table.Rows.Count > 0)
+                        {
+                            PhoneLog.LoadLog(table);
+                        }
+                        else
+                            MessageBox.Show(@"Call log from modem returned 0 rows; operation failed.", @"Data Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                        MessageBox.Show(@"Call log from modem returned null bytes; operation failed.", @"Data Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                UiMessages.Error(ex.ToString());
+            }
+        }
     }
 }
