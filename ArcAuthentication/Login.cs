@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -87,7 +86,7 @@ namespace ArcAuthentication
             var body = response.Content.ReadAsByteArrayAsync().Result;
             var reply = Encoding.ASCII.GetString(body);
 
-            File.WriteAllText(@"login.log", reply);
+            //File.WriteAllText(@"login.log", reply);
 
             //validation
             if (string.IsNullOrEmpty(reply)) return false;
@@ -97,7 +96,7 @@ namespace ArcAuthentication
             var homeGrab = ResourceGrab.GrabString(Global.HomeHtm, Global.IndexHtm);
 
             //debugging
-            File.WriteAllText(@"home.log", homeGrab);
+            //File.WriteAllText(@"home.log", homeGrab);
 
             //MessageBox.Show(homeGrab);
 

@@ -34,7 +34,7 @@ namespace ArcAuthentication
             var pageHtml = ResourceGrab.GrabString(tokenPollUri);
 
             //debugging
-            File.WriteAllText(@"latestTokenPage.log", pageHtml);
+            //File.WriteAllText(@"latestTokenPage.log", pageHtml);
 
             //MessageBox.Show(loginHtml);
 

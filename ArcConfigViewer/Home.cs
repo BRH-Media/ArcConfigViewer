@@ -99,11 +99,15 @@ namespace ArcConfigViewer
             return null;
         }
 
-        public static byte[] DecryptBytes(byte[] cipherBytes)
+        public static byte[] DecryptBytes(byte[] cipherBytes, bool dumpTarGz = true)
         {
             try
             {
                 var decryptedBytes = OpenSslAes.Decrypt(cipherBytes, Password);
+
+                if (dumpTarGz)
+                    File.WriteAllBytes(@"config.tar.gz", decryptedBytes);
+
                 return decryptedBytes;
             }
             catch (Exception ex)
