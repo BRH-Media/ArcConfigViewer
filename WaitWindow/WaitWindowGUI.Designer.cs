@@ -1,4 +1,4 @@
-﻿namespace WaitWindow
+﻿namespace ArcWaitWindow
 {
 	partial class WaitWindowGui
 	{

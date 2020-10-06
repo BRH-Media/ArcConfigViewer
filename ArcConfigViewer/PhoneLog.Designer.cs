@@ -33,12 +33,12 @@
             this.menuMain = new System.Windows.Forms.MenuStrip();
             this.itmFile = new System.Windows.Forms.ToolStripMenuItem();
             this.itmExport = new System.Windows.Forms.ToolStripMenuItem();
-            this.itmImport = new System.Windows.Forms.ToolStripMenuItem();
-            this.itmSearch = new System.Windows.Forms.ToolStripMenuItem();
-            this.itmHandset = new System.Windows.Forms.ToolStripMenuItem();
             this.itmExportJson = new System.Windows.Forms.ToolStripMenuItem();
             this.itmExportCsv = new System.Windows.Forms.ToolStripMenuItem();
             this.itmExportXml = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmImport = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmSearch = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmHandset = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMain)).BeginInit();
             this.menuMain.SuspendLayout();
             this.SuspendLayout();
@@ -99,13 +99,31 @@
             this.itmExportCsv,
             this.itmExportXml});
             this.itmExport.Name = "itmExport";
-            this.itmExport.Size = new System.Drawing.Size(180, 22);
+            this.itmExport.Size = new System.Drawing.Size(110, 22);
             this.itmExport.Text = "Export";
+            // 
+            // itmExportJson
+            // 
+            this.itmExportJson.Name = "itmExportJson";
+            this.itmExportJson.Size = new System.Drawing.Size(102, 22);
+            this.itmExportJson.Text = "JSON";
+            // 
+            // itmExportCsv
+            // 
+            this.itmExportCsv.Name = "itmExportCsv";
+            this.itmExportCsv.Size = new System.Drawing.Size(102, 22);
+            this.itmExportCsv.Text = "CSV";
+            // 
+            // itmExportXml
+            // 
+            this.itmExportXml.Name = "itmExportXml";
+            this.itmExportXml.Size = new System.Drawing.Size(102, 22);
+            this.itmExportXml.Text = "XML";
             // 
             // itmImport
             // 
             this.itmImport.Name = "itmImport";
-            this.itmImport.Size = new System.Drawing.Size(180, 22);
+            this.itmImport.Size = new System.Drawing.Size(110, 22);
             this.itmImport.Text = "Import";
             // 
             // itmSearch
@@ -119,24 +137,6 @@
             this.itmHandset.Name = "itmHandset";
             this.itmHandset.Size = new System.Drawing.Size(63, 20);
             this.itmHandset.Text = "Handset";
-            // 
-            // itmExportJson
-            // 
-            this.itmExportJson.Name = "itmExportJson";
-            this.itmExportJson.Size = new System.Drawing.Size(180, 22);
-            this.itmExportJson.Text = "JSON";
-            // 
-            // itmExportCsv
-            // 
-            this.itmExportCsv.Name = "itmExportCsv";
-            this.itmExportCsv.Size = new System.Drawing.Size(180, 22);
-            this.itmExportCsv.Text = "CSV";
-            // 
-            // itmExportXml
-            // 
-            this.itmExportXml.Name = "itmExportXml";
-            this.itmExportXml.Size = new System.Drawing.Size(180, 22);
-            this.itmExportXml.Text = "XML";
             // 
             // PhoneLog
             // 
@@ -152,7 +152,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Call Log";
+            this.Text = "VOIP Call Log";
             this.Load += new System.EventHandler(this.PhoneLog_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvMain)).EndInit();
             this.menuMain.ResumeLayout(false);

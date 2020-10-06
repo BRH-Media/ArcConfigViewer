@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace WaitWindow
+namespace ArcWaitWindow
 {
     /// <summary>
     /// The dialogue displayed by a WaitWindow instance.

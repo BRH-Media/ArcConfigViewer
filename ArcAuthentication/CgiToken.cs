@@ -1,6 +1,9 @@
-﻿using System;
-using System.IO;
+﻿using ArcWaitWindow;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Windows.Forms;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
@@ -64,6 +67,91 @@ namespace ArcAuthentication
             }
         }
 
+        private void Revoke(object sender, WaitWindowEventArgs e)
+        {
+            e.Result = Revoke(false);
+        }
+
+        public bool Revoke(bool waitWindow = true)
+        {
+            if (waitWindow)
+                return (bool)WaitWindow.Show(Revoke, @"Logging out...");
+
+            try
+            {
+                //important information for the request
+                var t = DateTime.UtcNow.ConvertToUnixTimestamp();
+                var referer = $@"{Global.Origin}/logout.htm?t={t}&m=";
+                var logout = $@"{Global.Origin}/logout.cgi";
+                var logoutToken = new CgiToken(referer);
+
+                if (!string.IsNullOrEmpty(logoutToken.Token))
+                {
+                    //data to send alongside request
+                    var requestBody =
+                        new FormUrlEncodedContent(
+                            new Dictionary<string, string>
+                            {
+                                {@"httoken", logoutToken.Token}
+                            });
+
+                    //session handler for cookies
+                    var cookies = new CookieContainer();
+
+                    //request handlers
+                    var handler = new HttpClientHandler();
+                    var client = new HttpClient(handler);
+
+                    //set global client
+                    Global.GlobalClient = client;
+
+                    //not fazed by Location headers
+                    //handler.AllowAutoRedirect = false;
+
+                    //add request credentials
+                    var request = new HttpRequestMessage(new HttpMethod(@"POST"), logout)
+                    {
+                        Content = requestBody
+                    };
+
+                    request.Headers.TryAddWithoutValidation(@"Accept",
+                        @"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+                    request.Headers.TryAddWithoutValidation(@"Accept-Language", @"en-US,en;q=0.5");
+                    request.Headers.TryAddWithoutValidation(@"Connection", @"keep-alive");
+                    request.Headers.TryAddWithoutValidation(@"Upgrade-Insecure-Requests", @"1");
+                    request.Headers.TryAddWithoutValidation(@"Cookie", @"disableLogout=0");
+                    request.Headers.TryAddWithoutValidation(@"User-Agent", Global.UserAgent);
+                    request.Headers.TryAddWithoutValidation(@"Referer", Global.LoginHtm);
+                    request.Headers.TryAddWithoutValidation(@"Host", Global.Gateway);
+                    request.Headers.TryAddWithoutValidation(@"Origin", Global.Origin);
+
+                    //apply cookie container
+                    handler.CookieContainer = cookies;
+
+                    //now fazed by location headers
+                    handler.AllowAutoRedirect = false;
+
+                    //receive and format response
+                    var response = client.SendAsync(request).Result;
+                    var locationHeader =
+                        response.Headers.Contains(@"Location")
+                            ? response.Headers.Location.ToString()
+                            : @"";
+
+                    //on success, logout redirects user to login page
+                    return locationHeader == @"/login.htm";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Token revocation error\n\n{ex}", @"Revoke Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            //default
+            return false;
+        }
+
         public string TokeniseUrl(string url)
         {
             try
@@ -84,7 +172,8 @@ namespace ArcAuthentication
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Tokenise error:\n\n{ex}");
+                MessageBox.Show($"Tokenise error\n\n{ex}", @"Tokenise Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             //default

@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ArcConfigViewer
+namespace ArcProcessor
 {
     public static class TreeBuilder
     {
@@ -27,13 +27,14 @@ namespace ArcConfigViewer
 
         private static bool IsBashScript(string fileName)
         {
+            var ext = Path.GetExtension(fileName);
             const string searchTerm = @"#!/bin/sh";
             var length = searchTerm.Length;
 
             var actual = new string(ReadChars(fileName, length));
 
             if (!string.IsNullOrEmpty(actual))
-                return actual == searchTerm;
+                return actual == searchTerm || ext == @".sh";
 
             //default
             return false;

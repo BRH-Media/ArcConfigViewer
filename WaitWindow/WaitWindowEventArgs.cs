@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WaitWindow
+namespace ArcWaitWindow
 {
     /// <summary>
     /// Provides data for the WaitWindow events.

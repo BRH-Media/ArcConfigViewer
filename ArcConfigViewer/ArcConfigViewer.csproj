@@ -36,17 +36,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DerConverter, Version=3.0.0.82, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DerConverter.3.0.0.82\lib\net471\DerConverter.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=1.2.0.246, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpZipLib.1.2.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PemUtils, Version=3.0.0.82, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\PemUtils.3.0.0.82\lib\net471\PemUtils.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -81,7 +84,6 @@
     <Compile Include="Home.Designer.cs">
       <DependentUpon>Home.cs</DependentUpon>
     </Compile>
-    <Compile Include="OpenSslAes.cs" />
     <Compile Include="PhoneLog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -103,9 +105,6 @@
     <Compile Include="SqliteBrowser.Designer.cs">
       <DependentUpon>SqliteBrowser.cs</DependentUpon>
     </Compile>
-    <Compile Include="TreeBuilder.cs" />
-    <Compile Include="UIMessages.cs" />
-    <Compile Include="ZipTreeBuilder.cs" />
     <EmbeddedResource Include="Home.resx">
       <DependentUpon>Home.cs</DependentUpon>
     </EmbeddedResource>
@@ -146,9 +145,13 @@
       <Project>{d3f856bc-88d6-4b29-8601-45e57ecd75aa}</Project>
       <Name>ArcAuthentication</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WaitWindow\WaitWindow.csproj">
+    <ProjectReference Include="..\ArcProcessor\ArcProcessor.csproj">
+      <Project>{853f252f-bf42-4bed-8ce2-1a52454611a8}</Project>
+      <Name>ArcProcessor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WaitWindow\ArcWaitWindow.csproj">
       <Project>{9da0e57e-16c2-4f74-9669-24ff0cddc268}</Project>
-      <Name>WaitWindow</Name>
+      <Name>ArcWaitWindow</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

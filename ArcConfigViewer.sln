@@ -5,9 +5,13 @@ VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcConfigViewer", "ArcConfigViewer\ArcConfigViewer.csproj", "{4743A6E2-A4D9-40B6-82A7-C2DDD5B2D16D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaitWindow", "WaitWindow\WaitWindow.csproj", "{9DA0E57E-16C2-4F74-9669-24FF0CDDC268}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcWaitWindow", "WaitWindow\ArcWaitWindow.csproj", "{9DA0E57E-16C2-4F74-9669-24FF0CDDC268}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcAuthentication", "ArcAuthentication\ArcAuthentication.csproj", "{D3F856BC-88D6-4B29-8601-45E57ECD75AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcProcessor", "ArcProcessor\ArcProcessor.csproj", "{853F252F-BF42-4BED-8CE2-1A52454611A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcFirmwareDecrypter", "ArcFirmwareDecrypter\ArcFirmwareDecrypter.csproj", "{89D33351-7BFD-4854-9227-B9225F35E8C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +45,22 @@ Global
 		{D3F856BC-88D6-4B29-8601-45E57ECD75AA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D3F856BC-88D6-4B29-8601-45E57ECD75AA}.Release|x86.ActiveCfg = Release|Any CPU
 		{D3F856BC-88D6-4B29-8601-45E57ECD75AA}.Release|x86.Build.0 = Release|Any CPU
+		{853F252F-BF42-4BED-8CE2-1A52454611A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{853F252F-BF42-4BED-8CE2-1A52454611A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{853F252F-BF42-4BED-8CE2-1A52454611A8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{853F252F-BF42-4BED-8CE2-1A52454611A8}.Debug|x86.Build.0 = Debug|Any CPU
+		{853F252F-BF42-4BED-8CE2-1A52454611A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{853F252F-BF42-4BED-8CE2-1A52454611A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{853F252F-BF42-4BED-8CE2-1A52454611A8}.Release|x86.ActiveCfg = Release|Any CPU
+		{853F252F-BF42-4BED-8CE2-1A52454611A8}.Release|x86.Build.0 = Release|Any CPU
+		{89D33351-7BFD-4854-9227-B9225F35E8C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89D33351-7BFD-4854-9227-B9225F35E8C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89D33351-7BFD-4854-9227-B9225F35E8C0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{89D33351-7BFD-4854-9227-B9225F35E8C0}.Debug|x86.Build.0 = Debug|Any CPU
+		{89D33351-7BFD-4854-9227-B9225F35E8C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89D33351-7BFD-4854-9227-B9225F35E8C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89D33351-7BFD-4854-9227-B9225F35E8C0}.Release|x86.ActiveCfg = Release|Any CPU
+		{89D33351-7BFD-4854-9227-B9225F35E8C0}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

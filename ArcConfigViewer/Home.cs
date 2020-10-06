@@ -1,17 +1,17 @@
 ﻿using ArcAuthentication;
 using ArcConfigViewer.Enums;
 using ArcConfigViewer.Extensions;
-using ICSharpCode.SharpZipLib.Tar;
+using ArcProcessor;
 using System;
 using System.Data;
 using System.Drawing;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
-using WaitWindow;
 
+// ReSharper disable UnusedMember.Local
+// ReSharper disable InconsistentNaming
 // ReSharper disable InvertIf
 
 namespace ArcConfigViewer
@@ -19,138 +19,11 @@ namespace ArcConfigViewer
     public partial class Home : Form
     {
         public string CurrentFile { get; set; } = @"";
-        public const string ExtractDir = @"config";
-        public const string Password = @"2&15u69A";
         public DataTable OriginalData { get; set; }
 
         public Home()
         {
             InitializeComponent();
-        }
-
-        private void ProcessConfigArchive(object sender, WaitWindowEventArgs e)
-        {
-            var cipherBytes = (byte[])e.Arguments[0];
-            ProcessConfigArchive(cipherBytes, false);
-        }
-
-        private void ProcessConfigArchive(string fileName, bool waitWindow = true)
-        {
-            byte[] cipherBytes = null;
-
-            if (File.Exists(fileName))
-            {
-                cipherBytes = File.ReadAllBytes(fileName);
-            }
-
-            if (waitWindow)
-            {
-                WaitWindow.WaitWindow.Show(ProcessConfigArchive, @"Processing archive...", cipherBytes);
-            }
-            else
-            {
-                ProcessConfigArchive(cipherBytes);
-            }
-        }
-
-        private void ProcessConfigArchive(byte[] archive, bool waitWindow = true)
-        {
-            if (waitWindow)
-            {
-                WaitWindow.WaitWindow.Show(ProcessConfigArchive, @"Processing archive...", archive);
-            }
-            else
-            {
-                var tar = DecryptDecompress(archive);
-                using (var sourceStream = new MemoryStream(tar))
-                {
-                    using (var tarArchive =
-                        TarArchive.CreateInputTarArchive(sourceStream, TarBuffer.DefaultBlockFactor))
-                    {
-                        if (Directory.Exists(ExtractDir))
-                            Directory.Delete(ExtractDir, true);
-
-                        //put 'config' folder in current directory
-                        tarArchive.ExtractContents(@".\");
-
-                        //UI load
-                        LoadTreeView(ExtractDir);
-                    }
-                }
-            }
-        }
-
-        private static byte[] LoadFileAndDecrypt(string filePath)
-        {
-            try
-            {
-                if (File.Exists(filePath))
-                {
-                    var cipherBytes = File.ReadAllBytes(filePath);
-                    return DecryptBytes(cipherBytes);
-                }
-            }
-            catch (Exception ex)
-            {
-                UiMessages.Error($"Decryption error:\n\n{ex}");
-            }
-
-            //default
-            return null;
-        }
-
-        public static byte[] DecryptBytes(byte[] cipherBytes, bool dumpTarGz = true)
-        {
-            try
-            {
-                var decryptedBytes = OpenSslAes.Decrypt(cipherBytes, Password);
-
-                if (dumpTarGz)
-                    File.WriteAllBytes(@"config.tar.gz", decryptedBytes);
-
-                return decryptedBytes;
-            }
-            catch (Exception ex)
-            {
-                UiMessages.Error($"Decryption error:\n\n{ex}");
-            }
-
-            //default
-            return null;
-        }
-
-        private static byte[] DecryptDecompress(string filePath)
-        {
-            return DecompressGzBytes(LoadFileAndDecrypt(filePath));
-        }
-
-        private static byte[] DecryptDecompress(byte[] cipherBytes)
-        {
-            return DecompressGzBytes(DecryptBytes(cipherBytes));
-        }
-
-        private static byte[] DecompressGzBytes(byte[] gzBytes)
-        {
-            try
-            {
-                byte[] decompressedBytes;
-                using (var rawStream = new MemoryStream(gzBytes))
-                {
-                    using (var decompressionStream = new GZipStream(rawStream, CompressionMode.Decompress))
-                    {
-                        var ms = new MemoryStream();
-                        decompressionStream.CopyTo(ms);
-                        decompressedBytes = ms.ToArray();
-                    }
-                }
-
-                return decompressedBytes;
-            }
-            catch (Exception ex)
-            {
-                UiMessages.Error($"Decompression failed!\n\n{ex}");
-                return null;
-            }
         }
 
         private void TrvMain_AfterSelect(TreeNode n)
@@ -256,23 +129,27 @@ namespace ArcConfigViewer
 
         private void ItmFileOpenConfig_Click(object sender, EventArgs e)
         {
-            if (Directory.Exists(ExtractDir))
+            if (Directory.Exists(ArcArchive.ExtractDir))
             {
-                if (Directory.GetFiles(ExtractDir).Length > 0)
+                if (Directory.GetFiles(ArcArchive.ExtractDir).Length > 0)
                     if (UiMessages.Question(@"You already have an extracted config file; load it instead?"))
                     {
-                        LoadTreeView(ExtractDir);
+                        LoadTreeView(ArcArchive.ExtractDir);
                         return;
                     }
             }
 
             var filePath = GetFileName();
+
             if (!string.IsNullOrEmpty(filePath))
             {
                 CurrentFile = filePath;
 
-                ProcessConfigArchive(filePath);
+                //decrypt and extract
+                ArcArchive.ProcessConfigArchive(filePath);
 
+                //UI setup
+                LoadTreeView(ArcArchive.ExtractDir);
                 itmRefreshConfig.Enabled = true;
             }
         }
@@ -576,12 +453,16 @@ namespace ArcConfigViewer
         private void Home_Load(object sender, EventArgs e)
         {
             CopyLabelPosition();
+
+            //update menu to reflect auth status
+            //this retains the status after the program is closed
+            UIAuthUpdate();
         }
 
         private void ItmRefreshConfig_Click(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(CurrentFile))
-                ProcessConfigArchive(CurrentFile);
+                ArcArchive.ProcessConfigArchive(CurrentFile);
         }
 
         private void LnkCopy_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -634,6 +515,41 @@ namespace ArcConfigViewer
                 CancelSearch();
         }
 
+        private void UpdateUIAuthenticate(bool authenticated = false)
+        {
+            try
+            {
+                itmAuthenticateGrant.Enabled = !authenticated;
+                itmAuthenticateRevoke.Enabled = authenticated;
+            }
+            catch (Exception ex)
+            {
+                UiMessages.Error(ex.ToString());
+            }
+        }
+
+        private bool Authenticated(bool tryLogin = false)
+        {
+            try
+            {
+                var testLogin = Login.TestLogin();
+                if (!testLogin && tryLogin)
+                {
+                    var loginTry = LoginForm.ShowLogin();
+                    return loginTry;
+                }
+
+                return testLogin;
+            }
+            catch (Exception ex)
+            {
+                UiMessages.Error(ex.ToString());
+            }
+
+            //default
+            return false;
+        }
+
         private void ItmConnectedDevicesList_Click(object sender, EventArgs e)
         {
             try
@@ -651,8 +567,8 @@ namespace ArcConfigViewer
         {
             try
             {
-                //try and login
-                var success = LoginForm.ShowLogin();
+                //test authentication
+                var success = Authenticated();
 
                 if (success)
                 {
@@ -663,7 +579,10 @@ namespace ArcConfigViewer
                     {
                         if (file.Length > 0)
                         {
-                            ProcessConfigArchive(file);
+                            ArcArchive.ProcessConfigArchive(file);
+
+                            //update UI
+                            LoadTreeView(ArcArchive.ExtractDir);
                         }
                         else
                             MessageBox.Show(@"Configuration file from modem returned 0 bytes; operation failed.", @"Data Error",
@@ -673,6 +592,8 @@ namespace ArcConfigViewer
                         MessageBox.Show(@"Configuration file from modem returned null bytes; operation failed.", @"Data Error",
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                else
+                    UiMessages.Warning(@"Authentication required; please authenticate first.");
             }
             catch (Exception ex)
             {
@@ -684,8 +605,8 @@ namespace ArcConfigViewer
         {
             try
             {
-                //try and login
-                var success = LoginForm.ShowLogin();
+                //test authentication
+                var success = Authenticated();
 
                 if (success)
                 {
@@ -706,6 +627,85 @@ namespace ArcConfigViewer
                         MessageBox.Show(@"Call log from modem returned null bytes; operation failed.", @"Data Error",
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                else
+                    UiMessages.Warning(@"Authentication required; please authenticate first.");
+            }
+            catch (Exception ex)
+            {
+                UiMessages.Error(ex.ToString());
+            }
+        }
+
+        private void UIAuthUpdate()
+        {
+            try
+            {
+                //test authentication
+                var testLogin = Login.TestLogin();
+                if (testLogin)
+                    UpdateUIAuthenticate(true);
+                else if (Global.InitToken == null)
+                    UpdateUIAuthenticate();
+                else
+                    UpdateUIAuthenticate();
+            }
+            catch (Exception)
+            {
+                //ignore all errors
+            }
+        }
+
+        private void ItmAuthenticateGrant_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //test authentication
+                var testLogin = Login.TestLogin();
+                if (testLogin)
+                    UiMessages.Warning(@"Authentication failed: user is already authenticated");
+                else if (Global.InitToken == null)
+                {
+                    var loginSuccess = LoginForm.ShowLogin();
+                    if (loginSuccess)
+                    {
+                        UpdateUIAuthenticate(true);
+                        Global.InitToken = null;
+                        UiMessages.Info(@"Successfully authenticated user");
+                    }
+                    else
+                        UiMessages.Warning(@"Authentication failed: login was unsuccessful");
+                }
+                else
+                    UiMessages.Warning(@"Authentication failed: login data already initialised");
+            }
+            catch (Exception ex)
+            {
+                UiMessages.Error(ex.ToString());
+            }
+        }
+
+        private void ItmAuthenticateRevoke_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //test authentication
+                var testLogin = Login.TestLogin();
+                if (!testLogin)
+                    UiMessages.Warning(@"Revocation failed: login not yet initiated");
+                else if (Global.InitToken != null)
+                {
+                    var logoutSuccess = Global.InitToken.Revoke();
+                    if (logoutSuccess)
+                    {
+                        UpdateUIAuthenticate();
+                        Global.InitToken = null;
+                        UiMessages.Info(@"Successfully logged user out");
+                    }
+                    else
+                        UiMessages.Warning(@"Revocation failed: logout was unsuccessful");
+                }
+                else
+                    UiMessages.Warning(@"Revocation failed: login data not yet initiated");
             }
             catch (Exception ex)
             {

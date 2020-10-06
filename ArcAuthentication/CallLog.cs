@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using WaitWindow;
+using ArcWaitWindow;
 
 // ReSharper disable CoVariantArrayConversion
 
@@ -27,7 +27,7 @@ namespace ArcAuthentication
             try
             {
                 if (waitWindow)
-                    return (string)WaitWindow.WaitWindow.Show(GrabJS, @"Retrieving call log...");
+                    return (string)WaitWindow.Show(GrabJS, @"Retrieving call log...");
 
                 var newToken = new CgiToken(Global.CallLogHtml);
                 var jsUri = $@"{Global.Origin}/cgi/cgi_tel_call_list.js";

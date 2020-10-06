@@ -3,7 +3,7 @@ using System.Collections;
 using System.Data;
 using System.Data.SQLite;
 using System.Windows.Forms;
-using WaitWindow;
+using ArcWaitWindow;
 
 // ReSharper disable InvertIf
 
@@ -77,7 +77,7 @@ namespace ArcConfigViewer
         {
             if (waitWindow)
             {
-                return (DataSet)WaitWindow.WaitWindow.Show(LoadEntireDatabase, @"Loading SQLite database...");
+                return (DataSet)WaitWindow.Show(LoadEntireDatabase, @"Loading SQLite database...");
             }
 
             try

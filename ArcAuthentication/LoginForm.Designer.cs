@@ -112,6 +112,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "LH1000 Gateway Login";
+            this.Load += new System.EventHandler(this.LoginForm_Load);
             this.gbUsername.ResumeLayout(false);
             this.gbUsername.PerformLayout();
             this.gbPassword.ResumeLayout(false);

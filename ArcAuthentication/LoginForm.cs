@@ -43,5 +43,10 @@ namespace ArcAuthentication
             frm.ShowDialog();
             return frm.Success;
         }
+
+        private void LoginForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -4,9 +4,11 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace ArcConfigViewer
+// ReSharper disable UnusedMember.Local
+
+namespace ArcProcessor
 {
-    public static class OpenSslAes
+    public static class CryptoHandler
     {
         public static string Encrypt(string plainText, string passphrase)
         {

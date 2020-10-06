@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace WaitWindow
+namespace ArcWaitWindow
 {
     /// <summary>
     /// Displays a window telling the user to wait while a process is executing.

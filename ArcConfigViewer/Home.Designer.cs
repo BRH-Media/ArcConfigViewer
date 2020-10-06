@@ -37,6 +37,9 @@ namespace ArcConfigViewer
             this.itmFile = new System.Windows.Forms.ToolStripMenuItem();
             this.itmFileOpenConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.itmNetwork = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmAuthenticate = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmAuthenticateGrant = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmAuthenticateRevoke = new System.Windows.Forms.ToolStripMenuItem();
             this.itmConnectedDevicesList = new System.Windows.Forms.ToolStripMenuItem();
             this.itmFetchFromModem = new System.Windows.Forms.ToolStripMenuItem();
             this.itmCallLog = new System.Windows.Forms.ToolStripMenuItem();
@@ -56,9 +59,6 @@ namespace ArcConfigViewer
             this.txtMain = new System.Windows.Forms.RichTextBox();
             this.dgvMain = new System.Windows.Forms.DataGridView();
             this.sfdExport = new System.Windows.Forms.SaveFileDialog();
-            this.itmAuthenticate = new System.Windows.Forms.ToolStripMenuItem();
-            this.itmAuthenticateGrant = new System.Windows.Forms.ToolStripMenuItem();
-            this.itmAuthenticateRevoke = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMain.SuspendLayout();
             this.tlpMain.SuspendLayout();
             this.pnlMain.SuspendLayout();
@@ -106,6 +106,30 @@ namespace ArcConfigViewer
             this.itmNetwork.Size = new System.Drawing.Size(64, 20);
             this.itmNetwork.Text = "Network";
             // 
+            // itmAuthenticate
+            // 
+            this.itmAuthenticate.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.itmAuthenticateGrant,
+            this.itmAuthenticateRevoke});
+            this.itmAuthenticate.Name = "itmAuthenticate";
+            this.itmAuthenticate.Size = new System.Drawing.Size(228, 22);
+            this.itmAuthenticate.Text = "Authenticate";
+            // 
+            // itmAuthenticateGrant
+            // 
+            this.itmAuthenticateGrant.Name = "itmAuthenticateGrant";
+            this.itmAuthenticateGrant.Size = new System.Drawing.Size(180, 22);
+            this.itmAuthenticateGrant.Text = "Grant";
+            this.itmAuthenticateGrant.Click += new System.EventHandler(this.ItmAuthenticateGrant_Click);
+            // 
+            // itmAuthenticateRevoke
+            // 
+            this.itmAuthenticateRevoke.Enabled = false;
+            this.itmAuthenticateRevoke.Name = "itmAuthenticateRevoke";
+            this.itmAuthenticateRevoke.Size = new System.Drawing.Size(180, 22);
+            this.itmAuthenticateRevoke.Text = "Revoke";
+            this.itmAuthenticateRevoke.Click += new System.EventHandler(this.ItmAuthenticateRevoke_Click);
+            // 
             // itmConnectedDevicesList
             // 
             this.itmConnectedDevicesList.Name = "itmConnectedDevicesList";
@@ -116,14 +140,14 @@ namespace ArcConfigViewer
             // itmFetchFromModem
             // 
             this.itmFetchFromModem.Name = "itmFetchFromModem";
-            this.itmFetchFromModem.Size = new System.Drawing.Size(224, 22);
+            this.itmFetchFromModem.Size = new System.Drawing.Size(228, 22);
             this.itmFetchFromModem.Text = "Fetch Config From Modem";
             this.itmFetchFromModem.Click += new System.EventHandler(this.ItmFetchFromModem_Click);
             // 
             // itmCallLog
             // 
             this.itmCallLog.Name = "itmCallLog";
-            this.itmCallLog.Size = new System.Drawing.Size(224, 22);
+            this.itmCallLog.Size = new System.Drawing.Size(228, 22);
             this.itmCallLog.Text = "Fetch Call Log";
             this.itmCallLog.Click += new System.EventHandler(this.ItmCallLog_Click);
             // 
@@ -295,28 +319,6 @@ namespace ArcConfigViewer
             // sfdExport
             // 
             this.sfdExport.Title = "Export Configuration";
-            // 
-            // itmAuthenticate
-            // 
-            this.itmAuthenticate.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.itmAuthenticateGrant,
-            this.itmAuthenticateRevoke});
-            this.itmAuthenticate.Name = "itmAuthenticate";
-            this.itmAuthenticate.Size = new System.Drawing.Size(228, 22);
-            this.itmAuthenticate.Text = "Authenticate";
-            // 
-            // itmAuthenticateGrant
-            // 
-            this.itmAuthenticateGrant.Name = "itmAuthenticateGrant";
-            this.itmAuthenticateGrant.Size = new System.Drawing.Size(180, 22);
-            this.itmAuthenticateGrant.Text = "Grant";
-            // 
-            // itmAuthenticateRevoke
-            // 
-            this.itmAuthenticateRevoke.Enabled = false;
-            this.itmAuthenticateRevoke.Name = "itmAuthenticateRevoke";
-            this.itmAuthenticateRevoke.Size = new System.Drawing.Size(180, 22);
-            this.itmAuthenticateRevoke.Text = "Revoke";
             // 
             // Home
             // 

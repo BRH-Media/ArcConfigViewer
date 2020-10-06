@@ -2,7 +2,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using WaitWindow;
+using ArcWaitWindow;
 
 namespace ArcAuthentication
 {
@@ -15,7 +15,7 @@ namespace ArcAuthentication
             try
             {
                 if (waitWindow)
-                    return (byte[])WaitWindow.WaitWindow.Show(GrabFile, @"Retrieving config file...");
+                    return (byte[])WaitWindow.Show(GrabFile, @"Retrieving config file...");
 
                 var newToken = new CgiToken(Global.BackupHtm);
                 var jsUri = $@"{Global.Origin}/cgi/cgi_backup.js";

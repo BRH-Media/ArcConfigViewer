@@ -1,7 +1,7 @@
 ﻿using ArcConfigViewer.Enums;
 using System.Data;
 using System.Windows.Forms;
-using WaitWindow;
+using ArcWaitWindow;
 
 namespace ArcConfigViewer.Extensions
 {
@@ -22,7 +22,7 @@ namespace ArcConfigViewer.Extensions
         {
             if (waitWindow)
             {
-                WaitWindow.WaitWindow.Show(ExportThis, @"Exporting...", table, format, fileName, silent);
+                WaitWindow.Show(ExportThis, @"Exporting...", table, format, fileName, silent);
             }
             else
             {
