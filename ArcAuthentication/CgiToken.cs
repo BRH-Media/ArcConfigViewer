@@ -83,6 +83,8 @@ namespace ArcAuthentication
                 var t = DateTime.UtcNow.ConvertToUnixTimestamp();
                 var referer = $@"{Global.Origin}/logout.htm?t={t}&m=";
                 var logout = $@"{Global.Origin}/logout.cgi";
+
+                //download logout.htm for the access token
                 var logoutToken = new CgiToken(referer);
 
                 if (!string.IsNullOrEmpty(logoutToken.Token))
@@ -121,7 +123,7 @@ namespace ArcAuthentication
                     request.Headers.TryAddWithoutValidation(@"Upgrade-Insecure-Requests", @"1");
                     request.Headers.TryAddWithoutValidation(@"Cookie", @"disableLogout=0");
                     request.Headers.TryAddWithoutValidation(@"User-Agent", Global.UserAgent);
-                    request.Headers.TryAddWithoutValidation(@"Referer", Global.LoginHtm);
+                    request.Headers.TryAddWithoutValidation(@"Referer", referer);
                     request.Headers.TryAddWithoutValidation(@"Host", Global.Gateway);
                     request.Headers.TryAddWithoutValidation(@"Origin", Global.Origin);
 
@@ -141,6 +143,9 @@ namespace ArcAuthentication
                     //on success, logout redirects user to login page
                     return locationHeader == @"/login.htm";
                 }
+                else
+                    MessageBox.Show($"Logout token was empty; revocation failed.", @"Revoke Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {

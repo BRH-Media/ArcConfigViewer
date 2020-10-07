@@ -519,47 +519,12 @@ namespace ArcConfigViewer
                 CancelSearch();
         }
 
-        private void UpdateUIAuthenticate(bool authenticated = false)
-        {
-            try
-            {
-                itmAuthenticateGrant.Enabled = !authenticated;
-                itmAuthenticateRevoke.Enabled = authenticated;
-            }
-            catch (Exception ex)
-            {
-                UiMessages.Error(ex.ToString());
-            }
-        }
-
-        private bool Authenticated(bool tryLogin = false)
-        {
-            try
-            {
-                var testLogin = Login.TestLogin();
-                if (!testLogin && tryLogin)
-                {
-                    var loginTry = LoginForm.ShowLogin();
-                    return loginTry;
-                }
-
-                return testLogin;
-            }
-            catch (Exception ex)
-            {
-                UiMessages.Error(ex.ToString());
-            }
-
-            //default
-            return false;
-        }
-
         private void ItmConnectedDevicesList_Click(object sender, EventArgs e)
         {
             try
             {
                 //try and login
-                var success = LoginForm.ShowLogin();
+                //var success = LoginForm.ShowLogin();
             }
             catch (Exception ex)
             {
@@ -640,6 +605,42 @@ namespace ArcConfigViewer
             }
         }
 
+        private void UpdateUIAuthenticate(bool authenticated = false)
+        {
+            try
+            {
+                itmAuthenticateGrant.Enabled = !authenticated;
+                itmTryDefault.Enabled = !authenticated;
+                itmAuthenticateRevoke.Enabled = authenticated;
+            }
+            catch (Exception ex)
+            {
+                UiMessages.Error(ex.ToString());
+            }
+        }
+
+        private static bool Authenticated(bool tryLogin = false)
+        {
+            try
+            {
+                var testLogin = Login.TestLogin();
+                if (!testLogin && tryLogin)
+                {
+                    var loginTry = LoginForm.ShowLogin();
+                    return loginTry;
+                }
+
+                return testLogin;
+            }
+            catch (Exception ex)
+            {
+                UiMessages.Error(ex.ToString());
+            }
+
+            //default
+            return false;
+        }
+
         private void UIAuthUpdate()
         {
             try
@@ -673,7 +674,6 @@ namespace ArcConfigViewer
                     if (loginSuccess)
                     {
                         UpdateUIAuthenticate(true);
-                        Global.InitToken = null;
                         UiMessages.Info(@"Successfully authenticated user");
                     }
                     else
@@ -710,6 +710,38 @@ namespace ArcConfigViewer
                 }
                 else
                     UiMessages.Warning(@"Revocation failed: login data not yet initiated");
+            }
+            catch (Exception ex)
+            {
+                UiMessages.Error(ex.ToString());
+            }
+        }
+
+        private void ItmTryDefault_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //test authentication
+                var testLogin = Login.TestLogin();
+                if (testLogin)
+                    UiMessages.Warning(@"Authentication failed: user is already authenticated");
+                else if (Global.InitToken == null)
+                {
+                    //LH1000 default is admin:Telstra
+                    var defaultLogin = new Credential(@"admin", @"Telstra");
+
+                    //login with default credentials
+                    var loginSuccess = Login.DoLogin(defaultLogin);
+                    if (loginSuccess)
+                    {
+                        UpdateUIAuthenticate(true);
+                        UiMessages.Info(@"Successfully authenticated user");
+                    }
+                    else
+                        UiMessages.Warning(@"Authentication failed: login was unsuccessful");
+                }
+                else
+                    UiMessages.Warning(@"Authentication failed: login data already initialised");
             }
             catch (Exception ex)
             {

@@ -59,6 +59,7 @@ namespace ArcConfigViewer
             this.txtMain = new System.Windows.Forms.RichTextBox();
             this.dgvMain = new System.Windows.Forms.DataGridView();
             this.sfdExport = new System.Windows.Forms.SaveFileDialog();
+            this.itmTryDefault = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMain.SuspendLayout();
             this.tlpMain.SuspendLayout();
             this.pnlMain.SuspendLayout();
@@ -110,6 +111,7 @@ namespace ArcConfigViewer
             // 
             this.itmAuthenticate.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.itmAuthenticateGrant,
+            this.itmTryDefault,
             this.itmAuthenticateRevoke});
             this.itmAuthenticate.Name = "itmAuthenticate";
             this.itmAuthenticate.Size = new System.Drawing.Size(228, 22);
@@ -118,16 +120,16 @@ namespace ArcConfigViewer
             // itmAuthenticateGrant
             // 
             this.itmAuthenticateGrant.Name = "itmAuthenticateGrant";
-            this.itmAuthenticateGrant.Size = new System.Drawing.Size(112, 22);
-            this.itmAuthenticateGrant.Text = "Grant";
+            this.itmAuthenticateGrant.Size = new System.Drawing.Size(180, 22);
+            this.itmAuthenticateGrant.Text = "Login";
             this.itmAuthenticateGrant.Click += new System.EventHandler(this.ItmAuthenticateGrant_Click);
             // 
             // itmAuthenticateRevoke
             // 
             this.itmAuthenticateRevoke.Enabled = false;
             this.itmAuthenticateRevoke.Name = "itmAuthenticateRevoke";
-            this.itmAuthenticateRevoke.Size = new System.Drawing.Size(112, 22);
-            this.itmAuthenticateRevoke.Text = "Revoke";
+            this.itmAuthenticateRevoke.Size = new System.Drawing.Size(180, 22);
+            this.itmAuthenticateRevoke.Text = "Logout";
             this.itmAuthenticateRevoke.Click += new System.EventHandler(this.ItmAuthenticateRevoke_Click);
             // 
             // itmConnectedDevicesList
@@ -320,6 +322,13 @@ namespace ArcConfigViewer
             // 
             this.sfdExport.Title = "Export Configuration";
             // 
+            // itmTryDefault
+            // 
+            this.itmTryDefault.Name = "itmTryDefault";
+            this.itmTryDefault.Size = new System.Drawing.Size(180, 22);
+            this.itmTryDefault.Text = "Try Default";
+            this.itmTryDefault.Click += new System.EventHandler(this.ItmTryDefault_Click);
+            // 
             // Home
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -372,6 +381,7 @@ namespace ArcConfigViewer
         private ToolStripMenuItem itmAuthenticate;
         private ToolStripMenuItem itmAuthenticateGrant;
         private ToolStripMenuItem itmAuthenticateRevoke;
+        private ToolStripMenuItem itmTryDefault;
     }
 }
 
