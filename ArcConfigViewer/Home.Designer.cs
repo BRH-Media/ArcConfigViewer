@@ -118,7 +118,7 @@ namespace ArcConfigViewer
             // itmAuthenticateGrant
             // 
             this.itmAuthenticateGrant.Name = "itmAuthenticateGrant";
-            this.itmAuthenticateGrant.Size = new System.Drawing.Size(180, 22);
+            this.itmAuthenticateGrant.Size = new System.Drawing.Size(112, 22);
             this.itmAuthenticateGrant.Text = "Grant";
             this.itmAuthenticateGrant.Click += new System.EventHandler(this.ItmAuthenticateGrant_Click);
             // 
@@ -126,7 +126,7 @@ namespace ArcConfigViewer
             // 
             this.itmAuthenticateRevoke.Enabled = false;
             this.itmAuthenticateRevoke.Name = "itmAuthenticateRevoke";
-            this.itmAuthenticateRevoke.Size = new System.Drawing.Size(180, 22);
+            this.itmAuthenticateRevoke.Size = new System.Drawing.Size(112, 22);
             this.itmAuthenticateRevoke.Text = "Revoke";
             this.itmAuthenticateRevoke.Click += new System.EventHandler(this.ItmAuthenticateRevoke_Click);
             // 
@@ -332,6 +332,7 @@ namespace ArcConfigViewer
             this.Name = "Home";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "LH1000 Configuration Viewer";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Home_Load);
             this.menuMain.ResumeLayout(false);
             this.menuMain.PerformLayout();

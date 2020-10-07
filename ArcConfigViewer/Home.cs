@@ -385,19 +385,23 @@ namespace ArcConfigViewer
 
         private void StartSearch()
         {
-            itmSearch.Text = @"Cancel Search";
-
             if (dgvMain.Visible)
             {
                 var cxt = Search.StartSearch(SearchMode.Grid, (DataTable)dgvMain.DataSource);
                 if (cxt.SearchSubmitted)
+                {
                     DoGridSearch(cxt);
+                    itmSearch.Text = @"Cancel Search";
+                }
             }
             else
             {
                 var cxt = Search.StartSearch(SearchMode.Text);
                 if (cxt.SearchSubmitted)
+                {
                     DoTextSearch(cxt);
+                    itmSearch.Text = @"Cancel Search";
+                }
             }
         }
 

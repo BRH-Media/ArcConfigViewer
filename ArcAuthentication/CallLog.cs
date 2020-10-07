@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using ArcWaitWindow;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using ArcWaitWindow;
 
 // ReSharper disable CoVariantArrayConversion
 
@@ -16,6 +16,21 @@ namespace ArcAuthentication
     {
         public string RawJS { get; set; } = @"";
         public string RawJSON { get; set; } = @"";
+
+        public static string[] ColumnDefinitions =
+        {
+            "Type",
+            "Time",
+            "Duration",
+            "Caller",
+            "VOIP #",
+            "Handset",
+            "Loss",
+            "Jitter",
+            "Latency",
+            "Status",
+            "Event"
+        };
 
         private void GrabJS(object sender, WaitWindowEventArgs e)
         {
@@ -97,25 +112,10 @@ namespace ArcAuthentication
                 {
                     var array = JsonConvert.DeserializeObject<string[]>(jsResult);
 
-                    var columnDefinitions = new[]
-                    {
-                        "Type",
-                        "Time",
-                        "Duration",
-                        "Caller",
-                        "VOIP #",
-                        "Handset",
-                        "Loss",
-                        "Jitter",
-                        "Latency",
-                        "Status",
-                        "Event"
-                    };
-
                     var dt = new DataTable(@"CallLog");
 
                     //column handler
-                    foreach (var c in columnDefinitions)
+                    foreach (var c in ColumnDefinitions)
                         dt.Columns.Add(c);
 
                     //row handler
