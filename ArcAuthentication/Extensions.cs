@@ -16,7 +16,7 @@ namespace ArcAuthentication
             return System.Convert.ToBase64String(plainTextBytes);
         }
 
-        public static DateTime ConvertFromUnixTimestamp(this double timestamp)
+        public static DateTime ConvertFromUnixTimestamp(this long timestamp)
         {
             var origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             return origin.AddSeconds(timestamp);
@@ -27,6 +27,38 @@ namespace ArcAuthentication
             var origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             var diff = date.ToUniversalTime() - origin;
             return Math.Floor(diff.TotalSeconds);
+        }
+
+        public static string ToShortForm(this TimeSpan t)
+        {
+            var shortForm = @"";
+            var useMs = true;
+
+            if (t.Hours > 0)
+            {
+                shortForm += $" {t.Hours}h";
+                useMs = false;
+            }
+            if (t.Minutes > 0)
+            {
+                shortForm += $" {t.Minutes}m";
+                useMs = false;
+            }
+            if (t.Seconds > 0)
+            {
+                shortForm += $" {t.Seconds}s";
+                useMs = false;
+            }
+
+            if (t.Milliseconds > 0 && useMs)
+                shortForm += $" {t.Milliseconds}ms";
+
+            if (t.TotalMilliseconds == 0)
+                shortForm = @"0ms";
+
+            shortForm = shortForm.TrimStart(' ');
+
+            return shortForm;
         }
     }
 }

@@ -36,9 +36,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DerConverter, Version=3.0.0.82, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DerConverter.3.0.0.82\lib\net471\DerConverter.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -50,9 +47,6 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="PemUtils, Version=3.0.0.82, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\PemUtils.3.0.0.82\lib\net471\PemUtils.dll</HintPath>
     </Reference>
     <Reference Include="PhoneNumbers, Version=8.12.10.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\libphonenumber-csharp.8.12.10\lib\net46\PhoneNumbers.dll</HintPath>
@@ -77,8 +71,6 @@
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
     </Reference>
-    <Reference Include="System.Messaging" />
-    <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
     </Reference>
@@ -94,6 +86,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyResolve.cs" />
+    <Compile Include="ConnectedDevices.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConnectedDevices.Designer.cs">
+      <DependentUpon>ConnectedDevices.cs</DependentUpon>
+    </Compile>
     <Compile Include="Enums\ExportFormat.cs" />
     <Compile Include="Enums\SearchMode.cs" />
     <Compile Include="Extensions\CfgUtility.cs" />
@@ -128,6 +126,9 @@
     <Compile Include="SqliteBrowser.Designer.cs">
       <DependentUpon>SqliteBrowser.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ConnectedDevices.resx">
+      <DependentUpon>ConnectedDevices.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Home.resx">
       <DependentUpon>Home.cs</DependentUpon>
     </EmbeddedResource>
@@ -167,6 +168,10 @@
     <ProjectReference Include="..\ArcAuthentication\ArcAuthentication.csproj">
       <Project>{d3f856bc-88d6-4b29-8601-45e57ecd75aa}</Project>
       <Name>ArcAuthentication</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ArcConfigKeyExtractor\ArcConfigKeyExtractor.csproj">
+      <Project>{a27df04d-57ff-454f-ba28-a186e908c016}</Project>
+      <Name>ArcConfigKeyExtractor</Name>
     </ProjectReference>
     <ProjectReference Include="..\ArcProcessor\ArcProcessor.csproj">
       <Project>{853f252f-bf42-4bed-8ce2-1a52454611a8}</Project>

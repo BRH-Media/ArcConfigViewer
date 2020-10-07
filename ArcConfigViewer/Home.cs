@@ -1,4 +1,6 @@
 ﻿using ArcAuthentication;
+using ArcAuthentication.Topology;
+using ArcConfigKeyExtractor;
 using ArcConfigViewer.Enums;
 using ArcConfigViewer.Extensions;
 using ArcProcessor;
@@ -429,7 +431,7 @@ namespace ArcConfigViewer
 
             if (!foundMatch)
             {
-                UiMessages.Error($"Nothing found for '{cxt.SearchTerm}'", @"No Results");
+                UiMessages.Warning($"Nothing found for '{cxt.SearchTerm}'", @"No Results");
                 CancelSearch();
             }
         }
@@ -444,7 +446,7 @@ namespace ArcConfigViewer
                 dgvMain.DataSource = filteredTable.CopyToDataTable();
             else
             {
-                UiMessages.Error($"Nothing found for '{cxt.SearchTerm}'", @"No Results");
+                UiMessages.Warning($"Nothing found for '{cxt.SearchTerm}'", @"No Results");
                 CancelSearch();
             }
         }
@@ -523,8 +525,32 @@ namespace ArcConfigViewer
         {
             try
             {
-                //try and login
-                //var success = LoginForm.ShowLogin();
+                //test authentication
+                var success = Authenticated();
+
+                if (success)
+                {
+                    var init = new CgiTopology();
+                    var dt = init.GrabTable();
+
+                    if (dt != null)
+                    {
+                        if (dt.Rows.Count > 0)
+                        {
+                            ConnectedDevices.ShowConnectedDevices(dt);
+                        }
+                        else
+                            UiMessages.Warning(
+                                @"Topology info from modem returned 0 devices connected; operation failed.",
+                                @"Data Error");
+                    }
+                    else
+                        UiMessages.Warning("Topology info from modem returned nothing useful. " +
+                                           "Please note that this is rate-limited, and the modem will reject too many requests within an undefined time-frame.",
+                            @"Data Error");
+                }
+                else
+                    UiMessages.Warning(@"Authentication required; please authenticate first.");
             }
             catch (Exception ex)
             {
@@ -554,12 +580,12 @@ namespace ArcConfigViewer
                             LoadTreeView(ArcArchive.ExtractDir);
                         }
                         else
-                            MessageBox.Show(@"Configuration file from modem returned 0 bytes; operation failed.", @"Data Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            UiMessages.Warning(@"Configuration file from modem returned 0 bytes; operation failed.",
+                                @"Data Error");
                     }
                     else
-                        MessageBox.Show(@"Configuration file from modem returned null bytes; operation failed.", @"Data Error",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        UiMessages.Warning(@"Configuration file from modem returned null bytes; operation failed.",
+                            @"Data Error");
                 }
                 else
                     UiMessages.Warning(@"Authentication required; please authenticate first.");
@@ -589,12 +615,10 @@ namespace ArcConfigViewer
                             PhoneLog.LoadLog(table);
                         }
                         else
-                            MessageBox.Show(@"Call log from modem returned 0 rows; operation failed.", @"Data Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            UiMessages.Warning(@"Call log from modem returned 0 rows; operation failed.", @"Data Error");
                     }
                     else
-                        MessageBox.Show(@"Call log from modem returned null bytes; operation failed.", @"Data Error",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        UiMessages.Warning(@"Call log from modem returned null bytes; operation failed.", @"Data Error");
                 }
                 else
                     UiMessages.Warning(@"Authentication required; please authenticate first.");
@@ -747,6 +771,12 @@ namespace ArcConfigViewer
             {
                 UiMessages.Error(ex.ToString());
             }
+        }
+
+        private void ItmElfDecryptionKey_Click(object sender, EventArgs e)
+        {
+            var elfProcessor = new ElfDissector(@"httpd");
+            elfProcessor.ExtractStrings();
         }
     }
 }

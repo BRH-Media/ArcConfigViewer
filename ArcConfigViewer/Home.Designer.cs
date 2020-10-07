@@ -39,6 +39,7 @@ namespace ArcConfigViewer
             this.itmNetwork = new System.Windows.Forms.ToolStripMenuItem();
             this.itmAuthenticate = new System.Windows.Forms.ToolStripMenuItem();
             this.itmAuthenticateGrant = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmTryDefault = new System.Windows.Forms.ToolStripMenuItem();
             this.itmAuthenticateRevoke = new System.Windows.Forms.ToolStripMenuItem();
             this.itmConnectedDevicesList = new System.Windows.Forms.ToolStripMenuItem();
             this.itmFetchFromModem = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,7 +60,7 @@ namespace ArcConfigViewer
             this.txtMain = new System.Windows.Forms.RichTextBox();
             this.dgvMain = new System.Windows.Forms.DataGridView();
             this.sfdExport = new System.Windows.Forms.SaveFileDialog();
-            this.itmTryDefault = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmElfDecryptionKey = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMain.SuspendLayout();
             this.tlpMain.SuspendLayout();
             this.pnlMain.SuspendLayout();
@@ -83,7 +84,8 @@ namespace ArcConfigViewer
             // itmFile
             // 
             this.itmFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.itmFileOpenConfig});
+            this.itmFileOpenConfig,
+            this.itmElfDecryptionKey});
             this.itmFile.Name = "itmFile";
             this.itmFile.Size = new System.Drawing.Size(37, 20);
             this.itmFile.Text = "File";
@@ -120,15 +122,22 @@ namespace ArcConfigViewer
             // itmAuthenticateGrant
             // 
             this.itmAuthenticateGrant.Name = "itmAuthenticateGrant";
-            this.itmAuthenticateGrant.Size = new System.Drawing.Size(180, 22);
+            this.itmAuthenticateGrant.Size = new System.Drawing.Size(130, 22);
             this.itmAuthenticateGrant.Text = "Login";
             this.itmAuthenticateGrant.Click += new System.EventHandler(this.ItmAuthenticateGrant_Click);
+            // 
+            // itmTryDefault
+            // 
+            this.itmTryDefault.Name = "itmTryDefault";
+            this.itmTryDefault.Size = new System.Drawing.Size(130, 22);
+            this.itmTryDefault.Text = "Try Default";
+            this.itmTryDefault.Click += new System.EventHandler(this.ItmTryDefault_Click);
             // 
             // itmAuthenticateRevoke
             // 
             this.itmAuthenticateRevoke.Enabled = false;
             this.itmAuthenticateRevoke.Name = "itmAuthenticateRevoke";
-            this.itmAuthenticateRevoke.Size = new System.Drawing.Size(180, 22);
+            this.itmAuthenticateRevoke.Size = new System.Drawing.Size(130, 22);
             this.itmAuthenticateRevoke.Text = "Logout";
             this.itmAuthenticateRevoke.Click += new System.EventHandler(this.ItmAuthenticateRevoke_Click);
             // 
@@ -322,12 +331,12 @@ namespace ArcConfigViewer
             // 
             this.sfdExport.Title = "Export Configuration";
             // 
-            // itmTryDefault
+            // itmElfDecryptionKey
             // 
-            this.itmTryDefault.Name = "itmTryDefault";
-            this.itmTryDefault.Size = new System.Drawing.Size(180, 22);
-            this.itmTryDefault.Text = "Try Default";
-            this.itmTryDefault.Click += new System.EventHandler(this.ItmTryDefault_Click);
+            this.itmElfDecryptionKey.Name = "itmElfDecryptionKey";
+            this.itmElfDecryptionKey.Size = new System.Drawing.Size(185, 22);
+            this.itmElfDecryptionKey.Text = "ELF Decryption Key";
+            this.itmElfDecryptionKey.Click += new System.EventHandler(this.ItmElfDecryptionKey_Click);
             // 
             // Home
             // 
@@ -382,6 +391,7 @@ namespace ArcConfigViewer
         private ToolStripMenuItem itmAuthenticateGrant;
         private ToolStripMenuItem itmAuthenticateRevoke;
         private ToolStripMenuItem itmTryDefault;
+        private ToolStripMenuItem itmElfDecryptionKey;
     }
 }
 

@@ -1,0 +1,2033 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ElfReader</name>
+    </assembly>
+    <members>
+        <member name="T:AlphaOmega.Debug.RelocationSectionItem">
+            <summary>
+            Relocation is the process of connecting symbolic references with symbolic definitions.
+            For example, when a program calls a function, the associated call instruction must transfer control to the proper destination address at execution.
+            In other words, relocatable files must have information that describes how to modify their section contents, thus allowing executable and shared object files to hold the right information for a process's program image.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.RelocationSectionItem.r_offset">
+            <summary>
+            This member gives the location at which to apply the relocation action.
+            For a relocatable file, the value is the byte offset from the beginning of the section to the storage unit affected by the relocation.
+            For an executable file or a shared object, the value is the virtual address of the storage unit affected by the relocation.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.RelocationSectionItem.r_info">
+            <summary>
+            This member gives both the symbol table index, with respect to which the relocation must be made, and the type of relocation to apply.
+            For example, a call instruction's relocation entry will hold the symbol table index of the function being called.
+            If the index is STN_UNDEF, the undefined symbol index, the relocation uses 0 as the symbol value.
+            </summary>
+        </member>
+        <member name="M:AlphaOmega.Debug.RelocationSectionItem.#ctor(System.UInt64,System.UInt64)">
+            <summary>Create instance of the relocation section item information (Used for .rela section)</summary>
+            <param name="r_offset">This member gives the location at which to apply the relocation action.</param>
+            <param name="r_info">This member gives both the symbol table index, with respect to which the relocation must be made, and the type of relocation to apply.</param>
+        </member>
+        <member name="T:AlphaOmega.Debug.StreamLoader">
+            <summary>Image loader from file or stream</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.IImageLoader">
+            <summary>Загрузчик PE файла</summary>
+        </member>
+        <member name="M:AlphaOmega.Debug.IImageLoader.PtrToStructure``1(System.UInt32)">
+            <summary>Получить структуру с определённого отступа</summary>
+            <typeparam name="T">Структура</typeparam>
+            <param name="padding">Отступ от начала файла или RVA</param>
+            <returns>Прочитанная структура</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.IImageLoader.ReadBytes(System.UInt32,System.UInt32)">
+            <summary>Получить массив байт с начала отступа</summary>
+            <param name="padding">Отступ от начала файла или RVA</param>
+            <param name="length">Читаемый размер</param>
+            <returns>Получить массив байт с отступа</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.IImageLoader.PtrToStringAnsi(System.UInt32)">
+            <summary>Получить строку с отпределённого отступа</summary>
+            <param name="padding">Отступ от начала файла или RVA</param>
+            <returns>Прочитанная строка</returns>
+        </member>
+        <member name="P:AlphaOmega.Debug.IImageLoader.IsModuleMapped">
+            <summary>Модуль загружен в память. Все RVA адреса переписаны в VA.</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.IImageLoader.BaseAddress">
+            <summary>Базовый адрес загруженного модуля в память</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.IImageLoader.Source">
+            <summary>Источник получения PE файла</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.IImageLoader.Endianness">
+            <summary>Required endianness</summary>
+        </member>
+        <member name="M:AlphaOmega.Debug.StreamLoader.#ctor(System.IO.Stream,System.String)">
+            <summary>Read image from stream</summary>
+            <param name="input">Stream with image</param>
+            <param name="source">Source of image</param>
+            <exception cref="T:ArgumentNullException">input stream is null</exception>
+            <exception cref="T:ArgumentNullException">souce is null</exception>
+            <exception cref="T:ArgumentException">stream must be seakable and readable</exception>
+        </member>
+        <member name="M:AlphaOmega.Debug.StreamLoader.FromFile(System.String)">
+            <summary>Read PE image from file</summary>
+            <param name="filePath">Path to the file</param>
+            <exception cref="T:ArgumentNullException">filePath is null or empty string</exception>
+            <exception cref="T:FileNotFoundException">file not found</exception>
+            <returns>PE loader</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.StreamLoader.FromMemory(System.Byte[],System.String)">
+            <summary>Read PE image from memory</summary>
+            <param name="input">Array of bytes</param>
+            <param name="sourceName">Custom source name</param>
+            <returns>PE loader</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.StreamLoader.ReadBytes(System.UInt32,System.UInt32)">
+            <summary>Get bytes from specific padding and specific length</summary>
+            <param name="padding">Padding from the beginning of the image</param>
+            <param name="length">Length of bytes to read</param>
+            <exception cref="T:ArgumentOutOfRangeException">padding + length more than size of image</exception>
+            <returns>Readed bytes</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.StreamLoader.PtrToStructure``1(System.UInt32)">
+            <summary>Get structure from specific padding from the beginning of the image</summary>
+            <typeparam name="T">Structure type</typeparam>
+            <param name="padding">Padding from the beginning of the image</param>
+            <returns>Readed structure from image</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.StreamLoader.PtrToStringAnsi(System.UInt32)">
+            <summary>Get ACSII string from specific padding from the beginning of the image</summary>
+            <param name="padding">Padding from the beginning of the image</param>
+            <exception cref="T:ArgumentOutOfRangeException">padding more than size of image</exception>
+            <returns>String from pointer</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.StreamLoader.Dispose">
+            <summary>Close PE reader</summary>
+        </member>
+        <member name="M:AlphaOmega.Debug.StreamLoader.Dispose(System.Boolean)">
+            <summary>Dispose managed objects</summary>
+            <param name="disposing">Dispose managed objects</param>
+        </member>
+        <member name="P:AlphaOmega.Debug.StreamLoader.Reader">
+            <summary>File reader</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.StreamLoader.IsModuleMapped">
+            <summary>Module mapped to memory</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.StreamLoader.BaseAddress">
+            <summary>Base PE file address</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.StreamLoader.Source">
+            <summary>Image source</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.StreamLoader.Endianness">
+            <summary>Required endianness</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.ElfFile">
+            <summary>ELF file description. With header and all sections</summary>
+        </member>
+        <member name="M:AlphaOmega.Debug.ElfFile.#ctor(AlphaOmega.Debug.IImageLoader)">
+            <summary>Create instance of the ELF file reader</summary>
+            <param name="loader">Stream of data</param>
+            <exception cref="T:System.InvalidOperationException">Invalid ELF header</exception>
+        </member>
+        <member name="M:AlphaOmega.Debug.ElfFile.GetStringSection(System.UInt32)">
+            <summary>Gets a STRTAB section from specified index</summary>
+            <param name="index">section index with type STRTAB</param>
+            <returns>STRTAB section from specified index or exception</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.ElfFile.GetStringSections">
+            <summary>
+            String table sections hold null-terminated character sequences, commonly called strings.
+            The object file uses these strings to represent symbol and section names.
+            One references a string as an index into the string table section.
+            </summary>
+            <returns>All STRTAB sections from current ELF image</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.ElfFile.GetNotesSections">
+            <summary>
+            Sometimes a vendor or system builder needs to mark an object file with special information that other programs will check for conformance, compatibility, and so forth.
+            Sections of type SHT_NOTE and program header elements of type PT_NOTE can be used for this purpose.
+            
+            The note information in sections and program header elements holds any number of entries, each of which is an array of 4-byte words in the format of the target processor.
+            </summary>
+        </member>
+        <member name="M:AlphaOmega.Debug.ElfFile.GetSymbolSections">
+            <summary>
+            An object file's symbol table holds information needed to locate and relocate a program's symbolic definitions and references. A symbol table index is a subscript into this array.
+            Index 0 both designates the first entry in the table and serves as the undefined symbol index.
+            </summary>
+        </member>
+        <member name="M:AlphaOmega.Debug.ElfFile.GetRelocationSections">
+            <summary>
+            Relocation is the process of connecting symbolic references with symbolic definitions.
+            For example, when a program calls a function, the associated call instruction must transfer control to the proper destination address at execution.
+            In other words, relocatable files must have information that describes how to modify their section contents, thus allowing executable and shared object files to hold the right information for a process's program image.
+            </summary>
+        </member>
+        <member name="M:AlphaOmega.Debug.ElfFile.GetRelocationASections">
+            <summary>
+            Relocation is the process of connecting symbolic references with symbolic definitions.
+            For example, when a program calls a function, the associated call instruction must transfer control to the proper destination address at execution.
+            In other words, relocatable files must have information that describes how to modify their section contents, thus allowing executable and shared object files to hold the right information for a process's program image.
+            </summary>
+        </member>
+        <member name="M:AlphaOmega.Debug.ElfFile.GetSectionByType(AlphaOmega.Debug.Elf.SHT)">
+            <summary>Get all sections by section type</summary>
+            <param name="type">Type of the required sections</param>
+            <returns>All sections with required type</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.ElfFile.Dispose">
+            <summary>Close loader</summary>
+        </member>
+        <member name="M:AlphaOmega.Debug.ElfFile.Dispose(System.Boolean)">
+            <summary>Dispose managed objects</summary>
+            <param name="disposing">Dispose managed objects</param>
+        </member>
+        <member name="P:AlphaOmega.Debug.ElfFile.Header">
+            <summary>ELF32/64 header</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.ElfFile.Sections">
+            <summary>
+            An object file's section header table lets one locate all the file's sections.
+            The section header table is an array of Elf32_Shdr or Elf64_Shdr structures as described below.
+            A section header table index is a subscript into this array.
+            The ELF header's e_shoff member gives the byte offset from the beginning of the file to the section header table.
+            e_shnum normally tells how many entries the section header table contains.
+            e_shentsize gives the size in bytes of each entry.
+            </summary>
+            <remarks>
+            Some section header table indexes are reserved in contexts where index size is restricted, for example, the st_shndx member of a symbol table entry and the e_shnum and e_shstrndx members of the ELF header.
+            In such contexts, the reserved values do not represent actual sections in the object file.
+            Also in such contexts, an escape value indicates that the actual section index is to be found elsewhere, in a larger field.
+            </remarks>
+        </member>
+        <member name="P:AlphaOmega.Debug.ElfFile.SectionNames">
+            <summary>This member holds the section header table of the entry associated with the section name string table.</summary>
+            <remarks>If the file has no section name string table, this member returns null.</remarks>
+        </member>
+        <member name="T:AlphaOmega.Debug.NoteSection">
+            <summary>
+            Sometimes a vendor or system builder needs to mark an object file with special information that other programs will check for conformance, compatibility, and so forth.
+            Sections of type SHT_NOTE and program header elements of type PT_NOTE can be used for this purpose.
+            
+            The note information in sections and program header elements holds any number of entries, each of which is an array of 4-byte words in the format of the target processor.
+            </summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.SectionBase">
+            <summary>Basic section information for the strongly typed sections</summary>
+        </member>
+        <member name="M:AlphaOmega.Debug.SectionBase.#ctor(AlphaOmega.Debug.Section,AlphaOmega.Debug.Elf.SHT)">
+            <summary>Create instance of the basic section information with section type check</summary>
+            <param name="section">ELF section information</param>
+            <param name="type">Required section type</param>
+            <exception cref="T:System.ArgumentException">section st_type is not equals with <paramref name="type"/></exception>
+        </member>
+        <member name="M:AlphaOmega.Debug.SectionBase.#ctor(AlphaOmega.Debug.Section)">
+            <summary>Create instance of the basic section information</summary>
+            <param name="section">ELF section information</param>
+        </member>
+        <member name="P:AlphaOmega.Debug.SectionBase.Section">
+            <summary>ELF section information</summary>
+        </member>
+        <member name="M:AlphaOmega.Debug.NoteSection.GetEnumerator">
+            <summary>Get all notes from current section</summary>
+            <returns>Stream of notes from current section</returns>
+        </member>
+        <member name="T:AlphaOmega.Debug.SymbolSection">
+            <summary>
+            An object file's symbol table holds information needed to locate and relocate a program's symbolic definitions and references. A symbol table index is a subscript into this array.
+            Index 0 both designates the first entry in the table and serves as the undefined symbol index.
+            </summary>
+        </member>
+        <member name="M:AlphaOmega.Debug.SymbolSection.GetEnumerator">
+            <summary>Get all symbols in the section</summary>
+            <returns>Stream of all symbols in the current section</returns>
+        </member>
+        <member name="T:AlphaOmega.Debug.RelocationASectionItem">
+            <summary>
+            Relocation is the process of connecting symbolic references with symbolic definitions.
+            For example, when a program calls a function, the associated call instruction must transfer control to the proper destination address at execution.
+            In other words, relocatable files must have information that describes how to modify their section contents, thus allowing executable and shared object files to hold the right information for a process's program image.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.RelocationASectionItem.r_addend">
+            <summary>This member specifies a constant addend used to compute the value to be stored into the relocatable field.</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.Properties.Resources.errHeaderInvalid">
+            <summary>
+              Looks up a localized string similar to Invalid identity header.
+            </summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.Properties.Resources.errNoStringConstantArg1">
+            <summary>
+              Looks up a localized string similar to Section &quot;{0}&quot; does not have string table constant reference.
+            </summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.Properties.Resources.errSectionNotFoundArg1">
+            <summary>
+              Looks up a localized string similar to Section &quot;{0}&quot; not found.
+            </summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.Properties.Resources.errUnsupportedSectionArg1">
+            <summary>
+              Looks up a localized string similar to Only &quot;{0}&quot; section is supported.
+            </summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Header">
+            <summary>ELF image header</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Header.e_type">
+            <summary>This member identifies the object file type.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Header.e_machine">
+            <summary>This member's value specifies the required architecture for an individual file.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Header.e_version">
+            <summary>This member identifies the object file version.</summary>
+            <remarks>
+            The value 1 signifies the original file format; extensions will create new versions with higher numbers.
+            The value of EV_CURRENT changes as necessary to reflect the current version number.
+            </remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Header.e_entry">
+            <summary>This member gives the virtual address to which the system first transfers control, thus starting the process. If the file has no associated entry point, this member holds zero.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Header.e_phoff">
+            <summary>This member holds the program header table's file offset in bytes.</summary>
+            <remarks>If the file has no program header table, this member holds zero.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Header.e_shoff">
+            <summary>This member holds the section header table's file offset in bytes.</summary>
+            <remarks>If the file has no section header table, this member holds zero.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Header.e_flags">
+            <summary>
+            This member holds processor-specific flags associated with the file.
+            Flag names take the form EF_machine_flag.
+            </summary>
+            <remarks>This member is presently zero for SPARC and IA.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Header.e_ehsize">
+            <summary>This member holds the ELF header's size in bytes.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Header.e_phentsize">
+            <summary>This member holds the size in bytes of one entry in the file's program header table; all entries are the same size.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Header.e_phnum">
+            <summary>
+            This member holds the number of entries in the program header table.
+            Thus the product of e_phentsize and e_phnum gives the table's size in bytes.
+            </summary>
+            <remarks>If a file has no program header table, e_phnum holds the value zero.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Header.e_shentsize">
+            <summary>
+            This member holds a section header's size in bytes.
+            A section header is one entry in the section header table
+            </summary>
+            <remarks>all entries are the same size.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Header.e_shnum">
+            <summary>
+            This member holds the number of entries in the section header table.
+            Thus the product of e_shentsize and e_shnum gives the section header table's size in bytes.
+            </summary>
+            <remarks>If a file has no section header table, e_shnum holds the value zero.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Header.e_shstrndx">
+            <summary>This member holds the section header table index of the entry associated with the section name string table.</summary>
+            <remarks>If the file has no section name string table, this member holds the value SHN_UNDEF.</remarks>
+        </member>
+        <member name="P:AlphaOmega.Debug.Header.SpecShIndex">
+            <summary>Special Section Indexes</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.RelocationASection">
+            <summary>
+            Relocation is the process of connecting symbolic references with symbolic definitions.
+            For example, when a program calls a function, the associated call instruction must transfer control to the proper destination address at execution.
+            In other words, relocatable files must have information that describes how to modify their section contents, thus allowing executable and shared object files to hold the right information for a process's program image.
+            </summary>
+        </member>
+        <member name="M:AlphaOmega.Debug.RelocationASection.GetEnumerator">
+            <summary>Get all relocations with addendum constant in the section</summary>
+            <returns>Stream of all relocations with addendum constant from current section</returns>
+        </member>
+        <member name="T:AlphaOmega.Debug.ISectionData">
+            <summary>Represents data from specific section</summary>
+        </member>
+        <member name="M:AlphaOmega.Debug.ISectionData.GetData">
+            <summary>Gets the data from specific image section</summary>
+            <returns>byte array</returns>
+        </member>
+        <member name="T:AlphaOmega.Debug.LookupLoader">
+            <summary>Test loader</summary>
+        </member>
+        <member name="M:AlphaOmega.Debug.LookupLoader.#ctor(System.String)">
+            <summary>Create instance of test loader</summary>
+            <param name="filePath"></param>
+        </member>
+        <member name="M:AlphaOmega.Debug.LookupLoader.PtrToStructure``1(System.UInt32)">
+            <summary>Get structure from specific padding from the beginning of the image</summary>
+            <typeparam name="T">Structure type</typeparam>
+            <param name="padding">Padding from the beginning of the image</param>
+            <returns>Readed structure from image</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.LookupLoader.ReadBytes(System.UInt32,System.UInt32)">
+            <summary>Get bytes from specific padding and specific length</summary>
+            <param name="padding">Padding from the beginning of the image</param>
+            <param name="length">Length of bytes to read</param>
+            <returns>Readed bytes</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.LookupLoader.PtrToStringAnsi(System.UInt32)">
+            <summary>Get ACSII string from specific padding from the beginning of the image</summary>
+            <param name="padding">Padding from the beginning of the image</param>
+            <returns>String from pointer</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.LookupLoader.Dispose">
+            <summary>Save to text file all data that was readed</summary>
+        </member>
+        <member name="M:AlphaOmega.Debug.LookupLoader.GetFileUniqueName(System.String,System.String,System.UInt32)">
+            <summary>Получить уникальное наименование файла</summary>
+            <param name="path">Путь с наименованием файла</param>
+            /// <param name="extension">Расширение, которое добавляется к файлу</param>
+            <param name="index">Индекс наименования, если файл с таким наименованием уже существует</param>
+            <returns>Уникальное наимеование файла</returns>
+        </member>
+        <member name="T:AlphaOmega.Debug.RelocationSection">
+            <summary>
+            Relocation is the process of connecting symbolic references with symbolic definitions.
+            For example, when a program calls a function, the associated call instruction must transfer control to the proper destination address at execution.
+            In other words, relocatable files must have information that describes how to modify their section contents, thus allowing executable and shared object files to hold the right information for a process's program image.
+            </summary>
+        </member>
+        <member name="M:AlphaOmega.Debug.RelocationSection.GetEnumerator">
+            <summary>Get all relocations in the section</summary>
+            <returns>Stream of all relocations from current section</returns>
+        </member>
+        <member name="T:AlphaOmega.Debug.EndianHelper">
+            <summary>Variable utils</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.EndianHelper.Endianness">
+            <summary>Get system default endiannesss</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.EndianHelper.Endian">
+            <summary>Endianness, big or little</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.EndianHelper.Endian.Big">
+            <summary>BigEndian</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.EndianHelper.Endian.Little">
+            <summary>LittleEndian</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.SymbolSectionItem">
+            <summary>
+            An object file's symbol table holds information needed to locate and relocate a program's symbolic definitions and references. A symbol table index is a subscript into this array.
+            Index 0 both designates the first entry in the table and serves as the undefined symbol index.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.SymbolSectionItem.st_name">
+            <summary>This member holds an index into the object file's symbol string table, which holds the character representations of the symbol names.</summary>
+            <remarks>If the value is non-zero, it represents a string table index that gives the symbol name. Otherwise, the symbol table entry has no name.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.SymbolSectionItem.st_info">
+            <summary>This member specifies the symbol's type and binding attributes.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.SymbolSectionItem.st_other">
+            <summary>This member currently specifies a symbol's visibility.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.SymbolSectionItem.st_shndx">
+            <summary>
+            Every symbol table entry is defined in relation to some section.
+            This member holds the relevant section header table index.
+            As the sh_link and sh_info interpretation table and the related text describe, some section indexes indicate special meanings.
+            </summary>
+            <remarks>
+            If this member contains SHN_XINDEX, then the actual section header index is too large to fit in this field.
+            The actual value is contained in the associated section of type SHT_SYMTAB_SHNDX.
+            </remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.SymbolSectionItem.st_value">
+            <summary>
+            This member gives the value of the associated symbol.
+            Depending on the context, this may be an absolute value, an address, and so on.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.SymbolSectionItem.st_size">
+            <summary>
+            Many symbols have associated sizes.
+            For example, a data object's size is the number of bytes contained in the object.
+            </summary>
+            <remarks>This member holds 0 if the symbol has no size or an unknown size.</remarks>
+        </member>
+        <member name="P:AlphaOmega.Debug.SymbolSectionItem.Bind">
+            <summary>A symbol's binding determines the linkage visibility and behavior</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.SymbolSectionItem.Type">
+            <summary>A symbol's type provides a general classification for the associated entity.</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.SymbolSectionItem.Visibility">
+            <summary>Symbol visibility</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.SymbolSectionItem.Name">
+            <summary>Character representation of the symbol name</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.ElfHeader">
+            <summary>ELF header data information</summary>
+        </member>
+        <member name="M:AlphaOmega.Debug.ElfHeader.#ctor(AlphaOmega.Debug.IImageLoader)">
+            <summary>Create instance of the ELF basic data information</summary>
+            <param name="loader">Stream of data</param>
+        </member>
+        <member name="M:AlphaOmega.Debug.ElfHeader.ReadBytes(System.UInt64,System.UInt64)">
+            <summary>Read bytes from image</summary>
+            <param name="offset">offset from beggining of the file</param>
+            <param name="length">How much to read</param>
+            <returns>Readed bytes</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.ElfHeader.ReadInt(System.UInt64@)">
+            <summary>Reads integer</summary>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.ElfHeader.PtrToStructure``1(System.UInt64)">
+            <summary>Get structure from specific RVA</summary>
+            <typeparam name="T">Structure to map</typeparam>
+            <param name="offset">RVA to the beggining of structure</param>
+            <returns>Mapped structure</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.ElfHeader.PtrToStringAnsi(System.UInt64)">
+            <summary>Get string from specific RVA</summary>
+            <param name="offset">RVA to the beggining of string</param>
+            <returns>Mapped string</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.ElfHeader.Dispose">
+            <summary>dispose data reader and all managed resources</summary>
+        </member>
+        <member name="M:AlphaOmega.Debug.ElfHeader.Dispose(System.Boolean)">
+            <summary>Dispose managed objects</summary>
+            <param name="disposing">Dispose managed objects</param>
+        </member>
+        <member name="P:AlphaOmega.Debug.ElfHeader.Loader">
+            <summary>Image loader interface</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.ElfHeader.Identification">
+            <summary>ELF file identification information</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.ElfHeader.IsValid">
+            <summary>This file contains valid ELF header</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.ElfHeader.Is64Bit">
+            <summary>This file for 64-byte address space</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.ElfHeader.Header">
+            <summary>ELF file header</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.BinaryEndianReader">
+            <summary>Binary reader with endianness check</summary>
+        </member>
+        <member name="M:AlphaOmega.Debug.BinaryEndianReader.#ctor(System.IO.Stream,AlphaOmega.Debug.EndianHelper.Endian)">
+            <summary>Create instance of the binary reader specifying required endianness and input stream</summary>
+            <param name="endianness">Required endianness</param>
+            <param name="input">Byte input stream</param>
+        </member>
+        <member name="M:AlphaOmega.Debug.BinaryEndianReader.CreateReader(AlphaOmega.Debug.EndianHelper.Endian,System.IO.MemoryStream)">
+            <summary>Creates reader for specific byte endianness</summary>
+            <param name="endiannes">Big or Little endian</param>
+            <param name="input">Byte array stream</param>
+            <returns>BinaryReader</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.BinaryEndianReader.ReadDecimal">
+            <summary>Reads decimal and swap bytes if needed</summary>
+            <returns>Decimal</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.BinaryEndianReader.ReadDouble">
+            <summary>Reads double and swap bytes if needed</summary>
+            <returns>Double</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.BinaryEndianReader.ReadInt16">
+            <summary>Reads Int16 and swap bytes if needed</summary>
+            <returns>Int16</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.BinaryEndianReader.ReadInt32">
+            <summary>Reads Int32 and swap bytes if needed</summary>
+            <returns>Int32</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.BinaryEndianReader.ReadInt64">
+            <summary>Reads Int64 and swap bytes if needed</summary>
+            <returns>Int64</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.BinaryEndianReader.ReadSingle">
+            <summary>Reads Single and swap bytes if needed</summary>
+            <returns>Single</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.BinaryEndianReader.ReadUInt16">
+            <summary>Reads unsigned Int16 and swap bytes if needed</summary>
+            <returns>UInt16</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.BinaryEndianReader.ReadUInt32">
+            <summary>Reads unsigned Int32 and swap bytes if needed</summary>
+            <returns>UInt32</returns>
+        </member>
+        <member name="M:AlphaOmega.Debug.BinaryEndianReader.ReadUInt64">
+            <summary>Reads unsigned Int64 and swap bytes if needed</summary>
+            <returns>UInt64</returns>
+        </member>
+        <member name="T:AlphaOmega.Debug.StringSectionItem">
+            <summary>String tables string constant</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.StringSectionItem.Index">
+            <summary>String constant index</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.StringSectionItem.Name">
+            <summary>String constant from string table section</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.StringSection">
+            <summary>
+            String table sections hold null-terminated character sequences, commonly called strings.
+            The object file uses these strings to represent symbol and section names.
+            One references a string as an index into the string table section.
+            </summary>
+        </member>
+        <member name="M:AlphaOmega.Debug.StringSection.#ctor(AlphaOmega.Debug.Section)">
+            <summary>Create instance of the string table section.</summary>
+            <param name="section">String table section. section.st_type must be equans to Elf.SHT.STRTAB</param>
+        </member>
+        <member name="M:AlphaOmega.Debug.StringSection.GetEnumerator">
+            <summary>Gets all string with indexes</summary>
+            <returns>Index and Values</returns>
+        </member>
+        <member name="P:AlphaOmega.Debug.StringSection.Item(System.UInt32)">
+            <summary>Gets string constant by index</summary>
+            <param name="index">Index of the string constant</param>
+            <returns>String constant or null</returns>
+        </member>
+        <member name="T:AlphaOmega.Debug.Section">
+            <summary>
+            An object file's section header table lets one locate all the file's sections.
+            The section header table is an array of Elf32_Shdr or Elf64_Shdr structures as described below.
+            A section header table index is a subscript into this array.
+            The ELF header's e_shoff member gives the byte offset from the beginning of the file to the section header table.
+            e_shnum normally tells how many entries the section header table contains.
+            e_shentsize gives the size in bytes of each entry.
+            </summary>
+            <remarks>
+            Some section header table indexes are reserved in contexts where index size is restricted, for example, the st_shndx member of a symbol table entry and the e_shnum and e_shstrndx members of the ELF header.
+            In such contexts, the reserved values do not represent actual sections in the object file.
+            Also in such contexts, an escape value indicates that the actual section index is to be found elsewhere, in a larger field.
+            </remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Section.sh_name">
+            <summary>This member specifies the name of the section.</summary>
+            <remarks>Its value is an index into the section header string table section (see "String Table") giving the location of a null-terminated string.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Section.sh_type">
+            <summary>This member categorizes the section's contents and semantics.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Section.sh_flags">
+            <summary>Sections support 1-bit flags that describe miscellaneous attributes.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Section.sh_addr">
+            <summary>If the section is to appear in the memory image of a process, this member gives the address at which the section's first byte should reside. Otherwise, the member contains 0.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Section.sh_offset">
+            <summary>
+            This member gives the byte offset from the beginning of the file to the first byte in the section.
+            Section type SHT_NOBITS, described below, occupies no space in the file, and its sh_offset member locates the conceptual placement in the file.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Section.sh_size">
+            <summary>
+            This member gives the section's size in bytes. Unless the section type is SHT_NOBITS, the section occupies sh_size bytes in the file.
+            A section of type SHT_NOBITS can have a nonzero size, but it occupies no space in the file.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Section.sh_link">
+            <summary>This member holds a section header table index link, whose interpretation depends on the section type.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Section.sh_info">
+            <summary>This member holds extra information, whose interpretation depends on the section type.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Section.sh_addralign">
+            <summary>
+            Some sections have address alignment constraints.
+            For example, if a section holds a double-word, the system must ensure double-word alignment for the entire section.
+            That is, the value of sh_addr must be congruent to 0, modulo the value of sh_addralign.
+            Currently, only 0 and positive integral powers of two are allowed.
+            Values 0 and 1 mean the section has no alignment constraints.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Section.sh_entsize">
+            <summary>
+            Some sections hold a table of fixed-size entries, such as a symbol table.
+            For such a section, this member gives the size in bytes of each entry.
+            The member contains 0 if the section does not hold a table of fixed-size entries.
+            </summary>
+        </member>
+        <member name="M:AlphaOmega.Debug.Section.GetData">
+            <summary>Get raw section data</summary>
+            <returns>Raw section data</returns>
+        </member>
+        <member name="P:AlphaOmega.Debug.Section.Name">
+            <summary>This member specifies the name of the section.</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.Section.Index">
+            <summary>Section index</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.Section.Flags">
+            <summary>Section Attribute Flags</summary>
+            <remarks>
+            If a flag bit is set in sh_flags, the attribute is on for the section.
+            Otherwise, the attribute is off or does not apply.
+            Undefined attributes are reserved and set to zero.
+            </remarks>
+        </member>
+        <member name="P:AlphaOmega.Debug.Section.IsOs">
+            <summary>Values in this inclusive range are reserved for operating system-specific semantics.</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.Section.IsProc">
+            <summary>Values in this inclusive range are reserved for processor-specific semantics.</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.Section.IsUser">
+            <summary>Section types between SHT_LOUSER and SHT_HIUSER can be used by the application, without conflicting with current or future system-defined section types.</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Elf">
+            <summary>Basic Executable and Linkable Format structures</summary>
+            <remarks>https://docs.oracle.com/cd/E19957-01/806-0641/chapter6-43405/index.html</remarks>
+        </member>
+        <member name="T:AlphaOmega.Debug.Elf.ELFCLASS">
+            <summary>
+            The file format is designed to be portable among machines of various sizes, without imposing the sizes of the largest machine on the smallest.
+            The class of the file defines the basic types used by the data structures of the object file container itself.
+            The data contained in object file sections may follow a different programming model.
+            If so, the processor supplement describes the model used.
+            </summary>
+            <remarks>Other classes will be defined as necessary, with different basic types and sizes for object file data.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ELFCLASS.NONE">
+            <summary>Invalid class</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ELFCLASS.CLASS32">
+            <summary>
+            Supports machines with 32-bit architectures.
+            It uses the basic types defined in the table labeled "32-Bit Data Types."
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ELFCLASS.CLASS64">
+            <summary>
+            Supports machines with 64-bit architectures.
+            It uses the basic types defined in the table labeled "64-Bit Data Types."
+            </summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Elf.ELFDATA">
+            <summary>Specifies the encoding of both the data structures used by object file container and data contained in object file sections.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ELFDATA.NONE">
+            <summary>Invalid data encoding</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ELFDATA._2LSB">
+            <summary>Encoding ELFDATA2LSB specifies 2's complement values, with the least significant byte occupying the lowest address.</summary>
+            <remarks>LE</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ELFDATA._2MSB">
+            <summary>Encoding ELFDATA2MSB specifies 2's complement values, with the most significant byte occupying the lowest address.</summary>
+            <remarks>BE</remarks>
+        </member>
+        <member name="T:AlphaOmega.Debug.Elf.EV">
+            <summary>This member identifies the object file version.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EV.NONE">
+            <summary>Invalid version</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EV.CURRENT">
+            <summary>Current version</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Elf.ELFOSABI">
+            <summary>Identifies the OS- or ABI-specific ELF extensions used by this file</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ELFOSABI.NONE">
+            <summary>No extensions or unspecified</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ELFOSABI.HPUX">
+            <summary>Hewlett-Packard HP-UX</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ELFOSABI.NETBSD">
+            <summary>NetBSD</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ELFOSABI.GNU">
+            <summary>GNU (Linux)</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ELFOSABI.SOLARIS">
+            <summary>Sun Solaris</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ELFOSABI.AIX">
+            <summary>AIX</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ELFOSABI.IRIX">
+            <summary>IRIX</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ELFOSABI.FREEBSD">
+            <summary>FreeBSD</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ELFOSABI.TRU64">
+            <summary>Compaq TRU64 UNIX</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ELFOSABI.MONDESTO">
+            <summary>Novell Modesto</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ELFOSABI.OPENBSD">
+            <summary>Open BSD</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ELFOSABI.OPENVMS">
+            <summary>Open VMS</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ELFOSABI.NSK">
+            <summary>Hewlett-Packard Non-Stop Kernel</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ELFOSABI.AROS">
+            <summary>Amiga Research OS</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ELFOSABI.FENIXOS">
+            <summary>The FenixOS highly scalable multi-core OS</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ELFOSABI.CLOUDABI">
+            <summary>Nuxi CloudABI</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ELFOSABI.OPENVOS">
+            <summary>Stratus Technologies OpenVOS</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Elf.EI">
+            <summary>ELF file identification information</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EI.magic">
+            <summary>A file's first 4 bytes hold a ``magic number,'' identifying the file as an ELF object file.</summary>
+            <remarks>0x7F, 'E', 'L', 'F'</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EI._class">
+            <summary>
+            The file format is designed to be portable among machines of various sizes, without imposing the sizes of the largest machine on the smallest.
+            The class of the file defines the basic types used by the data structures of the object file container itself.
+            The data contained in object file sections may follow a different programming model.
+            If so, the processor supplement describes the model used.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EI.data">
+            <summary>Specifies the encoding of both the data structures used by object file container and data contained in object file sections.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EI.version">
+            <summary>This member identifies the object file version.</summary>
+            <remarks>
+            The value 1 signifies the original file format; extensions will create new versions with higher numbers.
+            Although the value of EV_CURRENT is shown as 1 in the previous table, it will change as necessary to reflect the current version number.
+            </remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EI.osabi">
+            <summary>Identifies the OS- or ABI-specific ELF extensions used by this file</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EI.abiversion">
+            <summary>Identifies the version of the ABI to which the object is targeted</summary>
+            <remarks>
+            This field is used to distinguish among incompatible versions of an ABI.
+            The interpretation of this version number is dependent on the ABI identified by the EI_OSABI field.
+            If no values are specified for the EI_OSABI field by the processor supplement or no version values are specified for the ABI determined by a particular value of the EI_OSABI byte, the value 0 shall be used for the EI_ABIVERSION byte;
+            it indicates unspecified.
+            </remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EI.pad">
+            <summary>This value marks the beginning of the unused bytes in e_ident</summary>
+            <remarks>
+             These bytes are reserved and set to zero; programs that read object files should ignore them.
+             The value of EI_PAD will change in the future if currently unused bytes are given meanings.
+            </remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EI.nident">
+            <summary>
+            This value marks the beginning of the unused bytes in e_ident.
+            These bytes are reserved and set to zero; programs that read object files should ignore them.
+            The value of nident will change in the future if currently unused bytes are given meanings.
+            </summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.Elf.EI.SignatureStr">
+            <summary>String representation for signature field</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.Elf.EI.IsValid">
+            <summary>ELF header is valid</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Elf.ET">
+            <summary>File Identifiers</summary>
+            <remarks>
+            Although the core file contents are unspecified, type ET_CORE is reserved to mark the file.
+            Values from ET_LOPROC through ET_HIPROC (inclusive) are reserved for processor-specific semantics.
+            Other values are reserved and will be assigned to new object file types as necessary.
+            </remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ET.NONE">
+            <summary>No file type</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ET.REL">
+            <summary>Relocatable file</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ET.EXEC">
+            <summary>Executable file</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ET.DYN">
+            <summary>Shared object file</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ET.CORE">
+            <summary>Core file</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ET.LOPROC">
+            <summary>Processor-specific</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.ET.HIPROC">
+            <summary>Processor-specific</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Elf.EM">
+            <summary>ELF Machines</summary>
+            <remarks>
+            Other values are reserved and will be assigned to new machines as necessary.
+            Processor-specific ELF names use the machine name to distinguish them.
+            For example, the flags mentioned below use the prefix EF_; a flag named WIDGET for the EM_XYZ machine would be called EF_XYZ_WIDGET.
+            </remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.NONE">
+            <summary>No machine</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.M32">
+            <summary>AT&amp;T WE 32100</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.SPARC">
+            <summary>SPARC</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM._386">
+            <summary>Intel 80386</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM._68K">
+            <summary>Motorola 68000</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM._88K">
+            <summary>Motorola 88000</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM._486">
+            <summary>Intel 80486</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM._860">
+            <summary>Intel 80860</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.MIPS">
+            <summary>MIPS RS3000 Big-Endian</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.MIPS_RS3_LE">
+            <summary>MIPS RS3000 Little-Endian</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.RS6000">
+            <summary>RS6000</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.PA_RISC">
+            <summary>Hewlett-Packard PA-RISC</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.nCUBE">
+            <summary>nCUBE</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.VPP500">
+            <summary>Fujitsu VPP500</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.SPARC32PLUS">
+            <summary>Sun SPARC 32+</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM._960">
+            <summary>Intel 80960</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.PPC">
+            <summary>PowerPC</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.PPC64">
+            <summary>64-bit PowerPC</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.V800">
+            <summary>NEC V800</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.FR20">
+            <summary>Fujitsu FR20</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.RH32">
+            <summary>TRW RH-32</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.RCE">
+            <summary>Motorola RCE</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.ARM">
+            <summary>Advanced RISC Machines ARM</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.ALPHA">
+            <summary>Digital Alpha</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.SH">
+            <summary>Hitachi SH</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.SPARCV9">
+            <summary>SPARC V9</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.TRICORE">
+            <summary>Siemens Tricore embedded processor</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.ARC">
+            <summary>Argonaut RISC Core, Argonaut Technologies Inc.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.H8_300">
+            <summary>Hitachi H8/300</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.H8_300H">
+            <summary>Hitachi H8/300H</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.H8S">
+            <summary>Hitachi H8S</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.H8_500">
+            <summary>Hitachi H8/500</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.IA_64">
+            <summary>Intel IA-64 processor architecture</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.MIPS_X">
+            <summary>Stanford MIPS-X</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.COLDFIRE">
+            <summary>Motorola ColdFire</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM._68HC12">
+            <summary>Motorola M68HC12</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.MMA">
+            <summary>Fujitsu MMA Multimedia Accelerator</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.PCP">
+            <summary>Siemens PCP</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.NCPU">
+            <summary>Sony nCPU embedded RISC processor</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.NDR1">
+            <summary>Denso NDR1 microprocessor</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.STARCORE">
+            <summary>Motorola Star*Core processor</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.ME16">
+            <summary>Toyota ME16 processor</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.ST100">
+            <summary>STMicroelectronics ST100 processor</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.TINYJ">
+            <summary>Advanced Logic Corp. TinyJ embedded processor family</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.FX66">
+            <summary>Siemens FX66 microcontroller</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.ST9PLUS">
+            <summary>STMicroelectronics ST9+ 8/16 bit microcontroller</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.ST7">
+            <summary>STMicroelectronics ST7 8-bit microcontroller</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM._68HC16">
+            <summary>Motorola MC68HC16 Microcontroller</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM._68HC11">
+            <summary>Motorola MC68HC11 Microcontroller</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM._68HC08">
+            <summary>Motorola MC68HC08 Microcontroller</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM._68HC05">
+            <summary>Motorola MC68HC05 Microcontroller</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.SVX">
+            <summary>Silicon Graphics SVx</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.ST19">
+            <summary>STMicroelectronics ST19 8-bit microcontroller</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.VAX">
+            <summary>Digital VAX</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.CRIS">
+            <summary>Axis Communications 32-bit embedded processor</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.JAVELIN">
+            <summary>Infineon Technologies 32-bit embedded processor</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.FIREPATH">
+            <summary>Element 14 64-bit DSP Processor</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.ZSP">
+            <summary>LSI Logic 16-bit DSP Processor</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.MMIX">
+            <summary>Donald Knuth's educational 64-bit processor</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.HUANY">
+            <summary>Harvard University machine-independent object files</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.EM.PRISM">
+            <summary>SiTera Prism</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Elf.Elf32_Ehdr">
+            <summary>32b ELF image header</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Ehdr.e_type">
+            <summary>This member identifies the object file type.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Ehdr.e_machine">
+            <summary>This member's value specifies the required architecture for an individual file.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Ehdr.e_version">
+            <summary>This member identifies the object file version.</summary>
+            <remarks>
+            The value 1 signifies the original file format; extensions will create new versions with higher numbers.
+            The value of EV_CURRENT changes as necessary to reflect the current version number.
+            </remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Ehdr.e_entry">
+            <summary>This member gives the virtual address to which the system first transfers control, thus starting the process. If the file has no associated entry point, this member holds zero.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Ehdr.e_phoff">
+            <summary>This member holds the program header table's file offset in bytes.</summary>
+            <remarks>If the file has no program header table, this member holds zero.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Ehdr.e_shoff">
+            <summary>This member holds the section header table's file offset in bytes.</summary>
+            <remarks>If the file has no section header table, this member holds zero.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Ehdr.e_flags">
+            <summary>
+            This member holds processor-specific flags associated with the file.
+            Flag names take the form EF_machine_flag.
+            </summary>
+            <remarks>This member is presently zero for SPARC and IA.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Ehdr.e_ehsize">
+            <summary>This member holds the ELF header's size in bytes.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Ehdr.e_phentsize">
+            <summary>This member holds the size in bytes of one entry in the file's program header table; all entries are the same size.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Ehdr.e_phnum">
+            <summary>
+            This member holds the number of entries in the program header table.
+            Thus the product of e_phentsize and e_phnum gives the table's size in bytes.
+            </summary>
+            <remarks>If a file has no program header table, e_phnum holds the value zero.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Ehdr.e_shentsize">
+            <summary>
+            This member holds a section header's size in bytes.
+            A section header is one entry in the section header table
+            </summary>
+            <remarks>all entries are the same size.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Ehdr.e_shnum">
+            <summary>
+            This member holds the number of entries in the section header table.
+            Thus the product of e_shentsize and e_shnum gives the section header table's size in bytes.
+            </summary>
+            <remarks>If a file has no section header table, e_shnum holds the value zero.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Ehdr.e_shstrndx">
+            <summary>This member holds the section header table index of the entry associated with the section name string table.</summary>
+            <remarks>If the file has no section name string table, this member holds the value SHN_UNDEF.</remarks>
+        </member>
+        <member name="P:AlphaOmega.Debug.Elf.Elf32_Ehdr.SpecShIndex">
+            <summary>Special Section Indexes</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Elf.Elf64_Ehdr">
+            <summary>64b ELF image header</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Ehdr.e_type">
+            <summary>This member identifies the object file type.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Ehdr.e_machine">
+            <summary>This member's value specifies the required architecture for an individual file.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Ehdr.e_version">
+            <summary>This member identifies the object file version.</summary>
+            <remarks>
+            The value 1 signifies the original file format; extensions will create new versions with higher numbers.
+            The value of EV_CURRENT changes as necessary to reflect the current version number.
+            </remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Ehdr.e_entry">
+            <summary>This member gives the virtual address to which the system first transfers control, thus starting the process. If the file has no associated entry point, this member holds zero.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Ehdr.e_phoff">
+            <summary>This member holds the program header table's file offset in bytes.</summary>
+            <remarks>If the file has no program header table, this member holds zero.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Ehdr.e_shoff">
+            <summary>This member holds the section header table's file offset in bytes.</summary>
+            <remarks>If the file has no section header table, this member holds zero.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Ehdr.e_flags">
+            <summary>
+            This member holds processor-specific flags associated with the file.
+            Flag names take the form EF_machine_flag.
+            </summary>
+            <remarks>This member is presently zero for SPARC and IA.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Ehdr.e_ehsize">
+            <summary>This member holds the ELF header's size in bytes.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Ehdr.e_phentsize">
+            <summary>This member holds the size in bytes of one entry in the file's program header table; all entries are the same size.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Ehdr.e_phnum">
+            <summary>
+            This member holds the number of entries in the program header table.
+            Thus the product of e_phentsize and e_phnum gives the table's size in bytes.
+            </summary>
+            <remarks>If a file has no program header table, e_phnum holds the value zero.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Ehdr.e_shentsize">
+            <summary>
+            This member holds a section header's size in bytes.
+            A section header is one entry in the section header table
+            </summary>
+            <remarks>all entries are the same size.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Ehdr.e_shnum">
+            <summary>
+            This member holds the number of entries in the section header table.
+            Thus the product of e_shentsize and e_shnum gives the section header table's size in bytes.
+            </summary>
+            <remarks>If a file has no section header table, e_shnum holds the value zero.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Ehdr.e_shstrndx">
+            <summary>This member holds the section header table index of the entry associated with the section name string table.</summary>
+            <remarks>If the file has no section name string table, this member holds the value SHN_UNDEF.</remarks>
+        </member>
+        <member name="T:AlphaOmega.Debug.Elf.SHN">
+            <summary>Special section indexes</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHN.UNDEF">
+            <summary>
+            This value marks an undefined, missing, irrelevant, or otherwise meaningless section reference.
+            For example, a symbol "defined" relative to section number SHN_UNDEF is an undefined symbol.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHN.LOPROC">
+            <summary>Values in this inclusive range are reserved for processor-specific semantics.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHN.HIPROC">
+            <summary>Values in this inclusive range are reserved for processor-specific semantics.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHN.LOOS">
+            <summary>Values in this inclusive range are reserved for operating system-specific semantics.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHN.HIOS">
+            <summary>Values in this inclusive range are reserved for operating system-specific semantics.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHN.ABS">
+            <summary>
+            This value specifies absolute values for the corresponding reference.
+            For example, symbols defined relative to section number SHN_ABS have absolute values and are not affected by relocation.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHN.COMMON">
+            <summary>Symbols defined relative to this section are common symbols, such as FORTRAN COMMON or unallocated C external variables.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHN.XINDEX">
+            <summary>
+            This value specifies the upper bound of the range of reserved indexes.
+            The system reserves indexes between SHN_LORESERVE and SHN_HIRESERVE, inclusive; the values do not reference the section header table.
+            The section header table does not contain entries for the reserved indexes.
+            </summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Elf.SHT">
+            <summary>Section types</summary>
+            <remarks>Other section type values are reserved. As mentioned before, the section header for index 0 (SHN_UNDEF) exists, even though the index marks undefined section references.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHT.NULL">
+            <summary>
+            This value marks the section header as inactive; it does not have an associated section.
+            Other members of the section header have undefined values.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHT.PROGBITS">
+            <summary>This section holds information defined by the program, whose format and meaning are determined solely by the program.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHT.SYMTAB">
+            <summary>
+            These sections hold a symbol table.
+            Typically a SHT_SYMTAB section provides symbols for link-editing.
+            As a complete symbol table, it can contain many symbols unnecessary for dynamic linking.
+            Consequently, an object file can also contain a <see cref="F:AlphaOmega.Debug.Elf.SHT.DYNSYM"/> section, which holds a minimal set of dynamic linking symbols, to save space.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHT.STRTAB">
+            <summary>These sections hold a string table. An object file can have multiple string table sections.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHT.RELA">
+            <summary>This section holds relocation entries with explicit addends, such as type Elf32_Rela for the 32-bit class of object files.</summary>
+            <remarks>An object file can have multiple relocation sections.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHT.HASH">
+            <summary>This section holds a symbol hash table. All dynamically linked object files must contain a symbol hash table.</summary>
+            <remarks>Currently, an object file can have only one hash table, but this restriction might be relaxed in the future.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHT.DYNAMIC">
+            <summary>This section holds information for dynamic linking.</summary>
+            <remarks>Currently, an object file can have only one dynamic section, but this restriction might be relaxed in the future.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHT.NOTE">
+            <summary>This section holds information that marks the file in some way.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHT.NOBITS">
+            <summary>A section of this type occupies no space in the file but otherwise resembles <see cref="F:AlphaOmega.Debug.Elf.SHT.PROGBITS"/>.</summary>
+            <remarks>Although this section contains no bytes, the sh_offset member contains the conceptual file offset.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHT.REL">
+            <summary>
+            This section holds relocation entries without explicit addends, such as type Elf32_Rel for the 32-bit class of object files.
+            An object file can have multiple relocation sections.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHT.SHLIB">
+            <summary>This section type is reserved but has unspecified semantics. Programs that contain a section of this type do not conform to the ABI.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHT.DYNSYM">
+            <summary>
+            These sections hold a symbol table.
+            Typically a <see cref="F:AlphaOmega.Debug.Elf.SHT.SYMTAB"/> section provides symbols for link-editing.
+            As a complete symbol table, it can contain many symbols unnecessary for dynamic linking.
+            Consequently, an object file can also contain a SHT.DYNSYM section, which holds a minimal set of dynamic linking symbols, to save space.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHT.INIT_ARRAY">
+            <summary>This section contains an array of pointers to initialization functions.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHT.FINI_ARRAY">
+            <summary>This section contains an array of pointers to termination functions.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHT.PREINIT_ARRAY">
+            <summary>This section contains an array of pointers to functions that are invoked before all other initialization functions.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHT.GROUP">
+            <summary>
+            This section defines a section group.
+            A section group is a set of sections that are related and that must be treated specially by the linker (see below for further details).
+            Sections of type SHT.GROUP may appear only in relocatable objects (objects with the ELF header e_type member set to ET_REL).
+            The section header table entry for a group section must appear in the section header table before the entries for any of the sections that are members of the group.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHT.SYMTAB_SHNDX">
+            <summary>
+            This section is associated with a section of type <see cref="F:AlphaOmega.Debug.Elf.SHT.SYMTAB"/> and is required if any of the section header indexes referenced by that symbol table contain the escape value <see cref="F:AlphaOmega.Debug.Elf.SHN.XINDEX"/>.
+            The section is an array of Elf32_Word values.
+            Each value corresponds one to one with a symbol table entry and appear in the same order as those entries.
+            The values represent the section header indexes against which the symbol table entries are defined.
+            All of the values in this section must be valid section header indexes whether or not the st_shndx field in the corresponding symbol table entry contains the special escape code <see cref="F:AlphaOmega.Debug.Elf.SHN.XINDEX"/>.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHT.LOOS">
+            <summary>Values in this inclusive range are reserved for operating system-specific semantics.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHT.HIOS">
+            <summary>Values in this inclusive range are reserved for operating system-specific semantics.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHT.LOPROC">
+            <summary>Values in this inclusive range are reserved for processor-specific semantics.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHT.HIPROC">
+            <summary>Values in this inclusive range are reserved for processor-specific semantics.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHT.LOUSER">
+            <summary>This value specifies the lower boundary of the range of indexes reserved for application programs.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHT.HIUSER">
+            <summary>
+            This value specifies the upper boundary of the range of indexes reserved for application programs.
+            Section types between SHT_LOUSER and SHT_HIUSER can be used by the application, without conflicting with current or future system-defined section types.
+            </summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Elf.SHF">
+            <summary>Section Attribute Flags</summary>
+            <remarks>
+            If a flag bit is set in sh_flags, the attribute is on for the section.
+            Otherwise, the attribute is off or does not apply.
+            Undefined attributes are reserved and set to zero.
+            </remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHF.WRITE">
+            <summary>This section contains data that should be writable during process execution.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHF.ALLOC">
+            <summary>
+            This section occupies memory during process execution.
+            Some control sections do not reside in the memory image of an object file; this attribute is off for those sections.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHF.EXECINSTR">
+            <summary>This section contains executable machine instructions.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHF.MERGE">
+            <summary>
+            The data in the section may be merged to eliminate duplication.
+            Unless the SHF_STRINGS flag is also set, the data elements in the section are of a uniform size.
+            The size of each element is specified in the section header's sh_entsize field.
+            If the SHF_STRINGS flag is also set, the data elements consist of null-terminated character strings.
+            The size of each character is specified in the section header's sh_entsize field.
+            </summary>
+            <remarks>
+            Each element in the section is compared against other elements in sections with the same name, type and flags.
+            Elements that would have identical values at program run-time may be merged.
+            Relocations referencing elements of such sections must be resolved to the merged locations of the referenced values.
+            Note that any relocatable values, including values that would result in run-time relocations, must be analyzed to determine whether the run-time values would actually be identical.
+            An ABI-conforming object file may not depend on specific elements being merged, and an ABI-conforming link editor may choose not to merge specific elements.
+            </remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHF.STRINGS">
+            <summary>The data elements in the section consist of null-terminated character strings. The size of each character is specified in the section header's sh_entsize field.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHF.INFO_LINK">
+            <summary>The sh_info field of this section header holds a section header table index.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHF.LINK_ORDER">
+            <summary>
+            This flag adds special ordering requirements for link editors.
+            The requirements apply if the sh_link field of this section's header references another section (the linked-to section).
+            If this section is combined with other sections in the output file, it must appear in the same relative order with respect to those sections, as the linked-to section appears with respect to sections the linked-to section is combined with.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHF.OS_NONCONFORMING">
+            <summary>
+            This section requires special OS-specific processing (beyond the standard linking rules) to avoid incorrect behavior.
+            If this section has either an sh_type value or contains sh_flags bits in the OS-specific ranges for those fields, and a link editor processing this section does not recognize those values, then the link editor should reject the object file containing this section with an error.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHF.GROUP">
+            <summary>
+            This section is a member (perhaps the only one) of a section group.
+            The section must be referenced by a section of type SHT_GROUP.
+            The SHF_GROUP flag may be set only for sections contained in relocatable objects (objects with the ELF header e_type member set to ET_REL).
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHF.MASKOS">
+            <summary>All bits included in this mask are reserved for operating system-specific semantics.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.SHF.MASKPROC">
+            <summary>All bits included in this mask are reserved for processor-specific semantics. If meanings are specified, the processor supplement explains them.</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Elf.Elf32_Shdr">
+            <summary>
+            An object file's section header table lets one locate all the file's sections.
+            The section header table is an array of Elf32_Shdr or Elf64_Shdr structures as described below.
+            A section header table index is a subscript into this array.
+            The ELF header's e_shoff member gives the byte offset from the beginning of the file to the section header table.
+            e_shnum normally tells how many entries the section header table contains.
+            e_shentsize gives the size in bytes of each entry.
+            </summary>
+            <remarks>
+            Some section header table indexes are reserved in contexts where index size is restricted, for example, the st_shndx member of a symbol table entry and the e_shnum and e_shstrndx members of the ELF header.
+            In such contexts, the reserved values do not represent actual sections in the object file.
+            Also in such contexts, an escape value indicates that the actual section index is to be found elsewhere, in a larger field.
+            </remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Shdr.sh_name">
+            <summary>This member specifies the name of the section.</summary>
+            <remarks>Its value is an index into the section header string table section giving the location of a null-terminated string.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Shdr.sh_type">
+            <summary>This member categorizes the section's contents and semantics.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Shdr.sh_flags">
+            <summary>Sections support 1-bit flags that describe miscellaneous attributes.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Shdr.sh_addr">
+            <summary>If the section is to appear in the memory image of a process, this member gives the address at which the section's first byte should reside. Otherwise, the member contains 0.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Shdr.sh_offset">
+            <summary>
+            This member gives the byte offset from the beginning of the file to the first byte in the section.
+            Section type SHT_NOBITS, described below, occupies no space in the file, and its sh_offset member locates the conceptual placement in the file.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Shdr.sh_size">
+            <summary>
+            This member gives the section's size in bytes. Unless the section type is SHT_NOBITS, the section occupies sh_size bytes in the file.
+            A section of type SHT_NOBITS can have a nonzero size, but it occupies no space in the file.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Shdr.sh_link">
+            <summary>This member holds a section header table index link, whose interpretation depends on the section type.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Shdr.sh_info">
+            <summary>This member holds extra information, whose interpretation depends on the section type.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Shdr.sh_addralign">
+            <summary>
+            Some sections have address alignment constraints.
+            For example, if a section holds a double-word, the system must ensure double-word alignment for the entire section.
+            That is, the value of sh_addr must be congruent to 0, modulo the value of sh_addralign.
+            Currently, only 0 and positive integral powers of two are allowed.
+            Values 0 and 1 mean the section has no alignment constraints.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Shdr.sh_entsize">
+            <summary>
+            Some sections hold a table of fixed-size entries, such as a symbol table.
+            For such a section, this member gives the size in bytes of each entry.
+            The member contains 0 if the section does not hold a table of fixed-size entries.
+            </summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.Elf.Elf32_Shdr.Flags">
+            <summary>Section Attribute Flags</summary>
+            <remarks>
+            If a flag bit is set in sh_flags, the attribute is on for the section.
+            Otherwise, the attribute is off or does not apply.
+            Undefined attributes are reserved and set to zero.
+            </remarks>
+        </member>
+        <member name="P:AlphaOmega.Debug.Elf.Elf32_Shdr.IsOs">
+            <summary>Values in this inclusive range are reserved for operating system-specific semantics.</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.Elf.Elf32_Shdr.IsProc">
+            <summary>Values in this inclusive range are reserved for processor-specific semantics.</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.Elf.Elf32_Shdr.IsUser">
+            <summary>Section types between SHT_LOUSER and SHT_HIUSER can be used by the application, without conflicting with current or future system-defined section types.</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Elf.Elf64_Shdr">
+            <summary>
+            An object file's section header table lets one locate all the file's sections.
+            The section header table is an array of Elf32_Shdr or Elf64_Shdr structures as described below.
+            A section header table index is a subscript into this array.
+            The ELF header's e_shoff member gives the byte offset from the beginning of the file to the section header table.
+            e_shnum normally tells how many entries the section header table contains.
+            e_shentsize gives the size in bytes of each entry.
+            </summary>
+            <remarks>
+            Some section header table indexes are reserved in contexts where index size is restricted, for example, the st_shndx member of a symbol table entry and the e_shnum and e_shstrndx members of the ELF header.
+            In such contexts, the reserved values do not represent actual sections in the object file.
+            Also in such contexts, an escape value indicates that the actual section index is to be found elsewhere, in a larger field.
+            </remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Shdr.sh_name">
+            <summary>This member specifies the name of the section.</summary>
+            <remarks>Its value is an index into the section header string table section giving the location of a null-terminated string.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Shdr.sh_type">
+            <summary>This member categorizes the section's contents and semantics.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Shdr.sh_flags">
+            <summary>Sections support 1-bit flags that describe miscellaneous attributes.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Shdr.sh_addr">
+            <summary>If the section is to appear in the memory image of a process, this member gives the address at which the section's first byte should reside. Otherwise, the member contains 0.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Shdr.sh_offset">
+            <summary>
+            This member gives the byte offset from the beginning of the file to the first byte in the section.
+            Section type SHT_NOBITS, described below, occupies no space in the file, and its sh_offset member locates the conceptual placement in the file.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Shdr.sh_size">
+            <summary>
+            This member gives the section's size in bytes. Unless the section type is SHT_NOBITS, the section occupies sh_size bytes in the file.
+            A section of type SHT_NOBITS can have a nonzero size, but it occupies no space in the file.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Shdr.sh_link">
+            <summary>This member holds a section header table index link, whose interpretation depends on the section type.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Shdr.sh_info">
+            <summary>This member holds extra information, whose interpretation depends on the section type.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Shdr.sh_addralign">
+            <summary>
+            Some sections have address alignment constraints.
+            For example, if a section holds a double-word, the system must ensure double-word alignment for the entire section.
+            That is, the value of sh_addr must be congruent to 0, modulo the value of sh_addralign.
+            Currently, only 0 and positive integral powers of two are allowed.
+            Values 0 and 1 mean the section has no alignment constraints.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Shdr.sh_entsize">
+            <summary>
+            Some sections hold a table of fixed-size entries, such as a symbol table.
+            For such a section, this member gives the size in bytes of each entry.
+            The member contains 0 if the section does not hold a table of fixed-size entries.
+            </summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.Elf.Elf64_Shdr.Flags">
+            <summary>Section Attribute Flags</summary>
+            <remarks>
+            If a flag bit is set in sh_flags, the attribute is on for the section.
+            Otherwise, the attribute is off or does not apply.
+            Undefined attributes are reserved and set to zero.
+            </remarks>
+        </member>
+        <member name="P:AlphaOmega.Debug.Elf.Elf64_Shdr.IsOs">
+            <summary>Values in this inclusive range are reserved for operating system-specific semantics.</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.Elf.Elf64_Shdr.IsProc">
+            <summary>Values in this inclusive range are reserved for processor-specific semantics.</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.Elf.Elf64_Shdr.IsUser">
+            <summary>Section types between SHT_LOUSER and SHT_HIUSER can be used by the application, without conflicting with current or future system-defined section types.</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Elf.STV">
+            <summary>A symbol's visibility, although it may be specified in a relocatable object, defines how that symbol may be accessed once it has become part of an executable or shared object.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.STV.DEFAULT">
+            <summary>
+            The visibility of symbols with the STV_DEFAULT attribute is as specified by the symbol's binding type.
+            That is, global and weak symbols are visible outside of their defining component (executable file or shared object).
+            Local symbols are hidden, as described below.
+            Global and weak symbols are also preemptable, that is, they may by preempted by definitions of the same name in another component.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.STV.INTERNAL">
+            <summary>
+            The meaning of this visibility attribute may be defined by processor supplements to further constrain hidden symbols.
+            A processor supplement's definition should be such that generic tools can safely treat internal symbols as hidden.
+            </summary>
+            <remarks>An internal symbol contained in a relocatable object must be either removed or converted to STB_LOCAL binding by the link-editor when the relocatable object is included in an executable file or shared object.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.STV.HIDDEN">
+            <summary>
+            A symbol defined in the current component is hidden if its name is not visible to other components.
+            Such a symbol is necessarily protected.
+            This attribute may be used to control the external interface of a component.
+            Note that an object named by such a symbol may still be referenced from another component if its address is passed outside.
+            </summary>
+            <remarks>A hidden symbol contained in a relocatable object must be either removed or converted to STB_LOCAL binding by the link-editor when the relocatable object is included in an executable file or shared object.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.STV.PROTECTED">
+            <summary>
+            A symbol defined in the current component is protected if it is visible in other components but not preemptable, meaning that any reference to such a symbol from within the defining component must be resolved to the definition in that component, even if there is a definition in another component that would preempt by the default rules.
+            A symbol with STB_LOCAL binding may not have STV_PROTECTED visibility.
+            If a symbol definition with STV_PROTECTED visibility from a shared object is taken as resolving a reference from an executable or another shared object, the SHN_UNDEF symbol table entry created has STV_DEFAULT visibility.
+            </summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Elf.STB">
+            <summary>A symbol's binding determines the linkage visibility and behavior</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.STB.LOCAL">
+            <summary>
+            Local symbols are not visible outside the object file containing their definition.
+            Local symbols of the same name can exist in multiple files without interfering with each other.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.STB.GLOBAL">
+            <summary>
+            Global symbols are visible to all object files being combined.
+            One file's definition of a global symbol will satisfy another file's undefined reference to the same global symbol.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.STB.WEAK">
+            <summary>Weak symbols resemble global symbols, but their definitions have lower precedence.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.STB.LOOS">
+            <summary>Values in this inclusive range are reserved for operating system-specific semantics.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.STB.HIOS">
+            <summary>Values in this inclusive range are reserved for operating system-specific semantics.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.STB.LOPROC">
+            <summary>Values in this inclusive range are reserved for processor-specific semantics. If meanings are specified, the processor supplement explains them.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.STB.HIPROC">
+            <summary>Values in this inclusive range are reserved for processor-specific semantics. If meanings are specified, the processor supplement explains them.</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Elf.STT">
+            <summary>A symbol's type provides a general classification for the associated entity.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.STT.NOTYPE">
+            <summary>The symbol's type is not specified.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.STT.OBJECT">
+            <summary>The symbol is associated with a data object, such as a variable, an array, and so on.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.STT.FUNC">
+            <summary>The symbol is associated with a function or other executable code.</summary>
+            <remarks>
+            Function symbols (those with type STT_FUNC) in shared object files have special significance.
+            When another object file references a function from a shared object, the link editor automatically creates a procedure linkage table entry for the referenced symbol.
+            Shared object symbols with types other than STT_FUNC will not be referenced automatically through the procedure linkage table.
+            </remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.STT.SECTION">
+            <summary>The symbol is associated with a section. Symbol table entries of this type exist primarily for relocation and normally have STB_LOCAL binding.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.STT.FILE">
+            <summary>
+            Conventionally, the symbol's name gives the name of the source file associated with the object file.
+            A file symbol has STB_LOCAL binding, its section index is SHN_ABS, and it precedes the other STB_LOCAL symbols for the file, if it is present.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.STT.COMMON">
+            <summary>The symbol labels an uninitialized common block.</summary>
+            <remarks>
+            Symbols with type STT_COMMON label uninitialized common blocks.
+            In relocatable objects, these symbols are not allocated and must have the special section index SHN_COMMON (see below).
+            In shared objects and executables these symbols must be allocated to some section in the defining object.
+            
+            In relocatable objects, symbols with type STT_COMMON are treated just as other symbols with index SHN_COMMON.
+            If the link-editor allocates space for the SHN_COMMON symbol in an output section of the object it is producing, it must preserve the type of the output symbol as STT_COMMON.
+            
+            When the dynamic linker encounters a reference to a symbol that resolves to a definition of type STT_COMMON, it may (but is not required to) change its symbol resolution rules as follows: instead of binding the reference to the first symbol found with the given name, the dynamic linker searches for the first symbol with that name with type other than STT_COMMON.
+            If no such symbol is found, it looks for the STT_COMMON definition of that name that has the largest size.
+            </remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.STT.LOOS">
+            <summary>Values in this inclusive range are reserved for operating system-specific semantics.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.STT.HIOS">
+            <summary>Values in this inclusive range are reserved for operating system-specific semantics.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.STT.LOPROC">
+            <summary>
+            Values in this inclusive range are reserved for processor-specific semantics.
+            If meanings are specified, the processor supplement explains them.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.STT.HIPROC">
+            <summary>
+            Values in this inclusive range are reserved for processor-specific semantics.
+            If meanings are specified, the processor supplement explains them.
+            </summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Elf.Elf32_Sym">
+            <summary>
+            An object file's symbol table holds information needed to locate and relocate a program's symbolic definitions and references. A symbol table index is a subscript into this array.
+            Index 0 both designates the first entry in the table and serves as the undefined symbol index.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Sym.st_name">
+            <summary>This member holds an index into the object file's symbol string table, which holds the character representations of the symbol names.</summary>
+            <remarks>If the value is non-zero, it represents a string table index that gives the symbol name. Otherwise, the symbol table entry has no name.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Sym.st_value">
+            <summary>
+            This member gives the value of the associated symbol.
+            Depending on the context, this may be an absolute value, an address, and so on.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Sym.st_size">
+            <summary>
+            Many symbols have associated sizes.
+            For example, a data object's size is the number of bytes contained in the object.
+            </summary>
+            <remarks>This member holds 0 if the symbol has no size or an unknown size.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Sym.st_info">
+            <summary>This member specifies the symbol's type and binding attributes.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Sym.st_other">
+            <summary>This member currently specifies a symbol's visibility.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Sym.st_shndx">
+            <summary>
+            Every symbol table entry is defined in relation to some section.
+            This member holds the relevant section header table index.
+            As the sh_link and sh_info interpretation table and the related text describe, some section indexes indicate special meanings.
+            </summary>
+            <remarks>
+            If this member contains SHN_XINDEX, then the actual section header index is too large to fit in this field.
+            The actual value is contained in the associated section of type SHT_SYMTAB_SHNDX.
+            </remarks>
+        </member>
+        <member name="P:AlphaOmega.Debug.Elf.Elf32_Sym.Bind">
+            <summary>A symbol's binding determines the linkage visibility and behavior</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.Elf.Elf32_Sym.Type">
+            <summary>A symbol's type provides a general classification for the associated entity.</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.Elf.Elf32_Sym.Visibility">
+            <summary>Symbol visibility</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Elf.Elf64_Sym">
+            <summary>
+            An object file's symbol table holds information needed to locate and relocate a program's symbolic definitions and references. A symbol table index is a subscript into this array.
+            Index 0 both designates the first entry in the table and serves as the undefined symbol index.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Sym.st_name">
+            <summary>This member holds an index into the object file's symbol string table, which holds the character representations of the symbol names.</summary>
+            <remarks>If the value is non-zero, it represents a string table index that gives the symbol name. Otherwise, the symbol table entry has no name.</remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Sym.st_info">
+            <summary>This member specifies the symbol's type and binding attributes.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Sym.st_other">
+            <summary>This member currently specifies a symbol's visibility.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Sym.st_shndx">
+            <summary>
+            Every symbol table entry is defined in relation to some section.
+            This member holds the relevant section header table index.
+            As the sh_link and sh_info interpretation table and the related text describe, some section indexes indicate special meanings.
+            </summary>
+            <remarks>
+            If this member contains SHN_XINDEX, then the actual section header index is too large to fit in this field.
+            The actual value is contained in the associated section of type SHT_SYMTAB_SHNDX.
+            </remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Sym.st_value">
+            <summary>
+            This member gives the value of the associated symbol.
+            Depending on the context, this may be an absolute value, an address, and so on.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Sym.st_size">
+            <summary>
+            Many symbols have associated sizes.
+            For example, a data object's size is the number of bytes contained in the object.
+            </summary>
+            <remarks>This member holds 0 if the symbol has no size or an unknown size.</remarks>
+        </member>
+        <member name="P:AlphaOmega.Debug.Elf.Elf64_Sym.Bind">
+            <summary>A symbol's binding determines the linkage visibility and behavior</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.Elf.Elf64_Sym.Type">
+            <summary>A symbol's type provides a general classification for the associated entity.</summary>
+        </member>
+        <member name="P:AlphaOmega.Debug.Elf.Elf64_Sym.Visibility">
+            <summary>Symbol visibility</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Elf.Elf32_Rel">
+            <summary>
+            Relocation is the process of connecting symbolic references with symbolic definitions.
+            For example, when a program calls a function, the associated call instruction must transfer control to the proper destination address at execution.
+            In other words, relocatable files must have information that describes how to modify their section contents, thus allowing executable and shared object files to hold the right information for a process's program image.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Rel.r_offset">
+            <summary>
+            This member gives the location at which to apply the relocation action.
+            For a relocatable file, the value is the byte offset from the beginning of the section to the storage unit affected by the relocation.
+            For an executable file or a shared object, the value is the virtual address of the storage unit affected by the relocation.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Rel.r_info">
+            <summary>
+            This member gives both the symbol table index, with respect to which the relocation must be made, and the type of relocation to apply.
+            For example, a call instruction's relocation entry will hold the symbol table index of the function being called.
+            If the index is STN_UNDEF, the undefined symbol index, the relocation uses 0 as the symbol value.
+            </summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Elf.Elf64_Rel">
+            <summary>
+            Relocation is the process of connecting symbolic references with symbolic definitions.
+            For example, when a program calls a function, the associated call instruction must transfer control to the proper destination address at execution.
+            In other words, relocatable files must have information that describes how to modify their section contents, thus allowing executable and shared object files to hold the right information for a process's program image.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Rel.r_offset">
+            <summary>
+            This member gives the location at which to apply the relocation action.
+            For a relocatable file, the value is the byte offset from the beginning of the section to the storage unit affected by the relocation.
+            For an executable file or a shared object, the value is the virtual address of the storage unit affected by the relocation.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Rel.r_info">
+            <summary>
+            This member gives both the symbol table index, with respect to which the relocation must be made, and the type of relocation to apply.
+            For example, a call instruction's relocation entry will hold the symbol table index of the function being called.
+            If the index is STN_UNDEF, the undefined symbol index, the relocation uses 0 as the symbol value.
+            </summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Elf.Elf32_Rela">
+            <summary>
+            Relocation is the process of connecting symbolic references with symbolic definitions.
+            For example, when a program calls a function, the associated call instruction must transfer control to the proper destination address at execution.
+            In other words, relocatable files must have information that describes how to modify their section contents, thus allowing executable and shared object files to hold the right information for a process's program image.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Rela.r_offset">
+            <summary>
+            This member gives the location at which to apply the relocation action.
+            For a relocatable file, the value is the byte offset from the beginning of the section to the storage unit affected by the relocation.
+            For an executable file or a shared object, the value is the virtual address of the storage unit affected by the relocation.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Rela.r_info">
+            <summary>
+            This member gives both the symbol table index, with respect to which the relocation must be made, and the type of relocation to apply.
+            For example, a call instruction's relocation entry will hold the symbol table index of the function being called.
+            If the index is STN_UNDEF, the undefined symbol index, the relocation uses 0 as the symbol value.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf32_Rela.r_addend">
+            <summary>This member specifies a constant addend used to compute the value to be stored into the relocatable field.</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Elf.Elf64_Rela">
+            <summary>
+            Relocation is the process of connecting symbolic references with symbolic definitions.
+            For example, when a program calls a function, the associated call instruction must transfer control to the proper destination address at execution.
+            In other words, relocatable files must have information that describes how to modify their section contents, thus allowing executable and shared object files to hold the right information for a process's program image.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Rela.r_offset">
+            <summary>
+            This member gives the location at which to apply the relocation action.
+            For a relocatable file, the value is the byte offset from the beginning of the section to the storage unit affected by the relocation.
+            For an executable file or a shared object, the value is the virtual address of the storage unit affected by the relocation.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Rela.r_info">
+            <summary>
+            This member gives both the symbol table index, with respect to which the relocation must be made, and the type of relocation to apply.
+            For example, a call instruction's relocation entry will hold the symbol table index of the function being called.
+            If the index is STN_UNDEF, the undefined symbol index, the relocation uses 0 as the symbol value.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Elf.Elf64_Rela.r_addend">
+            <summary>This member specifies a constant addend used to compute the value to be stored into the relocatable field.</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.Constant.SectionNames">
+            <summary>Special sections</summary>
+            <remarks>
+            Various sections hold program and control information.
+            Sections in the list below are used by the system and have the indicated types and attributes.
+            </remarks>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.SectionNames.Bss">
+            <summary>
+            This section holds uninitialized data that contribute to the program’s memory image.
+            By definition, the system initializes the data with zeros when the program begins to run.
+            The section occupies no file space, as indicated by the section type, SHT_NOBITS.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.SectionNames.Comment">
+            <summary>This section holds version control information.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.SectionNames.Data">
+            <summary>These sections hold initialized data that contribute to the program’s memory image.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.SectionNames.Data1">
+            <summary>These sections hold initialized data that contribute to the program’s memory image.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.SectionNames.Debug">
+            <summary>
+            This section holds information for symbolic debugging.
+            The contents are unspecified.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.SectionNames.Dynamic">
+            <summary>
+            This section holds dynamic linking information.
+            The section’s attributes will include the SHF_ALLOC bit.
+            Whether the SHF_WRITE bit is set is processor specific.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.SectionNames.DynStr">
+            <summary>This section holds strings needed for dynamic linking, most commonly the strings that represent the names associated with symbol table entries.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.SectionNames.DynSym">
+            <summary>This section holds the dynamic linking symbol table.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.SectionNames.Fini">
+            <summary>
+            This section holds executable instructions that contribute to the process termination code.
+            That is, when a program exits normally, the system arranges to execute the code in this section.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.SectionNames.Got">
+            <summary>This section holds the global offset table.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.SectionNames.Hash">
+            <summary>This section holds a symbol hash table.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.SectionNames.Init">
+            <summary>
+            This section holds executable instructions that contribute to the process initialization code.
+            That is, when a program starts to run, the system arranges to execute the code in this section before calling the main program entry point (called main for C programs)
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.SectionNames.Interp">
+            <summary>
+            This section holds the path name of a program interpreter.
+            If the file has a loadable segment that includes the section, the section’s attributes will include the SHF_ALLOC bit; otherwise, that bit will be off.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.SectionNames.Line">
+            <summary>
+            This section holds line number information for symbolic debugging, which describes the correspondence between the source program and the machine code.
+            The contents are unspecified.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.SectionNames.Plt">
+            <summary>This section holds the procedure linkage table.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.SectionNames.RelArg1">
+            <summary>
+            These sections hold relocation information.
+            If the file has a loadable segment that includes relocation, the sections’ attributes will include the SHF_ALLOC bit; otherwise, that bit will be off. Conventionally, name is supplied by the section to which the relocations apply. Thus a relocation section for .text normally would have the name .rel.text or .rela.text.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.SectionNames.RelaArg1">
+            <summary>
+            These sections hold relocation information.
+            If the file has a loadable segment that includes relocation, the sections’ attributes will include the SHF_ALLOC bit; otherwise, that bit will be off. Conventionally, name is supplied by the section to which the relocations apply. Thus a relocation section for .text normally would have the name .rel.text or .rela.text.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.SectionNames.Rodata">
+            <summary>These sections hold read-only data that typically contribute to a non-writable segment in the process image.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.SectionNames.Rodata1">
+            <summary>These sections hold read-only data that typically contribute to a non-writable segment in the process image.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.SectionNames.Shstrtab">
+            <summary>This section holds section names.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.SectionNames.StrTab">
+            <summary>
+            This section holds strings, most commonly the strings that represent the names associated with symbol table entries.
+            If the file has a loadable segment that includes the symbol string table, the section’s attributes will include the SHF_ALLOC bit; otherwise, that bit will be off.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.SectionNames.SymTab">
+            <summary>
+            This section holds a symbol table, as ‘‘Symbol Table’’ in this section describes.
+            If the file has a loadable segment that includes the symbol table, the section’s attributes will include the SHF_ALLOC bit; otherwise, that bit will be off.
+            </summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.Constant.SectionNames.Text">
+            <summary>This section holds the ‘‘text,’’ or executable instructions, of a program.</summary>
+        </member>
+        <member name="T:AlphaOmega.Debug.NoteSectionItem">
+            <summary>Sometimes a vendor or system builder needs to mark an object file with special information that other programs will check for conformance, compatibility, and so forth.</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.NoteSectionItem.type">
+            <summary>Flags</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.NoteSectionItem.name">
+            <summary>Key</summary>
+        </member>
+        <member name="F:AlphaOmega.Debug.NoteSectionItem.descriptor">
+            <summary>Value</summary>
+        </member>
+    </members>
+</doc>
