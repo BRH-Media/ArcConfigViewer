@@ -16,7 +16,7 @@ namespace ArcAuthentication.Topology
         public string RawJS { get; set; } = @"";
         public string RawJSON { get; set; } = @"";
 
-        private void GrabJS(object sender, WaitWindowEventArgs e)
+        private void GrabJS(object sender, ArcWaitWindowEventArgs e)
         {
             e.Result = GrabJS(false);
         }
@@ -26,14 +26,15 @@ namespace ArcAuthentication.Topology
             try
             {
                 if (waitWindow)
-                    return (string)WaitWindow.Show(GrabJS, @"Retrieving modem topology info...");
+                    return (string)ArcWaitWindow.ArcWaitWindow.Show(GrabJS, @"Retrieving modem topology info...");
 
-                var devicesHtm = $@"{Global.Origin}/owl_lan_device.htm?m=adv";
-                var newToken = new CgiToken(devicesHtm);
-                var jsUri = $@"{Global.Origin}/cgi/cgi_toplogy_info.js";
+                var newToken = new CgiToken(Global.HomeHtm);
+                var jsUri = $@"{Global.Origin}/cgi/cgi_owl_stations.js";
                 jsUri = newToken.TokeniseUrl(jsUri);
 
-                var jsResult = ResourceGrab.GrabString(jsUri, devicesHtm);
+                var jsResult = ResourceGrab.GrabString(jsUri, Global.HomeHtm);
+
+                File.WriteAllText(@"test.js", jsResult);
 
                 //validate (LH1000 fakes a not found on failure)
                 if (!jsResult.Contains(@"404") && !string.IsNullOrEmpty(
@@ -61,7 +62,7 @@ namespace ArcAuthentication.Topology
 
                 if (!string.IsNullOrEmpty(jsResult))
                 {
-                    var regExp = new Regex(@"station_info.*?=\s*(.*?);", RegexOptions.Singleline);
+                    var regExp = new Regex(@"station_info.*?=\s*(.*?);");
 
                     var rawJsonCol = regExp.Matches(jsResult);
                     var rawJson = rawJsonCol[rawJsonCol.Count - 1].Groups[1].Value; //last match
@@ -114,6 +115,7 @@ namespace ArcAuthentication.Topology
                     //column names
                     var columnDefs = new[]
                     {
+                        @"Online",
                         @"Name",
                         @"MAC",
                         @"IP Address",
@@ -133,6 +135,7 @@ namespace ArcAuthentication.Topology
                     foreach (var d in objDevices.Stations)
                     {
                         //poll values
+                        var online = d.Online == 1;
                         var name = d.StationName;
                         var mac = d.StationMac;
                         var ip = d.StationIp;
@@ -146,6 +149,7 @@ namespace ArcAuthentication.Topology
                         //build row
                         var rowAdd = new[]
                         {
+                            online.ToString(),
                             name,
                             mac,
                             ip,

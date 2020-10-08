@@ -1,16 +1,16 @@
-﻿using System;
+﻿using ArcWaitWindow;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Windows.Forms;
-using ArcWaitWindow;
 
 namespace ArcAuthentication
 {
     public static class Login
     {
-        private static void TestLogin(object sender, WaitWindowEventArgs e)
+        private static void TestLogin(object sender, ArcWaitWindowEventArgs e)
         {
             e.Result = TestLogin(false);
         }
@@ -18,7 +18,7 @@ namespace ArcAuthentication
         public static bool TestLogin(bool waitWindow = true)
         {
             if (waitWindow)
-                return (bool)WaitWindow.Show(TestLogin, @"Testing authentication...");
+                return (bool)ArcWaitWindow.ArcWaitWindow.Show(TestLogin, @"Testing authentication...");
 
             try
             {
@@ -38,7 +38,7 @@ namespace ArcAuthentication
             return false;
         }
 
-        private static void DoLogin(object sender, WaitWindowEventArgs e)
+        private static void DoLogin(object sender, ArcWaitWindowEventArgs e)
         {
             if (e.Arguments.Count == 1)
             {
@@ -56,7 +56,7 @@ namespace ArcAuthentication
             if (waitWindow)
             {
                 //offloads to another thread and returns the result once it's done
-                return (bool)WaitWindow.Show(DoLogin, @"Authenticating...", auth);
+                return (bool)ArcWaitWindow.ArcWaitWindow.Show(DoLogin, @"Authenticating...", auth);
             }
 
             try
@@ -65,8 +65,8 @@ namespace ArcAuthentication
                 var cgiToken = new CgiToken();
 
                 //authentication credentials
-                var unEncoded = ArcMd5.ArcadyanMd5(auth.Username);
-                var pwEncoded = ArcMd5.ArcadyanMd5(auth.Password);
+                var unEncoded = ArcMd5.ArcadyanMd5(auth?.Username);
+                var pwEncoded = ArcMd5.ArcadyanMd5(auth?.Password);
 
                 //MessageBox.Show(cgiToken.Token);
                 //MessageBox.Show(unEncoded);

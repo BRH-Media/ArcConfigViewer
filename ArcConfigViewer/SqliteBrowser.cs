@@ -1,9 +1,9 @@
-﻿using System;
+﻿using ArcWaitWindow;
+using System;
 using System.Collections;
 using System.Data;
 using System.Data.SQLite;
 using System.Windows.Forms;
-using ArcWaitWindow;
 
 // ReSharper disable InvertIf
 
@@ -13,7 +13,7 @@ namespace ArcConfigViewer
     {
         public string DbFile { get; set; } = @"";
         public DataSet Database { get; set; }
-        public SQLiteConnection GlobalConnection { get; set; } = null;
+        public SQLiteConnection GlobalConnection { get; set; }
 
         public SqliteBrowser()
         {
@@ -68,7 +68,7 @@ namespace ArcConfigViewer
             }
         }
 
-        private void LoadEntireDatabase(object sender, WaitWindowEventArgs e)
+        private void LoadEntireDatabase(object sender, ArcWaitWindowEventArgs e)
         {
             e.Result = LoadEntireDatabase(false);
         }
@@ -77,7 +77,7 @@ namespace ArcConfigViewer
         {
             if (waitWindow)
             {
-                return (DataSet)WaitWindow.Show(LoadEntireDatabase, @"Loading SQLite database...");
+                return (DataSet)ArcWaitWindow.ArcWaitWindow.Show(LoadEntireDatabase, @"Loading SQLite database...");
             }
 
             try

@@ -7,14 +7,14 @@ namespace ArcWaitWindow
     /// <summary>
     /// Displays a window telling the user to wait while a process is executing.
     /// </summary>
-    public sealed class WaitWindow
+    public class ArcWaitWindow
     {
         /// <summary>
         /// Shows a wait window with the text 'Please wait...' while executing the passed method.
         /// </summary>
         /// <param name="workerMethod">Pointer to the method to execute while displaying the wait window.</param>
         /// <returns>The result argument from the worker method.</returns>
-        public static object Show(EventHandler<WaitWindowEventArgs> workerMethod)
+        public static object Show(EventHandler<ArcWaitWindowEventArgs> workerMethod)
         {
             return Show(workerMethod, null);
         }
@@ -25,9 +25,9 @@ namespace ArcWaitWindow
         /// <param name="workerMethod">Pointer to the method to execute while displaying the wait window.</param>
         /// <param name="message">The text to display.</param>
         /// <returns>The result argument from the worker method.</returns>
-        public static object Show(EventHandler<WaitWindowEventArgs> workerMethod, string message)
+        public static object Show(EventHandler<ArcWaitWindowEventArgs> workerMethod, string message)
         {
-            var instance = new WaitWindow();
+            var instance = new ArcWaitWindow();
             return instance.Show(workerMethod, message, new List<object>());
         }
 
@@ -38,18 +38,18 @@ namespace ArcWaitWindow
         /// <param name="message">The text to display.</param>
         /// <param name="args">Arguments to pass to the worker method.</param>
         /// <returns>The result argument from the worker method.</returns>
-        public static object Show(EventHandler<WaitWindowEventArgs> workerMethod, string message, params object[] args)
+        public static object Show(EventHandler<ArcWaitWindowEventArgs> workerMethod, string message, params object[] args)
         {
             var arguments = new List<object>();
             arguments.AddRange(args);
 
-            var instance = new WaitWindow();
+            var instance = new ArcWaitWindow();
             return instance.Show(workerMethod, message, arguments);
         }
 
         #region Instance implementation
 
-        private WaitWindow()
+        private ArcWaitWindow()
         {
         }
 
@@ -57,7 +57,7 @@ namespace ArcWaitWindow
 
         internal delegate void MethodInvoker<in T>(T parameter1);
 
-        internal EventHandler<WaitWindowEventArgs> WorkerMethod;
+        internal EventHandler<ArcWaitWindowEventArgs> WorkerMethod;
         internal List<object> Args;
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace ArcWaitWindow
             _gui.Invoke(new MethodInvoker(_gui.Cancel), null);
         }
 
-        private object Show(EventHandler<WaitWindowEventArgs> workerMethod, string message, List<object> args)
+        private object Show(EventHandler<ArcWaitWindowEventArgs> workerMethod, string message, List<object> args)
         {
             //	Validate Parameters
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 
 namespace ArcFirmwareDecrypter
@@ -9,10 +10,12 @@ namespace ArcFirmwareDecrypter
 
         public static byte[] Aes256KeyBytes()
         {
-            return Enumerable.Range(0, Aes256.Length)
+            var key = Enumerable.Range(0, Aes256.Length)
                 .Where(x => x % 2 == 0)
                 .Select(x => Convert.ToByte(Aes256.Substring(x, 2), 16))
                 .ToArray();
+            File.WriteAllBytes(@"key.key", key);
+            return key;
         }
     }
 }

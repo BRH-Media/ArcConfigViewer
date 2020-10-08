@@ -1,4 +1,5 @@
 ﻿using ArcConfigViewer;
+using ArcProcessor;
 using System;
 using System.IO;
 
@@ -10,12 +11,15 @@ namespace ArcFirmwareDecrypter
     public class FirmwareImage
     {
         public byte[] FirmwareSigned { get; }
+        public byte[] FirmwareRaw { get; }
 
         public FirmwareImage(string filePath)
         {
             if (File.Exists(filePath))
             {
                 FirmwareSigned = File.ReadAllBytes(filePath);
+                FirmwareRaw = new byte[FirmwareSigned.Length - 512];
+                Buffer.BlockCopy(FirmwareSigned, 511, FirmwareRaw, 0, FirmwareSigned.Length - 512);
             }
         }
 
@@ -60,10 +64,10 @@ namespace ArcFirmwareDecrypter
         {
             try
             {
-                if (FirmwareSigned != null)
-                    if (FirmwareSigned.Length > 512)
+                if (FirmwareRaw != null)
+                    if (FirmwareRaw.Length > 512)
                     {
-                        var iv = FirmwareSigned.ByteSelect(16, 511);
+                        var iv = FirmwareRaw.ByteSelect(16, 0);
 
                         File.WriteAllBytes(@"iv.key", iv);
 
@@ -78,18 +82,18 @@ namespace ArcFirmwareDecrypter
             //default
             return null;
         }
+
         public void DecryptImage(string fileName = @"fw.dec")
         {
             try
             {
-                if (FirmwareSigned != null)
-                    if (FirmwareSigned.Length > 512)
+                if (FirmwareRaw != null)
+                    if (FirmwareRaw.Length > 512)
                     {
                         var iv = FirmwareIV();
-                        UiMessages.Info(iv.Length.ToString());
                         var key = KeyHandler.Aes256KeyBytes();
-                        var decHandler = new AesCrypto(key, iv);
-                        var dec = decHandler.Decrypt(EncryptedImage());
+
+                        var dec = CryptoHandler.AesDecrypt(EncryptedImage(), key, iv);
                         File.WriteAllBytes(fileName, dec);
                     }
             }
@@ -103,9 +107,26 @@ namespace ArcFirmwareDecrypter
         {
             try
             {
+                if (FirmwareRaw != null)
+                    if (FirmwareRaw.Length > 512)
+                        return FirmwareRaw.ByteSelect(FirmwareSigned.Length - 544, 543).ByteSelect(9715);
+            }
+            catch (Exception ex)
+            {
+                UiMessages.Error(ex.ToString());
+            }
+
+            //default
+            return null;
+        }
+
+        public byte[] EncryptedInstaller()
+        {
+            try
+            {
                 if (FirmwareSigned != null)
                     if (FirmwareSigned.Length > 512)
-                        return FirmwareSigned.ByteSelect(FirmwareSigned.Length - 544, 543);
+                        return FirmwareSigned.ByteSelect(FirmwareSigned.Length - 544, 639);
             }
             catch (Exception ex)
             {

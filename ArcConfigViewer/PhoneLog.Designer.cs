@@ -46,18 +46,18 @@
             this.sepSection2 = new System.Windows.Forms.ToolStripSeparator();
             this.lblTotalOut = new System.Windows.Forms.ToolStripLabel();
             this.lblTotalOutValue = new System.Windows.Forms.ToolStripLabel();
-            this.lblTotalIn = new System.Windows.Forms.ToolStripLabel();
             this.sepSection3 = new System.Windows.Forms.ToolStripSeparator();
+            this.lblTotalIn = new System.Windows.Forms.ToolStripLabel();
             this.lblTotalInValue = new System.Windows.Forms.ToolStripLabel();
-            this.lblTotalBilledTime = new System.Windows.Forms.ToolStripLabel();
             this.lblTotalBilledTimeValue = new System.Windows.Forms.ToolStripLabel();
+            this.lblTotalBilledTime = new System.Windows.Forms.ToolStripLabel();
             this.sepTotalBilledTime = new System.Windows.Forms.ToolStripSeparator();
             this.sepEnd = new System.Windows.Forms.ToolStripSeparator();
             this.lblTotalCallTimeValue = new System.Windows.Forms.ToolStripLabel();
             this.lblTotalCallTime = new System.Windows.Forms.ToolStripLabel();
             this.sepTotalCallTime = new System.Windows.Forms.ToolStripSeparator();
-            this.lblCallRatio = new System.Windows.Forms.ToolStripLabel();
             this.lblCallRatioValue = new System.Windows.Forms.ToolStripLabel();
+            this.lblCallRatio = new System.Windows.Forms.ToolStripLabel();
             this.sepCallRatio = new System.Windows.Forms.ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMain)).BeginInit();
             this.menuMain.SuspendLayout();
@@ -70,6 +70,7 @@
             this.dgvMain.AllowUserToDeleteRows = false;
             this.dgvMain.AllowUserToResizeRows = false;
             this.dgvMain.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvMain.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dgvMain.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvMain.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
@@ -112,27 +113,27 @@
             this.itmExportXml});
             this.itmExport.Enabled = false;
             this.itmExport.Name = "itmExport";
-            this.itmExport.Size = new System.Drawing.Size(180, 22);
+            this.itmExport.Size = new System.Drawing.Size(108, 22);
             this.itmExport.Text = "Export";
             // 
             // itmExportJson
             // 
             this.itmExportJson.Name = "itmExportJson";
-            this.itmExportJson.Size = new System.Drawing.Size(180, 22);
+            this.itmExportJson.Size = new System.Drawing.Size(102, 22);
             this.itmExportJson.Text = "JSON";
             this.itmExportJson.Click += new System.EventHandler(this.ItmExportJson_Click);
             // 
             // itmExportCsv
             // 
             this.itmExportCsv.Name = "itmExportCsv";
-            this.itmExportCsv.Size = new System.Drawing.Size(180, 22);
+            this.itmExportCsv.Size = new System.Drawing.Size(102, 22);
             this.itmExportCsv.Text = "CSV";
             this.itmExportCsv.Click += new System.EventHandler(this.ItmExportCsv_Click);
             // 
             // itmExportXml
             // 
             this.itmExportXml.Name = "itmExportXml";
-            this.itmExportXml.Size = new System.Drawing.Size(180, 22);
+            this.itmExportXml.Size = new System.Drawing.Size(102, 22);
             this.itmExportXml.Text = "XML";
             this.itmExportXml.Click += new System.EventHandler(this.ItmExportXml_Click);
             // 
@@ -186,8 +187,8 @@
             // lblVoip
             // 
             this.lblVoip.Name = "lblVoip";
-            this.lblVoip.Size = new System.Drawing.Size(101, 22);
-            this.lblVoip.Text = "PHONE NUMBER:";
+            this.lblVoip.Size = new System.Drawing.Size(91, 22);
+            this.lblVoip.Text = "Phone Number:";
             // 
             // lblVoipValue
             // 
@@ -202,9 +203,10 @@
             // 
             // lblTotalMissed
             // 
+            this.lblTotalMissed.ForeColor = System.Drawing.Color.DarkRed;
             this.lblTotalMissed.Name = "lblTotalMissed";
-            this.lblTotalMissed.Size = new System.Drawing.Size(60, 22);
-            this.lblTotalMissed.Text = "# MISSED:";
+            this.lblTotalMissed.Size = new System.Drawing.Size(57, 22);
+            this.lblTotalMissed.Text = "# Missed:";
             // 
             // lblTotalMissedValue
             // 
@@ -219,9 +221,10 @@
             // 
             // lblTotalOut
             // 
+            this.lblTotalOut.ForeColor = System.Drawing.Color.OrangeRed;
             this.lblTotalOut.Name = "lblTotalOut";
-            this.lblTotalOut.Size = new System.Drawing.Size(43, 22);
-            this.lblTotalOut.Text = "# OUT:";
+            this.lblTotalOut.Size = new System.Drawing.Size(40, 22);
+            this.lblTotalOut.Text = "# Out:";
             // 
             // lblTotalOutValue
             // 
@@ -229,30 +232,23 @@
             this.lblTotalOutValue.Size = new System.Drawing.Size(58, 22);
             this.lblTotalOutValue.Text = "Unknown";
             // 
-            // lblTotalIn
-            // 
-            this.lblTotalIn.Name = "lblTotalIn";
-            this.lblTotalIn.Size = new System.Drawing.Size(32, 22);
-            this.lblTotalIn.Text = "# IN:";
-            // 
             // sepSection3
             // 
             this.sepSection3.Name = "sepSection3";
             this.sepSection3.Size = new System.Drawing.Size(6, 25);
+            // 
+            // lblTotalIn
+            // 
+            this.lblTotalIn.ForeColor = System.Drawing.Color.DarkGreen;
+            this.lblTotalIn.Name = "lblTotalIn";
+            this.lblTotalIn.Size = new System.Drawing.Size(30, 22);
+            this.lblTotalIn.Text = "# In:";
             // 
             // lblTotalInValue
             // 
             this.lblTotalInValue.Name = "lblTotalInValue";
             this.lblTotalInValue.Size = new System.Drawing.Size(58, 22);
             this.lblTotalInValue.Text = "Unknown";
-            // 
-            // lblTotalBilledTime
-            // 
-            this.lblTotalBilledTime.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.lblTotalBilledTime.Name = "lblTotalBilledTime";
-            this.lblTotalBilledTime.Size = new System.Drawing.Size(110, 22);
-            this.lblTotalBilledTime.Text = "TOTAL BILLED TIME:";
-            this.lblTotalBilledTime.Click += new System.EventHandler(this.LblTotalBilledTime_Click);
             // 
             // lblTotalBilledTimeValue
             // 
@@ -261,6 +257,14 @@
             this.lblTotalBilledTimeValue.Size = new System.Drawing.Size(58, 22);
             this.lblTotalBilledTimeValue.Text = "Unknown";
             this.lblTotalBilledTimeValue.Click += new System.EventHandler(this.LblTotalBilledTimeValue_Click);
+            // 
+            // lblTotalBilledTime
+            // 
+            this.lblTotalBilledTime.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.lblTotalBilledTime.Name = "lblTotalBilledTime";
+            this.lblTotalBilledTime.Size = new System.Drawing.Size(96, 22);
+            this.lblTotalBilledTime.Text = "Total Billed Time:";
+            this.lblTotalBilledTime.Click += new System.EventHandler(this.LblTotalBilledTime_Click);
             // 
             // sepTotalBilledTime
             // 
@@ -284,8 +288,8 @@
             // 
             this.lblTotalCallTime.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.lblTotalCallTime.Name = "lblTotalCallTime";
-            this.lblTotalCallTime.Size = new System.Drawing.Size(102, 22);
-            this.lblTotalCallTime.Text = "TOTAL CALL TIME:";
+            this.lblTotalCallTime.Size = new System.Drawing.Size(87, 22);
+            this.lblTotalCallTime.Text = "Total Call Time:";
             // 
             // sepTotalCallTime
             // 
@@ -293,19 +297,19 @@
             this.sepTotalCallTime.Name = "sepTotalCallTime";
             this.sepTotalCallTime.Size = new System.Drawing.Size(6, 25);
             // 
-            // lblCallRatio
-            // 
-            this.lblCallRatio.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.lblCallRatio.Name = "lblCallRatio";
-            this.lblCallRatio.Size = new System.Drawing.Size(70, 22);
-            this.lblCallRatio.Text = "CALL RATIO";
-            // 
             // lblCallRatioValue
             // 
             this.lblCallRatioValue.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.lblCallRatioValue.Name = "lblCallRatioValue";
             this.lblCallRatioValue.Size = new System.Drawing.Size(58, 22);
             this.lblCallRatioValue.Text = "Unknown";
+            // 
+            // lblCallRatio
+            // 
+            this.lblCallRatio.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.lblCallRatio.Name = "lblCallRatio";
+            this.lblCallRatio.Size = new System.Drawing.Size(60, 22);
+            this.lblCallRatio.Text = "Call Ratio:";
             // 
             // sepCallRatio
             // 

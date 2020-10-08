@@ -67,7 +67,7 @@ namespace ArcAuthentication
             }
         }
 
-        private void Revoke(object sender, WaitWindowEventArgs e)
+        private void Revoke(object sender, ArcWaitWindowEventArgs e)
         {
             e.Result = Revoke(false);
         }
@@ -75,7 +75,7 @@ namespace ArcAuthentication
         public bool Revoke(bool waitWindow = true)
         {
             if (waitWindow)
-                return (bool)WaitWindow.Show(Revoke, @"Logging out...");
+                return (bool)ArcWaitWindow.ArcWaitWindow.Show(Revoke, @"Logging out...");
 
             try
             {

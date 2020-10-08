@@ -31,7 +31,7 @@ namespace ArcAuthentication
             "Event"
         };
 
-        private void GrabJS(object sender, WaitWindowEventArgs e)
+        private void GrabJS(object sender, ArcWaitWindowEventArgs e)
         {
             e.Result = GrabJS(false);
         }
@@ -41,7 +41,7 @@ namespace ArcAuthentication
             try
             {
                 if (waitWindow)
-                    return (string)WaitWindow.Show(GrabJS, @"Retrieving call log...");
+                    return (string)ArcWaitWindow.ArcWaitWindow.Show(GrabJS, @"Retrieving call log...");
 
                 var newToken = new CgiToken(Global.CallLogHtml);
                 var jsUri = $@"{Global.Origin}/cgi/cgi_tel_call_list.js";

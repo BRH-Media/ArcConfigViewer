@@ -14,7 +14,7 @@ namespace ArcProcessor
         public const string ExtractDir = @"config";
         public const string Password = @"2&15u69A";
 
-        private static void ProcessConfigArchive(object sender, WaitWindowEventArgs e)
+        private static void ProcessConfigArchive(object sender, ArcWaitWindowEventArgs e)
         {
             var cipherBytes = (byte[])e.Arguments[0];
             ProcessConfigArchive(cipherBytes, false);
@@ -31,7 +31,7 @@ namespace ArcProcessor
 
             if (waitWindow)
             {
-                WaitWindow.Show(ProcessConfigArchive, @"Processing archive...", cipherBytes);
+                ArcWaitWindow.ArcWaitWindow.Show(ProcessConfigArchive, @"Processing archive...", cipherBytes);
             }
             else
             {
@@ -43,7 +43,7 @@ namespace ArcProcessor
         {
             if (waitWindow)
             {
-                WaitWindow.Show(ProcessConfigArchive, @"Processing archive...", archive);
+                ArcWaitWindow.ArcWaitWindow.Show(ProcessConfigArchive, @"Processing archive...", archive);
             }
             else
             {

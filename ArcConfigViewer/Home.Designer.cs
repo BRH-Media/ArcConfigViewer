@@ -36,7 +36,8 @@ namespace ArcConfigViewer
             this.menuMain = new System.Windows.Forms.MenuStrip();
             this.itmFile = new System.Windows.Forms.ToolStripMenuItem();
             this.itmFileOpenConfig = new System.Windows.Forms.ToolStripMenuItem();
-            this.itmNetwork = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmElfDecryptionKey = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmModem = new System.Windows.Forms.ToolStripMenuItem();
             this.itmAuthenticate = new System.Windows.Forms.ToolStripMenuItem();
             this.itmAuthenticateGrant = new System.Windows.Forms.ToolStripMenuItem();
             this.itmTryDefault = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,7 +61,7 @@ namespace ArcConfigViewer
             this.txtMain = new System.Windows.Forms.RichTextBox();
             this.dgvMain = new System.Windows.Forms.DataGridView();
             this.sfdExport = new System.Windows.Forms.SaveFileDialog();
-            this.itmElfDecryptionKey = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmSSHInjection = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMain.SuspendLayout();
             this.tlpMain.SuspendLayout();
             this.pnlMain.SuspendLayout();
@@ -71,7 +72,7 @@ namespace ArcConfigViewer
             // 
             this.menuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.itmFile,
-            this.itmNetwork,
+            this.itmModem,
             this.itmSearch,
             this.itmRefreshConfig,
             this.itmExport});
@@ -98,16 +99,25 @@ namespace ArcConfigViewer
             this.itmFileOpenConfig.Text = "Open Config";
             this.itmFileOpenConfig.Click += new System.EventHandler(this.ItmFileOpenConfig_Click);
             // 
-            // itmNetwork
+            // itmElfDecryptionKey
             // 
-            this.itmNetwork.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.itmElfDecryptionKey.Name = "itmElfDecryptionKey";
+            this.itmElfDecryptionKey.Size = new System.Drawing.Size(185, 22);
+            this.itmElfDecryptionKey.Text = "ELF Decryption Key";
+            this.itmElfDecryptionKey.Click += new System.EventHandler(this.ItmElfDecryptionKey_Click);
+            // 
+            // itmModem
+            // 
+            this.itmModem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.itmAuthenticate,
+            this.itmSSHInjection,
             this.itmConnectedDevicesList,
             this.itmFetchFromModem,
             this.itmCallLog});
-            this.itmNetwork.Name = "itmNetwork";
-            this.itmNetwork.Size = new System.Drawing.Size(64, 20);
-            this.itmNetwork.Text = "Network";
+            this.itmModem.Name = "itmModem";
+            this.itmModem.Size = new System.Drawing.Size(61, 20);
+            this.itmModem.Text = "Modem";
+            this.itmModem.Click += new System.EventHandler(this.itmModem_Click);
             // 
             // itmAuthenticate
             // 
@@ -331,12 +341,11 @@ namespace ArcConfigViewer
             // 
             this.sfdExport.Title = "Export Configuration";
             // 
-            // itmElfDecryptionKey
+            // itmSSHInjection
             // 
-            this.itmElfDecryptionKey.Name = "itmElfDecryptionKey";
-            this.itmElfDecryptionKey.Size = new System.Drawing.Size(185, 22);
-            this.itmElfDecryptionKey.Text = "ELF Decryption Key";
-            this.itmElfDecryptionKey.Click += new System.EventHandler(this.ItmElfDecryptionKey_Click);
+            this.itmSSHInjection.Name = "itmSSHInjection";
+            this.itmSSHInjection.Size = new System.Drawing.Size(228, 22);
+            this.itmSSHInjection.Text = "SSH Injection";
             // 
             // Home
             // 
@@ -383,7 +392,7 @@ namespace ArcConfigViewer
         private System.Windows.Forms.LinkLabel lnkCopy;
         private System.Windows.Forms.ImageList imgMain;
         private System.Windows.Forms.ToolStripMenuItem itmSearch;
-        private ToolStripMenuItem itmNetwork;
+        private ToolStripMenuItem itmModem;
         private ToolStripMenuItem itmConnectedDevicesList;
         private ToolStripMenuItem itmFetchFromModem;
         private ToolStripMenuItem itmCallLog;
@@ -392,6 +401,7 @@ namespace ArcConfigViewer
         private ToolStripMenuItem itmAuthenticateRevoke;
         private ToolStripMenuItem itmTryDefault;
         private ToolStripMenuItem itmElfDecryptionKey;
+        private ToolStripMenuItem itmSSHInjection;
     }
 }
 

@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcConfigViewer", "ArcConfigViewer\ArcConfigViewer.csproj", "{4743A6E2-A4D9-40B6-82A7-C2DDD5B2D16D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcWaitWindow", "WaitWindow\ArcWaitWindow.csproj", "{9DA0E57E-16C2-4F74-9669-24FF0CDDC268}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcWaitWindow", "ArcWaitWindow\ArcWaitWindow.csproj", "{9DA0E57E-16C2-4F74-9669-24FF0CDDC268}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcAuthentication", "ArcAuthentication\ArcAuthentication.csproj", "{D3F856BC-88D6-4B29-8601-45E57ECD75AA}"
 EndProject

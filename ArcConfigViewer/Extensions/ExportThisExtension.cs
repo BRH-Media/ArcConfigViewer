@@ -1,13 +1,13 @@
 ﻿using ArcConfigViewer.Enums;
+using ArcWaitWindow;
 using System.Data;
 using System.Windows.Forms;
-using ArcWaitWindow;
 
 namespace ArcConfigViewer.Extensions
 {
     public static class ExportThisExtension
     {
-        private static void ExportThis(object sender, WaitWindowEventArgs e)
+        private static void ExportThis(object sender, ArcWaitWindowEventArgs e)
         {
             if (e.Arguments.Count != 4) return;
 
@@ -22,7 +22,7 @@ namespace ArcConfigViewer.Extensions
         {
             if (waitWindow)
             {
-                WaitWindow.Show(ExportThis, @"Exporting...", table, format, fileName, silent);
+                ArcWaitWindow.ArcWaitWindow.Show(ExportThis, @"Exporting...", table, format, fileName, silent);
             }
             else
             {

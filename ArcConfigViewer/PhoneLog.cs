@@ -385,7 +385,7 @@ namespace ArcConfigViewer
                 SetDataSource(filteredTable.CopyToDataTable());
             else
             {
-                UiMessages.Error($"Nothing found for '{cxt.SearchTerm}'", @"No Results");
+                UiMessages.Warning($"Nothing found for '{cxt.SearchTerm}'", @"No Results");
                 CancelSearch();
             }
         }

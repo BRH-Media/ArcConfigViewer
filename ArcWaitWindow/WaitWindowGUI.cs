@@ -8,7 +8,7 @@ namespace ArcWaitWindow
     /// </summary>
     internal partial class WaitWindowGui : Form
     {
-        public WaitWindowGui(WaitWindow parent)
+        public WaitWindowGui(ArcWaitWindow parent)
         {
             //
             // The InitializeComponent() call is required for Windows Forms designer support.
@@ -18,7 +18,7 @@ namespace ArcWaitWindow
             _parent = parent;
         }
 
-        private readonly WaitWindow _parent;
+        private readonly ArcWaitWindow _parent;
 
         private delegate T FunctionInvoker<out T>();
 
@@ -39,7 +39,7 @@ namespace ArcWaitWindow
         internal object DoWork()
         {
             //	Invoke the worker method and return any results.
-            var e = new WaitWindowEventArgs(_parent, _parent.Args);
+            var e = new ArcWaitWindowEventArgs(_parent, _parent.Args);
             _parent.WorkerMethod?.Invoke(this, e);
             return e.Result;
         }
@@ -50,7 +50,7 @@ namespace ArcWaitWindow
             {
                 if (InvokeRequired)
                 {
-                    Invoke(new WaitWindow.MethodInvoker<IAsyncResult>(WorkComplete), results);
+                    Invoke(new ArcWaitWindow.MethodInvoker<IAsyncResult>(WorkComplete), results);
                 }
                 else
                 {

@@ -13,7 +13,7 @@ namespace ArcAuthentication
     {
         public string RawJS { get; set; } = @"";
 
-        private void GrabJS(object sender, WaitWindowEventArgs e)
+        private void GrabJS(object sender, ArcWaitWindowEventArgs e)
         {
             e.Result = GrabJS(false);
         }
@@ -23,7 +23,7 @@ namespace ArcAuthentication
             try
             {
                 if (waitWindow)
-                    return (string)WaitWindow.Show(GrabJS, @"Retrieving modem initialisation info...");
+                    return (string)ArcWaitWindow.ArcWaitWindow.Show(GrabJS, @"Retrieving modem initialisation info...");
 
                 var newToken = new CgiToken(Global.HomeHtm);
                 var jsUri = $@"{Global.Origin}/cgi/cgi_init.js";

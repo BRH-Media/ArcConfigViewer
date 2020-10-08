@@ -1,21 +1,21 @@
-﻿using System;
+﻿using ArcWaitWindow;
+using System;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using ArcWaitWindow;
 
 namespace ArcAuthentication
 {
     public class ConfigFile
     {
-        public byte[] RawFile { get; set; } = null;
+        public byte[] RawFile { get; set; }
 
         public byte[] GrabFile(bool waitWindow = true)
         {
             try
             {
                 if (waitWindow)
-                    return (byte[])WaitWindow.Show(GrabFile, @"Retrieving config file...");
+                    return (byte[])ArcWaitWindow.ArcWaitWindow.Show(GrabFile, @"Retrieving config file...");
 
                 var newToken = new CgiToken(Global.BackupHtm);
                 var jsUri = $@"{Global.Origin}/cgi/cgi_backup.js";
@@ -61,7 +61,7 @@ namespace ArcAuthentication
             return null;
         }
 
-        private void GrabFile(object sender, WaitWindowEventArgs e)
+        private void GrabFile(object sender, ArcWaitWindowEventArgs e)
         {
             e.Result = GrabFile(false);
         }

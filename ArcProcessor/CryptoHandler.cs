@@ -43,7 +43,7 @@ namespace ArcProcessor
         }
 
         // OpenSSL prefixes the combined encrypted data and salt with "Salted__"
-        private static byte[] CombineSaltAndEncryptedData(byte[] encryptedData, byte[] salt)
+        public static byte[] CombineSaltAndEncryptedData(byte[] encryptedData, byte[] salt)
         {
             var encryptedBytesWithSalt = new byte[salt.Length + encryptedData.Length + 8];
             Buffer.BlockCopy(Encoding.ASCII.GetBytes("Salted__"), 0, encryptedBytesWithSalt, 0, 8);
@@ -53,7 +53,7 @@ namespace ArcProcessor
         }
 
         // Pull the data out from the combined salt and data
-        private static byte[] ExtractEncryptedData(byte[] salt, byte[] encryptedBytesWithSalt)
+        public static byte[] ExtractEncryptedData(byte[] salt, byte[] encryptedBytesWithSalt)
         {
             var encryptedBytes = new byte[encryptedBytesWithSalt.Length - salt.Length - 8];
             Buffer.BlockCopy(encryptedBytesWithSalt, salt.Length + 8, encryptedBytes, 0, encryptedBytes.Length);
@@ -61,7 +61,7 @@ namespace ArcProcessor
         }
 
         // The salt is located in the first 8 bytes of the combined encrypted data and salt bytes
-        private static byte[] ExtractSalt(byte[] encryptedBytesWithSalt)
+        public static byte[] ExtractSalt(byte[] encryptedBytesWithSalt)
         {
             var salt = new byte[8];
             Buffer.BlockCopy(encryptedBytesWithSalt, 8, salt, 0, salt.Length);
@@ -73,7 +73,7 @@ namespace ArcProcessor
         // Derives a key and IV from the passphrase and salt using a hash algorithm (in this case, MD5).
         //
         // Refer to http://www.openssl.org/docs/crypto/EVP_BytesToKey.html#KEY_DERIVATION_ALGORITHM
-        private static void EvpBytesToKey(string passphrase, byte[] salt, out byte[] key, out byte[] iv)
+        public static void EvpBytesToKey(string passphrase, byte[] salt, out byte[] key, out byte[] iv)
         {
             var concatenatedHashes = new List<byte>(48);
 
@@ -105,12 +105,12 @@ namespace ArcProcessor
             md5.Clear();
         }
 
-        private static byte[] AesEncrypt(string plainText, byte[] key, byte[] iv)
+        public static byte[] AesEncrypt(string plainText, byte[] key, byte[] iv)
         {
             return AesEncrypt(Encoding.ASCII.GetBytes(plainText), key, iv);
         }
 
-        private static byte[] AesEncrypt(byte[] plainText, byte[] key, byte[] iv)
+        public static byte[] AesEncrypt(byte[] plainText, byte[] key, byte[] iv)
         {
             MemoryStream memoryStream;
             RijndaelManaged aesAlgorithm = null;
@@ -147,7 +147,7 @@ namespace ArcProcessor
             return memoryStream.ToArray();
         }
 
-        private static byte[] AesDecrypt(byte[] cipherText, byte[] key, byte[] iv)
+        public static byte[] AesDecrypt(byte[] cipherText, byte[] key, byte[] iv)
         {
             RijndaelManaged aesAlgorithm = null;
             byte[] plainText;
@@ -156,6 +156,7 @@ namespace ArcProcessor
             {
                 aesAlgorithm = new RijndaelManaged
                 {
+                    Padding = PaddingMode.None,
                     Mode = CipherMode.CBC,
                     KeySize = 256,
                     BlockSize = 128,
