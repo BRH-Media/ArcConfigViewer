@@ -46,6 +46,10 @@ namespace ArcConfigViewer.Extensions
                         table.ToCfg(fileName);
                         break;
 
+                    case ExportFormat.Txt:
+                        table.ToTxt(fileName);
+                        break;
+
                     default:
                         if (!silent)
                         {
@@ -65,7 +69,7 @@ namespace ArcConfigViewer.Extensions
         {
             var sfd = new SaveFileDialog
             {
-                Title = @"Export Configuration"
+                Title = @"Export Data"
             };
 
             switch (format)
@@ -86,8 +90,12 @@ namespace ArcConfigViewer.Extensions
                     sfd.Filter = @"CFG File|*.cfg";
                     break;
 
+                case ExportFormat.Txt:
+                    sfd.Filter = @"TXT File|*.txt";
+                    break;
+
                 default:
-                    sfd.Filter = @"CFG File|*.cfg";
+                    sfd.Filter = @"TXT File|*.txt";
                     break;
             }
 

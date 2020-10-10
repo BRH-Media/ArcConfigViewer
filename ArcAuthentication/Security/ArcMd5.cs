@@ -1,4 +1,4 @@
-﻿namespace ArcAuthentication
+﻿namespace ArcAuthentication.Security
 {
     public static class ArcMd5
     {

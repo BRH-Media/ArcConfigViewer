@@ -49,31 +49,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArcMd5.cs" />
-    <Compile Include="CallLog.cs" />
-    <Compile Include="CgiInit.cs" />
-    <Compile Include="CgiSshInjection.cs" />
-    <Compile Include="CgiToken.cs" />
-    <Compile Include="Topology\CgiDevices.cs" />
-    <Compile Include="Topology\CgiTopology.cs" />
-    <Compile Include="ConfigFile.cs" />
-    <Compile Include="Credential.cs" />
+    <Compile Include="Security\ArcMd5.cs" />
+    <Compile Include="CGI\CgiCallLog.cs" />
+    <Compile Include="CGI\CgiInit.cs" />
+    <Compile Include="CGI\CgiSystemLog.cs" />
+    <Compile Include="CGI\CgiSshInjection.cs" />
+    <Compile Include="CGI\CgiToken.cs" />
+    <Compile Include="Enums\LogType.cs" />
+    <Compile Include="CGI\CgiTopology.cs" />
+    <Compile Include="CGI\CgiConfigFile.cs" />
+    <Compile Include="Security\Credential.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Global.cs" />
-    <Compile Include="Login.cs" />
+    <Compile Include="CGI\CgiLogin.cs" />
     <Compile Include="LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="HashHelper.cs" />
+    <Compile Include="Security\HashHelper.cs" />
     <Compile Include="ResourceGrab.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Topology\Converter.cs" />
-    <Compile Include="Topology\ParseStringConverter.cs" />
-    <Compile Include="Topology\Serialize.cs" />
-    <Compile Include="Topology\Station.cs" />
+    <Compile Include="Converter.cs" />
+    <Compile Include="TopologyHandlers\ParseStringConverter.cs" />
+    <Compile Include="TopologyHandlers\Station.cs" />
+    <Compile Include="TopologyHandlers\StationList.cs" />
     <Compile Include="Validation.cs" />
   </ItemGroup>
   <ItemGroup>

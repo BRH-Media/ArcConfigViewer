@@ -1,21 +1,40 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-
-namespace ArcFirmwareDecrypter
+﻿namespace ArcFirmwareDecrypter
 {
     public static class KeyHandler
     {
-        public static string Aes256 { get; } = @"a524c994333480b1df4a0164de7f29a5e94d99e4d24e72f3ce58a8e6e4b1f6de";
-
-        public static byte[] Aes256KeyBytes()
-        {
-            var key = Enumerable.Range(0, Aes256.Length)
-                .Where(x => x % 2 == 0)
-                .Select(x => Convert.ToByte(Aes256.Substring(x, 2), 16))
-                .ToArray();
-            File.WriteAllBytes(@"key.key", key);
-            return key;
-        }
+        public static byte[] Aes256 { get; } = {
+            0xa5,
+            0x24,
+            0xc9,
+            0x94,
+            0x33,
+            0x34,
+            0x80,
+            0xb1,
+            0xdf,
+            0x4a,
+            0x01,
+            0x64,
+            0xde,
+            0x7f,
+            0x29,
+            0xa5,
+            0xe9,
+            0x4d,
+            0x99,
+            0xe4,
+            0xd2,
+            0x4e,
+            0x72,
+            0xf3,
+            0xce,
+            0x58,
+            0xa8,
+            0xe6,
+            0xe4,
+            0xb1,
+            0xf6,
+            0xde
+        };
     }
 }

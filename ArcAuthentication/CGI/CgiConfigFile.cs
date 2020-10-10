@@ -4,9 +4,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace ArcAuthentication
+namespace ArcAuthentication.CGI
 {
-    public class ConfigFile
+    public class CgiConfigFile
     {
         public byte[] RawFile { get; set; }
 

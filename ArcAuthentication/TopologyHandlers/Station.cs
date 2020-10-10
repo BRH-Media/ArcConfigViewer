@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace ArcAuthentication.Topology
+namespace ArcAuthentication.TopologyHandlers
 {
-    public partial class Station
+    public class Station
     {
         [JsonProperty("station_mac")]
         public string StationMac { get; set; }

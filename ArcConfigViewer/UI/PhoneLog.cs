@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 // ReSharper disable InconsistentNaming
 
-namespace ArcConfigViewer
+namespace ArcConfigViewer.UI
 {
     public partial class PhoneLog : Form
     {
@@ -358,12 +358,7 @@ namespace ArcConfigViewer
         {
             var cxt = Search.StartSearch(SearchMode.Grid, Data);
             if (cxt.SearchSubmitted)
-            {
                 DoGridSearch(cxt);
-
-                itmSearch.Text = @"Cancel Search";
-                itmHandset.Enabled = false;
-            }
         }
 
         private void CancelSearch()
@@ -382,7 +377,11 @@ namespace ArcConfigViewer
             var filteredTable = table.Select(query);
 
             if (filteredTable.Length > 0)
+            {
                 SetDataSource(filteredTable.CopyToDataTable());
+                itmSearch.Text = @"Cancel Search";
+                itmHandset.Enabled = false;
+            }
             else
             {
                 UiMessages.Warning($"Nothing found for '{cxt.SearchTerm}'", @"No Results");
@@ -443,10 +442,11 @@ namespace ArcConfigViewer
 
         private void ItmSearch_Click(object sender, EventArgs e)
         {
-            if (itmSearch.Text == @"Search")
-                StartSearch();
-            else
-                CancelSearch();
+            if (dgvMain.DataSource != null)
+                if (itmSearch.Text == @"Search")
+                    StartSearch();
+                else
+                    CancelSearch();
         }
 
         private void LblTotalBilledTimeValue_Click(object sender, EventArgs e)

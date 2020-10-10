@@ -5,6 +5,7 @@
         Json,
         Xml,
         Csv,
-        Cfg
+        Cfg,
+        Txt
     }
 }

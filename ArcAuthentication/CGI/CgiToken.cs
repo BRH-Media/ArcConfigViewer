@@ -9,7 +9,7 @@ using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 // ReSharper disable InconsistentNaming
 
-namespace ArcAuthentication
+namespace ArcAuthentication.CGI
 {
     public class CgiToken
     {

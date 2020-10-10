@@ -7,7 +7,7 @@ using System.Windows.Forms;
 // ReSharper disable CoVariantArrayConversion
 // ReSharper disable InconsistentNaming
 
-namespace ArcAuthentication
+namespace ArcAuthentication.CGI
 {
     public class CgiInit
     {
@@ -57,7 +57,7 @@ namespace ArcAuthentication
             {
                 if (File.Exists(fileName))
                     File.Delete(fileName);
-                File.WriteAllText(fileName, RawJS);
+                File.WriteAllText(fileName, !string.IsNullOrWhiteSpace(RawJS) ? RawJS : GrabJS());
             }
             catch (Exception ex)
             {

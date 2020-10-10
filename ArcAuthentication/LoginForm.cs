@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ArcAuthentication.CGI;
+using ArcAuthentication.Security;
+using System;
 using System.Windows.Forms;
 
 namespace ArcAuthentication
@@ -16,7 +18,7 @@ namespace ArcAuthentication
         {
             if (!string.IsNullOrWhiteSpace(txtPassword.Text) && !string.IsNullOrWhiteSpace(txtUsername.Text))
             {
-                if (Login.DoLogin(new Credential(txtUsername.Text, txtPassword.Text)))
+                if (CgiLogin.DoLogin(new Credential(txtUsername.Text, txtPassword.Text)))
                 {
                     Success = true;
                     /*MessageBox.Show(@"Success!", @"Message",
@@ -46,7 +48,6 @@ namespace ArcAuthentication
 
         private void LoginForm_Load(object sender, EventArgs e)
         {
-
         }
     }
 }

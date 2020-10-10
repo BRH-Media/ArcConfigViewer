@@ -1,5 +1,7 @@
-﻿using ArcConfigViewer;
+﻿using ArcAuthentication.TopologyHandlers;
+using ArcConfigViewer;
 using ArcWaitWindow;
+using Newtonsoft.Json;
 using System;
 using System.Data;
 using System.IO;
@@ -9,7 +11,7 @@ using System.Windows.Forms;
 // ReSharper disable CoVariantArrayConversion
 // ReSharper disable InconsistentNaming
 
-namespace ArcAuthentication.Topology
+namespace ArcAuthentication.CGI
 {
     public class CgiTopology
     {
@@ -83,14 +85,14 @@ namespace ArcAuthentication.Topology
             return @"";
         }
 
-        public CgiDevices GrabDevicesObject()
+        public Station[] GrabDevicesObject()
         {
             try
             {
                 var jsonRaw = GrabJSON();
 
                 if (!string.IsNullOrEmpty(jsonRaw))
-                    return CgiDevices.FromJson(jsonRaw);
+                    return JsonConvert.DeserializeObject<StationList>(jsonRaw, ConverterSettings.Settings)?.Stations;
             }
             catch (Exception ex)
             {
@@ -107,7 +109,7 @@ namespace ArcAuthentication.Topology
             {
                 var objDevices = GrabDevicesObject();
 
-                if (objDevices?.Stations?.Length > 0)
+                if (objDevices?.Length > 0)
                 {
                     //the table to build
                     var dt = new DataTable(@"DevicesList");
@@ -132,7 +134,7 @@ namespace ArcAuthentication.Topology
                         dt.Columns.Add(s, typeof(string));
 
                     //data construction
-                    foreach (var d in objDevices.Stations)
+                    foreach (var d in objDevices)
                     {
                         //poll values
                         var online = d.Online == 1;

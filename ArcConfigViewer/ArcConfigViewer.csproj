@@ -86,10 +86,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyResolve.cs" />
-    <Compile Include="ConnectedDevices.cs">
+    <Compile Include="Extensions\TxtUtility.cs" />
+    <Compile Include="UI\ConnectedDevices.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ConnectedDevices.Designer.cs">
+    <Compile Include="UI\ConnectedDevices.Designer.cs">
       <DependentUpon>ConnectedDevices.cs</DependentUpon>
     </Compile>
     <Compile Include="Enums\ExportFormat.cs" />
@@ -99,40 +100,46 @@
     <Compile Include="Extensions\ExportThisExtension.cs" />
     <Compile Include="Extensions\JsonUtility.cs" />
     <Compile Include="Extensions\XmlUtility.cs" />
-    <Compile Include="Home.cs">
+    <Compile Include="UI\Home.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Home.Designer.cs">
+    <Compile Include="UI\Home.Designer.cs">
       <DependentUpon>Home.cs</DependentUpon>
     </Compile>
-    <Compile Include="PhoneLog.cs">
+    <Compile Include="UI\PhoneLog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PhoneLog.Designer.cs">
+    <Compile Include="UI\PhoneLog.Designer.cs">
       <DependentUpon>PhoneLog.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Search.cs">
+    <Compile Include="UI\Search.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Search.Designer.cs">
+    <Compile Include="UI\Search.Designer.cs">
       <DependentUpon>Search.cs</DependentUpon>
     </Compile>
     <Compile Include="SearchContext.cs" />
-    <Compile Include="SqliteBrowser.cs">
+    <Compile Include="UI\SqliteBrowser.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SqliteBrowser.Designer.cs">
+    <Compile Include="UI\SqliteBrowser.Designer.cs">
       <DependentUpon>SqliteBrowser.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="ConnectedDevices.resx">
+    <Compile Include="UI\SystemLogs.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\SystemLogs.Designer.cs">
+      <DependentUpon>SystemLogs.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="UI\ConnectedDevices.resx">
       <DependentUpon>ConnectedDevices.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Home.resx">
+    <EmbeddedResource Include="UI\Home.resx">
       <DependentUpon>Home.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PhoneLog.resx">
+    <EmbeddedResource Include="UI\PhoneLog.resx">
       <DependentUpon>PhoneLog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -144,11 +151,14 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Search.resx">
+    <EmbeddedResource Include="UI\Search.resx">
       <DependentUpon>Search.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SqliteBrowser.resx">
+    <EmbeddedResource Include="UI\SqliteBrowser.resx">
       <DependentUpon>SqliteBrowser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\SystemLogs.resx">
+      <DependentUpon>SystemLogs.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -182,6 +192,7 @@
       <Name>ArcWaitWindow</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

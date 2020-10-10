@@ -5,7 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace ArcConfigViewer
+namespace ArcConfigViewer.UI
 {
     public partial class ConnectedDevices : Form
     {
@@ -185,7 +185,10 @@ namespace ArcConfigViewer
             var filteredTable = table.Select(query);
 
             if (filteredTable.Length > 0)
+            {
                 SetDataSource(filteredTable.CopyToDataTable());
+                itmSearch.Text = @"Cancel Search";
+            }
             else
             {
                 UiMessages.Warning($"Nothing found for '{cxt.SearchTerm}'", @"No Results");
@@ -197,11 +200,7 @@ namespace ArcConfigViewer
         {
             var cxt = Search.StartSearch(SearchMode.Grid, Data);
             if (cxt.SearchSubmitted)
-            {
                 DoGridSearch(cxt);
-
-                itmSearch.Text = @"Cancel Search";
-            }
         }
 
         private void CancelSearch()
@@ -262,10 +261,11 @@ namespace ArcConfigViewer
 
         private void ItmSearch_Click(object sender, EventArgs e)
         {
-            if (itmSearch.Text == @"Search")
-                StartSearch();
-            else
-                CancelSearch();
+            if (dgvMain.DataSource != null)
+                if (itmSearch.Text == @"Search")
+                    StartSearch();
+                else
+                    CancelSearch();
         }
 
         private void ItmAvgOnlineOnly_Click(object sender, EventArgs e)

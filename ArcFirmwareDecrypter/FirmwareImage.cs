@@ -23,6 +23,32 @@ namespace ArcFirmwareDecrypter
             }
         }
 
+        public byte[] DecryptHeader()
+        {
+            try
+            {
+                if (FirmwareRaw != null)
+                    if (FirmwareRaw.Length > 512)
+                    {
+                        var iv = FirmwareIV();
+                        var key = KeyHandler.Aes256;
+
+                        var fileName = @"header.rawBytes";
+                        var rawHeader = FirmwareSigned.ByteSelect(640, 543);
+
+                        var dec = CryptoHandler.AesDecrypt(rawHeader, key, iv);
+                        File.WriteAllBytes(fileName, dec);
+                    }
+            }
+            catch (Exception ex)
+            {
+                UiMessages.Error(ex.ToString());
+            }
+
+            //default
+            return null;
+        }
+
         public byte[] SignedSHA512()
         {
             try
@@ -67,7 +93,7 @@ namespace ArcFirmwareDecrypter
                 if (FirmwareRaw != null)
                     if (FirmwareRaw.Length > 512)
                     {
-                        var iv = FirmwareRaw.ByteSelect(16, 0);
+                        var iv = FirmwareRaw.ByteSelect(16);
 
                         File.WriteAllBytes(@"iv.key", iv);
 
@@ -90,11 +116,7 @@ namespace ArcFirmwareDecrypter
                 if (FirmwareRaw != null)
                     if (FirmwareRaw.Length > 512)
                     {
-                        var iv = FirmwareIV();
-                        var key = KeyHandler.Aes256KeyBytes();
-
-                        var dec = CryptoHandler.AesDecrypt(EncryptedImage(), key, iv);
-                        File.WriteAllBytes(fileName, dec);
+                        var header = DecryptHeader();
                     }
             }
             catch (Exception ex)

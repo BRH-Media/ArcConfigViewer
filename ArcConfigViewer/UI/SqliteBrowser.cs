@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 // ReSharper disable InvertIf
 
-namespace ArcConfigViewer
+namespace ArcConfigViewer.UI
 {
     public partial class SqliteBrowser : Form
     {

@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace ArcAuthentication
+namespace ArcAuthentication.Security
 {
     public static class HashHelper
     {

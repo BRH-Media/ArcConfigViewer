@@ -9,9 +9,9 @@ using System.Windows.Forms;
 // ReSharper disable CoVariantArrayConversion
 // ReSharper disable InconsistentNaming
 
-namespace ArcAuthentication
+namespace ArcAuthentication.CGI
 {
-    public class CallLog
+    public class CgiCallLog
     {
         public string RawJS { get; set; } = @"";
         public string RawJSON { get; set; } = @"";
@@ -43,11 +43,11 @@ namespace ArcAuthentication
                 if (waitWindow)
                     return (string)ArcWaitWindow.ArcWaitWindow.Show(GrabJS, @"Retrieving call log...");
 
-                var newToken = new CgiToken(Global.CallLogHtml);
+                var newToken = new CgiToken(Global.CallLogHtm);
                 var jsUri = $@"{Global.Origin}/cgi/cgi_tel_call_list.js";
                 jsUri = newToken.TokeniseUrl(jsUri);
 
-                var jsResult = ResourceGrab.GrabString(jsUri, Global.CallLogHtml);
+                var jsResult = ResourceGrab.GrabString(jsUri, Global.CallLogHtm);
 
                 //validate (LH1000 fakes a not found on failure)
                 if (!jsResult.Contains(@"404") && !string.IsNullOrEmpty(

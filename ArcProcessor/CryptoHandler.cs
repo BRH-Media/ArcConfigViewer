@@ -105,11 +105,6 @@ namespace ArcProcessor
             md5.Clear();
         }
 
-        public static byte[] AesEncrypt(string plainText, byte[] key, byte[] iv)
-        {
-            return AesEncrypt(Encoding.ASCII.GetBytes(plainText), key, iv);
-        }
-
         public static byte[] AesEncrypt(byte[] plainText, byte[] key, byte[] iv)
         {
             MemoryStream memoryStream;
@@ -156,7 +151,7 @@ namespace ArcProcessor
             {
                 aesAlgorithm = new RijndaelManaged
                 {
-                    Padding = PaddingMode.None,
+                    Padding = PaddingMode.PKCS7,
                     Mode = CipherMode.CBC,
                     KeySize = 256,
                     BlockSize = 128,

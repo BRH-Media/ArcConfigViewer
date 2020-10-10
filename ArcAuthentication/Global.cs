@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using ArcAuthentication.CGI;
+using System.Net.Http;
 
 namespace ArcAuthentication
 {
@@ -11,8 +12,9 @@ namespace ArcAuthentication
         public static string LoginHtm { get; } = $@"{Origin}/login.htm";
         public static string IndexHtm { get; } = $@"{Origin}/index.htm";
         public static string HomeHtm { get; } = $@"{Origin}/home.htm";
+        public static string SystemLogHtm { get; } = $@"{Origin}/diagnostics_logviewer.htm?m=adv";
         public static string BackupHtm { get; } = $@"{Origin}/sys_backup.htm?m=adv";
-        public static string CallLogHtml { get; } = $@"{Origin}/mmpbx_book.htm?m=adv";
+        public static string CallLogHtm { get; } = $@"{Origin}/mmpbx_book.htm?m=adv";
         public static CgiToken InitToken { get; set; } = null;
         public static HttpClient GlobalClient { get; set; } = null;
     }

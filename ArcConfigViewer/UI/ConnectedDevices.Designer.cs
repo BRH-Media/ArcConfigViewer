@@ -1,4 +1,4 @@
-﻿namespace ArcConfigViewer
+﻿namespace ArcConfigViewer.UI
 {
     partial class ConnectedDevices
     {

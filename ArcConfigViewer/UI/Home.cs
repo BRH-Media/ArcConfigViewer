@@ -1,5 +1,6 @@
 ﻿using ArcAuthentication;
-using ArcAuthentication.Topology;
+using ArcAuthentication.CGI;
+using ArcAuthentication.Security;
 using ArcConfigKeyExtractor;
 using ArcConfigViewer.Enums;
 using ArcConfigViewer.Extensions;
@@ -16,7 +17,7 @@ using System.Windows.Forms;
 // ReSharper disable InconsistentNaming
 // ReSharper disable InvertIf
 
-namespace ArcConfigViewer
+namespace ArcConfigViewer.UI
 {
     public partial class Home : Form
     {
@@ -393,7 +394,6 @@ namespace ArcConfigViewer
                 if (cxt.SearchSubmitted)
                 {
                     DoGridSearch(cxt);
-                    itmSearch.Text = @"Cancel Search";
                 }
             }
             else
@@ -402,7 +402,6 @@ namespace ArcConfigViewer
                 if (cxt.SearchSubmitted)
                 {
                     DoTextSearch(cxt);
-                    itmSearch.Text = @"Cancel Search";
                 }
             }
         }
@@ -434,6 +433,8 @@ namespace ArcConfigViewer
                 UiMessages.Warning($"Nothing found for '{cxt.SearchTerm}'", @"No Results");
                 CancelSearch();
             }
+            else
+                itmSearch.Text = @"Cancel Search";
         }
 
         private void DoGridSearch(SearchContext cxt)
@@ -443,7 +444,10 @@ namespace ArcConfigViewer
             var filteredTable = table.Select(query);
 
             if (filteredTable.Length > 0)
+            {
                 dgvMain.DataSource = filteredTable.CopyToDataTable();
+                itmSearch.Text = @"Cancel Search";
+            }
             else
             {
                 UiMessages.Warning($"Nothing found for '{cxt.SearchTerm}'", @"No Results");
@@ -567,7 +571,7 @@ namespace ArcConfigViewer
 
                 if (success)
                 {
-                    var cfg = new ConfigFile();
+                    var cfg = new CgiConfigFile();
                     var file = cfg.GrabFile();
 
                     if (file != null)
@@ -605,7 +609,7 @@ namespace ArcConfigViewer
 
                 if (success)
                 {
-                    var log = new CallLog();
+                    var log = new CgiCallLog();
                     var table = log.GrabTable();
 
                     if (table != null)
@@ -620,6 +624,24 @@ namespace ArcConfigViewer
                     else
                         UiMessages.Warning(@"Call log from modem returned null bytes; operation failed.", @"Data Error");
                 }
+                else
+                    UiMessages.Warning(@"Authentication required; please authenticate first.");
+            }
+            catch (Exception ex)
+            {
+                UiMessages.Error(ex.ToString());
+            }
+        }
+
+        private void ItmFetchSystemLogs_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //test authentication
+                var success = Authenticated();
+
+                if (success)
+                    SystemLogs.ShowSystemLogViewer();
                 else
                     UiMessages.Warning(@"Authentication required; please authenticate first.");
             }
@@ -647,7 +669,7 @@ namespace ArcConfigViewer
         {
             try
             {
-                var testLogin = Login.TestLogin();
+                var testLogin = CgiLogin.TestLogin();
                 if (!testLogin && tryLogin)
                 {
                     var loginTry = LoginForm.ShowLogin();
@@ -670,7 +692,7 @@ namespace ArcConfigViewer
             try
             {
                 //test authentication
-                var testLogin = Login.TestLogin();
+                var testLogin = CgiLogin.TestLogin();
                 if (testLogin)
                     UpdateUIAuthenticate(true);
                 else if (Global.InitToken == null)
@@ -689,7 +711,7 @@ namespace ArcConfigViewer
             try
             {
                 //test authentication
-                var testLogin = Login.TestLogin();
+                var testLogin = CgiLogin.TestLogin();
                 if (testLogin)
                     UiMessages.Warning(@"Authentication failed: user is already authenticated");
                 else if (Global.InitToken == null)
@@ -717,7 +739,7 @@ namespace ArcConfigViewer
             try
             {
                 //test authentication
-                var testLogin = Login.TestLogin();
+                var testLogin = CgiLogin.TestLogin();
                 if (!testLogin)
                     UiMessages.Warning(@"Revocation failed: login not yet initiated");
                 else if (Global.InitToken != null)
@@ -746,7 +768,7 @@ namespace ArcConfigViewer
             try
             {
                 //test authentication
-                var testLogin = Login.TestLogin();
+                var testLogin = CgiLogin.TestLogin();
                 if (testLogin)
                     UiMessages.Warning(@"Authentication failed: user is already authenticated");
                 else if (Global.InitToken == null)
@@ -755,7 +777,7 @@ namespace ArcConfigViewer
                     var defaultLogin = new Credential(@"admin", @"Telstra");
 
                     //login with default credentials
-                    var loginSuccess = Login.DoLogin(defaultLogin);
+                    var loginSuccess = CgiLogin.DoLogin(defaultLogin);
                     if (loginSuccess)
                     {
                         UpdateUIAuthenticate(true);
@@ -777,11 +799,6 @@ namespace ArcConfigViewer
         {
             var elfProcessor = new ElfDissector(@"httpd");
             elfProcessor.ExtractStrings();
-        }
-
-        private void itmModem_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

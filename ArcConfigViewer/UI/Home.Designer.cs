@@ -1,7 +1,6 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
-namespace ArcConfigViewer
+namespace ArcConfigViewer.UI
 {
     partial class Home
     {
@@ -42,9 +41,11 @@ namespace ArcConfigViewer
             this.itmAuthenticateGrant = new System.Windows.Forms.ToolStripMenuItem();
             this.itmTryDefault = new System.Windows.Forms.ToolStripMenuItem();
             this.itmAuthenticateRevoke = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmSSHInjection = new System.Windows.Forms.ToolStripMenuItem();
             this.itmConnectedDevicesList = new System.Windows.Forms.ToolStripMenuItem();
             this.itmFetchFromModem = new System.Windows.Forms.ToolStripMenuItem();
             this.itmCallLog = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmFetchSystemLogs = new System.Windows.Forms.ToolStripMenuItem();
             this.itmSearch = new System.Windows.Forms.ToolStripMenuItem();
             this.itmRefreshConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.itmExport = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,7 +62,6 @@ namespace ArcConfigViewer
             this.txtMain = new System.Windows.Forms.RichTextBox();
             this.dgvMain = new System.Windows.Forms.DataGridView();
             this.sfdExport = new System.Windows.Forms.SaveFileDialog();
-            this.itmSSHInjection = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMain.SuspendLayout();
             this.tlpMain.SuspendLayout();
             this.pnlMain.SuspendLayout();
@@ -113,11 +113,11 @@ namespace ArcConfigViewer
             this.itmSSHInjection,
             this.itmConnectedDevicesList,
             this.itmFetchFromModem,
-            this.itmCallLog});
+            this.itmCallLog,
+            this.itmFetchSystemLogs});
             this.itmModem.Name = "itmModem";
             this.itmModem.Size = new System.Drawing.Size(61, 20);
             this.itmModem.Text = "Modem";
-            this.itmModem.Click += new System.EventHandler(this.itmModem_Click);
             // 
             // itmAuthenticate
             // 
@@ -151,6 +151,12 @@ namespace ArcConfigViewer
             this.itmAuthenticateRevoke.Text = "Logout";
             this.itmAuthenticateRevoke.Click += new System.EventHandler(this.ItmAuthenticateRevoke_Click);
             // 
+            // itmSSHInjection
+            // 
+            this.itmSSHInjection.Name = "itmSSHInjection";
+            this.itmSSHInjection.Size = new System.Drawing.Size(228, 22);
+            this.itmSSHInjection.Text = "SSH Injection";
+            // 
             // itmConnectedDevicesList
             // 
             this.itmConnectedDevicesList.Name = "itmConnectedDevicesList";
@@ -171,6 +177,13 @@ namespace ArcConfigViewer
             this.itmCallLog.Size = new System.Drawing.Size(228, 22);
             this.itmCallLog.Text = "Fetch Call Log";
             this.itmCallLog.Click += new System.EventHandler(this.ItmCallLog_Click);
+            // 
+            // itmFetchSystemLogs
+            // 
+            this.itmFetchSystemLogs.Name = "itmFetchSystemLogs";
+            this.itmFetchSystemLogs.Size = new System.Drawing.Size(228, 22);
+            this.itmFetchSystemLogs.Text = "Fetch System Logs";
+            this.itmFetchSystemLogs.Click += new System.EventHandler(this.ItmFetchSystemLogs_Click);
             // 
             // itmSearch
             // 
@@ -341,12 +354,6 @@ namespace ArcConfigViewer
             // 
             this.sfdExport.Title = "Export Configuration";
             // 
-            // itmSSHInjection
-            // 
-            this.itmSSHInjection.Name = "itmSSHInjection";
-            this.itmSSHInjection.Size = new System.Drawing.Size(228, 22);
-            this.itmSSHInjection.Text = "SSH Injection";
-            // 
             // Home
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -402,6 +409,7 @@ namespace ArcConfigViewer
         private ToolStripMenuItem itmTryDefault;
         private ToolStripMenuItem itmElfDecryptionKey;
         private ToolStripMenuItem itmSSHInjection;
+        private ToolStripMenuItem itmFetchSystemLogs;
     }
 }
 

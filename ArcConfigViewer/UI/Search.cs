@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 
-namespace ArcConfigViewer
+namespace ArcConfigViewer.UI
 {
     public partial class Search : Form
     {

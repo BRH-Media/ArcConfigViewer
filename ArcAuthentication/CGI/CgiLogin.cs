@@ -1,4 +1,5 @@
-﻿using ArcWaitWindow;
+﻿using ArcAuthentication.Security;
+using ArcWaitWindow;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -6,9 +7,9 @@ using System.Net.Http;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ArcAuthentication
+namespace ArcAuthentication.CGI
 {
-    public static class Login
+    public static class CgiLogin
     {
         private static void TestLogin(object sender, ArcWaitWindowEventArgs e)
         {
@@ -64,9 +65,9 @@ namespace ArcAuthentication
                 //this will trigger a secondary request
                 var cgiToken = new CgiToken();
 
-                //authentication credentials
-                var unEncoded = ArcMd5.ArcadyanMd5(auth?.Username);
-                var pwEncoded = ArcMd5.ArcadyanMd5(auth?.Password);
+                //authentication credentials (they get hashed when loaded into the Credential object)
+                var unEncoded = auth?.Username;
+                var pwEncoded = auth?.Password;
 
                 //MessageBox.Show(cgiToken.Token);
                 //MessageBox.Show(unEncoded);

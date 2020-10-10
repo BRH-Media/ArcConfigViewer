@@ -1,7 +1,7 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System;
 
-namespace ArcAuthentication.Topology
+namespace ArcAuthentication.TopologyHandlers
 {
     internal class ParseStringConverter : JsonConverter
     {
@@ -28,9 +28,6 @@ namespace ArcAuthentication.Topology
             }
             var value = (long)untypedValue;
             serializer.Serialize(writer, value.ToString());
-            return;
         }
-
-        public static readonly ParseStringConverter Singleton = new ParseStringConverter();
     }
 }
