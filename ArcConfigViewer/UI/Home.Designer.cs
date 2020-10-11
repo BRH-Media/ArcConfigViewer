@@ -37,15 +37,16 @@ namespace ArcConfigViewer.UI
             this.itmFileOpenConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.itmElfDecryptionKey = new System.Windows.Forms.ToolStripMenuItem();
             this.itmModem = new System.Windows.Forms.ToolStripMenuItem();
-            this.itmAuthenticate = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmAuthentication = new System.Windows.Forms.ToolStripMenuItem();
             this.itmAuthenticateGrant = new System.Windows.Forms.ToolStripMenuItem();
             this.itmTryDefault = new System.Windows.Forms.ToolStripMenuItem();
             this.itmAuthenticateRevoke = new System.Windows.Forms.ToolStripMenuItem();
-            this.itmSSHInjection = new System.Windows.Forms.ToolStripMenuItem();
-            this.itmConnectedDevicesList = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmOperation = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmFetchConnectedDevicesList = new System.Windows.Forms.ToolStripMenuItem();
             this.itmFetchFromModem = new System.Windows.Forms.ToolStripMenuItem();
-            this.itmCallLog = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmFetchCallLog = new System.Windows.Forms.ToolStripMenuItem();
             this.itmFetchSystemLogs = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmExploits = new System.Windows.Forms.ToolStripMenuItem();
             this.itmSearch = new System.Windows.Forms.ToolStripMenuItem();
             this.itmRefreshConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.itmExport = new System.Windows.Forms.ToolStripMenuItem();
@@ -62,6 +63,7 @@ namespace ArcConfigViewer.UI
             this.txtMain = new System.Windows.Forms.RichTextBox();
             this.dgvMain = new System.Windows.Forms.DataGridView();
             this.sfdExport = new System.Windows.Forms.SaveFileDialog();
+            this.itmExploitTelnet = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMain.SuspendLayout();
             this.tlpMain.SuspendLayout();
             this.pnlMain.SuspendLayout();
@@ -109,25 +111,22 @@ namespace ArcConfigViewer.UI
             // itmModem
             // 
             this.itmModem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.itmAuthenticate,
-            this.itmSSHInjection,
-            this.itmConnectedDevicesList,
-            this.itmFetchFromModem,
-            this.itmCallLog,
-            this.itmFetchSystemLogs});
+            this.itmAuthentication,
+            this.itmOperation,
+            this.itmExploits});
             this.itmModem.Name = "itmModem";
             this.itmModem.Size = new System.Drawing.Size(61, 20);
             this.itmModem.Text = "Modem";
             // 
-            // itmAuthenticate
+            // itmAuthentication
             // 
-            this.itmAuthenticate.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.itmAuthentication.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.itmAuthenticateGrant,
             this.itmTryDefault,
             this.itmAuthenticateRevoke});
-            this.itmAuthenticate.Name = "itmAuthenticate";
-            this.itmAuthenticate.Size = new System.Drawing.Size(228, 22);
-            this.itmAuthenticate.Text = "Authenticate";
+            this.itmAuthentication.Name = "itmAuthentication";
+            this.itmAuthentication.Size = new System.Drawing.Size(180, 22);
+            this.itmAuthentication.Text = "Authentication";
             // 
             // itmAuthenticateGrant
             // 
@@ -151,18 +150,23 @@ namespace ArcConfigViewer.UI
             this.itmAuthenticateRevoke.Text = "Logout";
             this.itmAuthenticateRevoke.Click += new System.EventHandler(this.ItmAuthenticateRevoke_Click);
             // 
-            // itmSSHInjection
+            // itmOperation
             // 
-            this.itmSSHInjection.Name = "itmSSHInjection";
-            this.itmSSHInjection.Size = new System.Drawing.Size(228, 22);
-            this.itmSSHInjection.Text = "SSH Injection";
+            this.itmOperation.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.itmFetchConnectedDevicesList,
+            this.itmFetchFromModem,
+            this.itmFetchCallLog,
+            this.itmFetchSystemLogs});
+            this.itmOperation.Name = "itmOperation";
+            this.itmOperation.Size = new System.Drawing.Size(180, 22);
+            this.itmOperation.Text = "Operation";
             // 
-            // itmConnectedDevicesList
+            // itmFetchConnectedDevicesList
             // 
-            this.itmConnectedDevicesList.Name = "itmConnectedDevicesList";
-            this.itmConnectedDevicesList.Size = new System.Drawing.Size(228, 22);
-            this.itmConnectedDevicesList.Text = "Fetch Connected Devices List";
-            this.itmConnectedDevicesList.Click += new System.EventHandler(this.ItmConnectedDevicesList_Click);
+            this.itmFetchConnectedDevicesList.Name = "itmFetchConnectedDevicesList";
+            this.itmFetchConnectedDevicesList.Size = new System.Drawing.Size(228, 22);
+            this.itmFetchConnectedDevicesList.Text = "Fetch Connected Devices List";
+            this.itmFetchConnectedDevicesList.Click += new System.EventHandler(this.ItmConnectedDevicesList_Click);
             // 
             // itmFetchFromModem
             // 
@@ -171,12 +175,12 @@ namespace ArcConfigViewer.UI
             this.itmFetchFromModem.Text = "Fetch Config From Modem";
             this.itmFetchFromModem.Click += new System.EventHandler(this.ItmFetchFromModem_Click);
             // 
-            // itmCallLog
+            // itmFetchCallLog
             // 
-            this.itmCallLog.Name = "itmCallLog";
-            this.itmCallLog.Size = new System.Drawing.Size(228, 22);
-            this.itmCallLog.Text = "Fetch Call Log";
-            this.itmCallLog.Click += new System.EventHandler(this.ItmCallLog_Click);
+            this.itmFetchCallLog.Name = "itmFetchCallLog";
+            this.itmFetchCallLog.Size = new System.Drawing.Size(228, 22);
+            this.itmFetchCallLog.Text = "Fetch Call Log";
+            this.itmFetchCallLog.Click += new System.EventHandler(this.ItmCallLog_Click);
             // 
             // itmFetchSystemLogs
             // 
@@ -184,6 +188,15 @@ namespace ArcConfigViewer.UI
             this.itmFetchSystemLogs.Size = new System.Drawing.Size(228, 22);
             this.itmFetchSystemLogs.Text = "Fetch System Logs";
             this.itmFetchSystemLogs.Click += new System.EventHandler(this.ItmFetchSystemLogs_Click);
+            // 
+            // itmExploits
+            // 
+            this.itmExploits.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.itmExploitTelnet});
+            this.itmExploits.Name = "itmExploits";
+            this.itmExploits.Size = new System.Drawing.Size(180, 22);
+            this.itmExploits.Text = "Exploits";
+            this.itmExploits.Click += new System.EventHandler(this.ItmExploits_Click);
             // 
             // itmSearch
             // 
@@ -354,6 +367,13 @@ namespace ArcConfigViewer.UI
             // 
             this.sfdExport.Title = "Export Configuration";
             // 
+            // itmExploitTelnet
+            // 
+            this.itmExploitTelnet.Name = "itmExploitTelnet";
+            this.itmExploitTelnet.Size = new System.Drawing.Size(180, 22);
+            this.itmExploitTelnet.Text = "Telnet";
+            this.itmExploitTelnet.Click += new System.EventHandler(this.ItmExploitTelnet_Click);
+            // 
             // Home
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -400,16 +420,18 @@ namespace ArcConfigViewer.UI
         private System.Windows.Forms.ImageList imgMain;
         private System.Windows.Forms.ToolStripMenuItem itmSearch;
         private ToolStripMenuItem itmModem;
-        private ToolStripMenuItem itmConnectedDevicesList;
+        private ToolStripMenuItem itmFetchConnectedDevicesList;
         private ToolStripMenuItem itmFetchFromModem;
-        private ToolStripMenuItem itmCallLog;
-        private ToolStripMenuItem itmAuthenticate;
+        private ToolStripMenuItem itmFetchCallLog;
+        private ToolStripMenuItem itmAuthentication;
         private ToolStripMenuItem itmAuthenticateGrant;
         private ToolStripMenuItem itmAuthenticateRevoke;
         private ToolStripMenuItem itmTryDefault;
         private ToolStripMenuItem itmElfDecryptionKey;
-        private ToolStripMenuItem itmSSHInjection;
+        private ToolStripMenuItem itmExploits;
         private ToolStripMenuItem itmFetchSystemLogs;
+        private ToolStripMenuItem itmOperation;
+        private ToolStripMenuItem itmExploitTelnet;
     }
 }
 

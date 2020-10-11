@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CGI\CgiFirmwareVersion.cs" />
     <Compile Include="Security\ArcMd5.cs" />
     <Compile Include="CGI\CgiCallLog.cs" />
     <Compile Include="CGI\CgiInit.cs" />
