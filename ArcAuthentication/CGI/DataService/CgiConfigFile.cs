@@ -1,10 +1,12 @@
-﻿using ArcWaitWindow;
+﻿using ArcAuthentication.CGI.ScriptService.Scripts;
+using ArcAuthentication.Net;
+using ArcWaitWindow;
 using System;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace ArcAuthentication.CGI
+namespace ArcAuthentication.CGI.DataService
 {
     public class CgiConfigFile
     {
@@ -17,19 +19,21 @@ namespace ArcAuthentication.CGI
                 if (waitWindow)
                     return (byte[])ArcWaitWindow.ArcWaitWindow.Show(GrabFile, @"Retrieving config file...");
 
-                var newToken = new CgiToken(Global.BackupHtm);
-                var jsUri = $@"{Global.Origin}/cgi/cgi_backup.js";
-                jsUri = newToken.TokeniseUrl(jsUri);
-
-                var jsResult = ResourceGrab.GrabString(jsUri, Global.BackupHtm);
+                var jsResultHandler = new CgiBackupScript();
+                var jsResult = jsResultHandler.GrabJS(false);
 
                 //validate (LH1000 fakes a not found on failure)
                 if (!jsResult.Contains(@"404"))
                 {
+                    //where to grab the backup file from
                     var regExp = new Regex("cgi_bkup_file=\'(.*?)\';");
+
+                    //construct fileName and URI
                     var fileName = regExp.Match(jsResult).Groups[1];
                     var fileUri = $@"{Global.Origin}/tmp/{fileName}";
-                    fileUri = newToken.TokeniseUrl(fileUri);
+
+                    //tokenise from the CGI token contained in the script service handler above
+                    fileUri = jsResultHandler.AuthenticationToken.TokeniseUrl(fileUri);
 
                     //MessageBox.Show(fileUri);
 
@@ -48,9 +52,6 @@ namespace ArcAuthentication.CGI
                             }
                         }
                 }
-
-                //MessageBox.Show(jsResult);
-                //MessageBox.Show(jsUri);
             }
             catch (Exception ex)
             {

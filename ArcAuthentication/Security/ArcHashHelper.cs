@@ -3,7 +3,7 @@ using System.Text;
 
 namespace ArcAuthentication.Security
 {
-    public static class HashHelper
+    public static class ArcHashHelper
     {
         public static string CalculateMd5Hash(string input)
         {

@@ -1,4 +1,4 @@
-﻿namespace ArcAuthentication.CGI
+﻿namespace ArcAuthentication.CGI.DataService
 {
     public class CgiSshInjection
     {

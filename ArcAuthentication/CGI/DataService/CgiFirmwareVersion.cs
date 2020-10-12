@@ -1,9 +1,10 @@
-﻿using ArcProcessor;
+﻿using ArcAuthentication.CGI.ScriptService.Scripts;
+using ArcProcessor;
 using ArcWaitWindow;
 using System;
 using System.Text.RegularExpressions;
 
-namespace ArcAuthentication.CGI
+namespace ArcAuthentication.CGI.DataService
 {
     public class CgiFirmwareVersion
     {
@@ -29,7 +30,7 @@ namespace ArcAuthentication.CGI
                     return (CgiFirmwareVersion)ArcWaitWindow.ArcWaitWindow.Show(GetFwVersion, @"Grabbing firmware version...", silent);
 
                 //download cgi_init.js
-                var initHandler = new CgiInit();
+                var initHandler = new CgiInitScript();
                 var init = initHandler.GrabJS(false);
 
                 //validation

@@ -1,9 +1,8 @@
-﻿using ArcAuthentication.CGI;
-using ArcAuthentication.Security;
+﻿using ArcAuthentication.Security;
 using System;
 using System.Windows.Forms;
 
-namespace ArcAuthentication
+namespace ArcAuthentication.UI
 {
     public partial class LoginForm : Form
     {
@@ -18,7 +17,7 @@ namespace ArcAuthentication
         {
             if (!string.IsNullOrWhiteSpace(txtPassword.Text) && !string.IsNullOrWhiteSpace(txtUsername.Text))
             {
-                if (CgiLogin.DoLogin(new Credential(txtUsername.Text, txtPassword.Text)))
+                if (ArcLogin.DoLogin(new ArcCredential(txtUsername.Text, txtPassword.Text)))
                 {
                     Success = true;
                     /*MessageBox.Show(@"Success!", @"Message",

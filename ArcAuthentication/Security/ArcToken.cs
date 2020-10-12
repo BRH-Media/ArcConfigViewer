@@ -1,4 +1,5 @@
-﻿using ArcWaitWindow;
+﻿using ArcAuthentication.Net;
+using ArcWaitWindow;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,9 @@ using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 // ReSharper disable InconsistentNaming
 
-namespace ArcAuthentication.CGI
+namespace ArcAuthentication.Security
 {
-    public class CgiToken
+    public class ArcToken
     {
         public string Token => !string.IsNullOrEmpty(TokenRaw) ? TokenRaw.Base64Decode() : @"";
         public string TokenRaw { get; }
@@ -22,7 +23,7 @@ namespace ArcAuthentication.CGI
         /// Defaults to login.htm<br />
         /// Note: Don't use this after login! Specify a relevant URL instead
         /// </summary>
-        public CgiToken() : this(Global.LoginHtm)
+        public ArcToken() : this(Global.LoginHtm)
         {
             //blank intialiser
         }
@@ -31,7 +32,7 @@ namespace ArcAuthentication.CGI
         /// Downloads the page from the specified URL, extracts the token and instantiates the object
         /// </summary>
         /// <param name="tokenPollUri"></param>
-        public CgiToken(string tokenPollUri)
+        public ArcToken(string tokenPollUri)
         {
             //download the login page for a new token
             var pageHtml = ResourceGrab.GrabString(tokenPollUri);
@@ -85,7 +86,7 @@ namespace ArcAuthentication.CGI
                 var logout = $@"{Global.Origin}/logout.cgi";
 
                 //download logout.htm for the access token
-                var logoutToken = new CgiToken(referer);
+                var logoutToken = new ArcToken(referer);
 
                 if (!string.IsNullOrEmpty(logoutToken.Token))
                 {

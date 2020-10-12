@@ -1,4 +1,4 @@
-﻿using ArcWaitWindow;
+﻿using ArcAuthentication.CGI.ScriptService.Scripts;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -9,11 +9,10 @@ using System.Windows.Forms;
 // ReSharper disable CoVariantArrayConversion
 // ReSharper disable InconsistentNaming
 
-namespace ArcAuthentication.CGI
+namespace ArcAuthentication.CGI.DataService
 {
-    public class CgiCallLog
+    public class CgiCallLog : CgiCallLogScript
     {
-        public string RawJS { get; set; } = @"";
         public string RawJSON { get; set; } = @"";
 
         public static string[] ColumnDefinitions =
@@ -30,44 +29,6 @@ namespace ArcAuthentication.CGI
             "Status",
             "Event"
         };
-
-        private void GrabJS(object sender, ArcWaitWindowEventArgs e)
-        {
-            e.Result = GrabJS(false);
-        }
-
-        public string GrabJS(bool waitWindow = true)
-        {
-            try
-            {
-                if (waitWindow)
-                    return (string)ArcWaitWindow.ArcWaitWindow.Show(GrabJS, @"Retrieving call log...");
-
-                var newToken = new CgiToken(Global.CallLogHtm);
-                var jsUri = $@"{Global.Origin}/cgi/cgi_tel_call_list.js";
-                jsUri = newToken.TokeniseUrl(jsUri);
-
-                var jsResult = ResourceGrab.GrabString(jsUri, Global.CallLogHtm);
-
-                //validate (LH1000 fakes a not found on failure)
-                if (!jsResult.Contains(@"404") && !string.IsNullOrEmpty(
-                    jsResult))
-                {
-                    RawJS = jsResult;
-                    return jsResult;
-                }
-
-                //MessageBox.Show(jsResult);
-                //MessageBox.Show(jsUri);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"CallLogGrab error:\n\n{ex}");
-            }
-
-            //default
-            return @"";
-        }
 
         public string GrabJSON(bool waitWindow = true)
         {

@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace ArcAuthentication
 {
-    internal static class ConverterSettings
+    internal static class GenericJsonSettings
     {
         public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
         {
@@ -13,7 +13,10 @@ namespace ArcAuthentication
             NullValueHandling = NullValueHandling.Ignore,
             Converters =
             {
-                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
+                new IsoDateTimeConverter
+                {
+                    DateTimeStyles = DateTimeStyles.AssumeUniversal
+                }
             },
         };
     }

@@ -1,59 +1,19 @@
-﻿using ArcAuthentication.TopologyHandlers;
-using ArcProcessor;
-using ArcWaitWindow;
+﻿using ArcAuthentication.CGI.ScriptService.Scripts;
+using ArcAuthentication.StationHandlers;
 using Newtonsoft.Json;
 using System;
 using System.Data;
-using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 // ReSharper disable CoVariantArrayConversion
 // ReSharper disable InconsistentNaming
 
-namespace ArcAuthentication.CGI
+namespace ArcAuthentication.CGI.DataService
 {
-    public class CgiTopology
+    public class CgiStations : CgiStationsScript
     {
-        public string RawJS { get; set; } = @"";
         public string RawJSON { get; set; } = @"";
-
-        private void GrabJS(object sender, ArcWaitWindowEventArgs e)
-        {
-            e.Result = GrabJS(false);
-        }
-
-        public string GrabJS(bool waitWindow = true)
-        {
-            try
-            {
-                if (waitWindow)
-                    return (string)ArcWaitWindow.ArcWaitWindow.Show(GrabJS, @"Retrieving modem topology info...");
-
-                var newToken = new CgiToken(Global.HomeHtm);
-                var jsUri = $@"{Global.Origin}/cgi/cgi_owl_stations.js";
-                jsUri = newToken.TokeniseUrl(jsUri);
-
-                var jsResult = ResourceGrab.GrabString(jsUri, Global.HomeHtm);
-
-                File.WriteAllText(@"test.js", jsResult);
-
-                //validate (LH1000 fakes a not found on failure)
-                if (!jsResult.Contains(@"404") && !string.IsNullOrEmpty(
-                    jsResult))
-                {
-                    RawJS = jsResult;
-                    return jsResult;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"DeviceListGrab error:\n\n{ex}");
-            }
-
-            //default
-            return @"";
-        }
 
         public string GrabJSON(bool waitWindow = true)
         {
@@ -92,7 +52,7 @@ namespace ArcAuthentication.CGI
                 var jsonRaw = GrabJSON();
 
                 if (!string.IsNullOrEmpty(jsonRaw))
-                    return JsonConvert.DeserializeObject<StationList>(jsonRaw, ConverterSettings.Settings)?.Stations;
+                    return JsonConvert.DeserializeObject<StationList>(jsonRaw, GenericJsonSettings.Settings)?.Stations;
             }
             catch (Exception ex)
             {
@@ -182,20 +142,6 @@ namespace ArcAuthentication.CGI
 
             //default
             return null;
-        }
-
-        public void ToFile(string fileName)
-        {
-            try
-            {
-                if (File.Exists(fileName))
-                    File.Delete(fileName);
-                File.WriteAllText(fileName, RawJS);
-            }
-            catch (Exception ex)
-            {
-                UiMessages.Error(ex.ToString());
-            }
         }
     }
 }

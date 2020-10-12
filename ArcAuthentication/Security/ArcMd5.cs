@@ -4,7 +4,7 @@
     {
         public static string ArcadyanMd5(string input)
         {
-            return HashHelper.CalculateSha512Hash(HashHelper.CalculateMd5Hash(input));
+            return ArcHashHelper.CalculateSha512Hash(ArcHashHelper.CalculateMd5Hash(input));
         }
     }
 }

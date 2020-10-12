@@ -1,5 +1,6 @@
-﻿using ArcAuthentication.Enums;
-using ArcWaitWindow;
+﻿using ArcAuthentication.CGI.ScriptService;
+using ArcAuthentication.CGI.ScriptService.Scripts;
+using ArcAuthentication.Enums;
 using Newtonsoft.Json;
 using System;
 using System.Data;
@@ -9,52 +10,25 @@ using System.Windows.Forms;
 // ReSharper disable InconsistentNaming
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 
-namespace ArcAuthentication.CGI
+namespace ArcAuthentication.CGI.DataService
 {
-    public class CgiSystemLog
+    public class CgiSystemLog : CgiSystemLogScript
     {
-        public LogType Log { get; }
-        public string RawJS { get; set; } = @"";
         public string RawJSON { get; set; } = @"";
-        public string LogJSEndpoint { get; }
 
         public CgiSystemLog(LogType cgiLogType)
         {
+            //global log type for endpoint construction
             Log = cgiLogType;
-            LogJSEndpoint = EndpointFromLogType();
-        }
 
-        private void GrabJS(object sender, ArcWaitWindowEventArgs e)
-        {
-            e.Result = GrabJS(false);
-        }
+            //parameters needed for communication
+            const string serviceMessage = @"Retrieving log...";
+            var serviceEndpoint = EndpointFromLogType();
+            var serviceTokeniser = Global.SystemLogHtm;
+            var serviceInformation = new CgiScriptServiceInfo(serviceTokeniser, serviceEndpoint, serviceMessage);
 
-        public string GrabJS(bool waitWindow = true)
-        {
-            try
-            {
-                if (waitWindow)
-                    return (string)ArcWaitWindow.ArcWaitWindow.Show(GrabJS, @"Retrieving log...");
-
-                //for each new log request, get a new token
-                var uri = TokeniseEndpoint();
-                var jsResult = ResourceGrab.GrabString(uri, Global.SystemLogHtm);
-
-                //validate (LH1000 fakes a not found on failure)
-                if (!jsResult.Contains(@"404") && !string.IsNullOrEmpty(
-                    jsResult))
-                {
-                    RawJS = jsResult;
-                    return jsResult;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"SystemLogGrab error:\n\n{ex}");
-            }
-
-            //default
-            return @"";
+            //set the global service parameters
+            ServiceAuthInfo = serviceInformation;
         }
 
         public string GrabJSON(bool waitWindow = true)
@@ -102,7 +76,7 @@ namespace ArcAuthentication.CGI
                     //validate
                     if (!string.IsNullOrWhiteSpace(jsonResult))
                     {
-                        var obj = JsonConvert.DeserializeObject<string[]>(jsonResult, ConverterSettings.Settings);
+                        var obj = JsonConvert.DeserializeObject<string[]>(jsonResult, GenericJsonSettings.Settings);
                         if (obj != null)
                             if (obj.Length > 0)
                                 if (!string.IsNullOrWhiteSpace(obj[0]))
@@ -155,62 +129,6 @@ namespace ArcAuthentication.CGI
 
             //default
             return null;
-        }
-
-        public string TokeniseEndpoint()
-        {
-            try
-            {
-                var token = new CgiToken(Global.SystemLogHtm);
-                return token.TokeniseUrl(LogJSEndpoint);
-            }
-            catch
-            {
-                //ignore all errors
-            }
-
-            //default
-            return @"";
-        }
-
-        public string EndpointFromLogType()
-        {
-            try
-            {
-                switch (Log)
-                {
-                    case LogType.FullLog:
-                        return $@"{Global.Origin}/cgi/cgi_syslog_by_function.js?fun_str=system,ntp,hw,voip,wan,dhcp,tr69,owl,wlan";
-
-                    case LogType.TR069Log:
-                        return $@"{Global.Origin}/cgi/cgi_syslog_by_function.js?fun_str=tr69";
-
-                    case LogType.SystemLog:
-                        return $@"{Global.Origin}/cgi/cgi_syslog_by_function.js?fun_str=system,ntp";
-
-                    case LogType.HardwareLog:
-                        return $@"{Global.Origin}/cgi/cgi_syslog_by_function.js?fun_str=hw";
-
-                    case LogType.VOIPLog:
-                        return $@"{Global.Origin}/cgi/cgi_syslog_by_function.js?fun_str=voip";
-
-                    case LogType.WANLog:
-                        return $@"{Global.Origin}/cgi/cgi_syslog_by_function.js?fun_str=wan,dhcp";
-
-                    case LogType.WLANLog:
-                        return $@"{Global.Origin}/cgi/cgi_syslog_by_function.js?fun_str=wlan";
-
-                    case LogType.BoosterLog:
-                        return $@"{Global.Origin}/cgi/cgi_syslog_by_function.js?fun_str=owl";
-                }
-            }
-            catch
-            {
-                //ignore all errors
-            }
-
-            //default
-            return @"";
         }
     }
 }

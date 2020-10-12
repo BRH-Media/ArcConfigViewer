@@ -1,4 +1,4 @@
-﻿using ArcAuthentication.Security;
+﻿using ArcAuthentication.Net;
 using ArcWaitWindow;
 using System;
 using System.Collections.Generic;
@@ -7,9 +7,9 @@ using System.Net.Http;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ArcAuthentication.CGI
+namespace ArcAuthentication.Security
 {
-    public static class CgiLogin
+    public static class ArcLogin
     {
         private static void TestLogin(object sender, ArcWaitWindowEventArgs e)
         {
@@ -26,7 +26,7 @@ namespace ArcAuthentication.CGI
                 //for some reason, the modem will retain login information
                 //even when you quit the app; making it authorise logins
                 //if you don't provide credentials.
-                var dummyAuth = new Credential(@"", @"");
+                var dummyAuth = new ArcCredential(@"", @"");
                 return Global.InitToken != null || DoLogin(dummyAuth, false);
             }
             catch (Exception ex)
@@ -44,14 +44,14 @@ namespace ArcAuthentication.CGI
             if (e.Arguments.Count == 1)
             {
                 //credentials
-                var auth = (Credential)e.Arguments[0];
+                var auth = (ArcCredential)e.Arguments[0];
 
                 //return result from offloaded thread
                 e.Result = DoLogin(auth, false);
             }
         }
 
-        public static bool DoLogin(Credential auth = null, bool waitWindow = true)
+        public static bool DoLogin(ArcCredential auth = null, bool waitWindow = true)
         {
             //waitwindow activation
             if (waitWindow)
@@ -63,13 +63,13 @@ namespace ArcAuthentication.CGI
             try
             {
                 //this will trigger a secondary request
-                var cgiToken = new CgiToken();
+                var ArcToken = new ArcToken();
 
                 //authentication credentials (they get hashed when loaded into the Credential object)
                 var unEncoded = auth?.Username;
                 var pwEncoded = auth?.Password;
 
-                //MessageBox.Show(cgiToken.Token);
+                //MessageBox.Show(ArcToken.Token);
                 //MessageBox.Show(unEncoded);
                 //MessageBox.Show(pwEncoded);
 
@@ -78,7 +78,7 @@ namespace ArcAuthentication.CGI
                     new FormUrlEncodedContent(
                         new Dictionary<string, string>
                         {
-                            {@"httoken", cgiToken.Token},
+                            {@"httoken", ArcToken.Token},
                             {@"usr", unEncoded},
                             {@"pws", pwEncoded}
                         });
@@ -140,7 +140,7 @@ namespace ArcAuthentication.CGI
 
                 //apply global token if successful
                 if (success)
-                    Global.InitToken = cgiToken;
+                    Global.InitToken = ArcToken;
 
                 //report status
                 return success;

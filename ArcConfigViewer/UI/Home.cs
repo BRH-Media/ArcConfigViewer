@@ -12,6 +12,8 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
+using ArcAuthentication.CGI.DataService;
+using ArcAuthentication.UI;
 
 // ReSharper disable UnusedMember.Local
 // ReSharper disable InconsistentNaming
@@ -534,7 +536,7 @@ namespace ArcConfigViewer.UI
 
                 if (success)
                 {
-                    var init = new CgiTopology();
+                    var init = new CgiStations();
                     var dt = init.GrabTable();
 
                     if (dt != null)
@@ -687,7 +689,7 @@ namespace ArcConfigViewer.UI
         {
             try
             {
-                var testLogin = CgiLogin.TestLogin();
+                var testLogin = ArcLogin.TestLogin();
                 if (!testLogin && tryLogin)
                 {
                     var loginTry = LoginForm.ShowLogin();
@@ -710,7 +712,7 @@ namespace ArcConfigViewer.UI
             try
             {
                 //test authentication
-                var testLogin = CgiLogin.TestLogin();
+                var testLogin = ArcLogin.TestLogin();
                 if (testLogin)
                     UpdateUIAuthenticate(true);
                 else if (Global.InitToken == null)
@@ -729,7 +731,7 @@ namespace ArcConfigViewer.UI
             try
             {
                 //test authentication
-                var testLogin = CgiLogin.TestLogin();
+                var testLogin = ArcLogin.TestLogin();
                 if (testLogin)
                     UiMessages.Warning(@"Authentication failed: user is already authenticated");
                 else if (Global.InitToken == null)
@@ -757,7 +759,7 @@ namespace ArcConfigViewer.UI
             try
             {
                 //test authentication
-                var testLogin = CgiLogin.TestLogin();
+                var testLogin = ArcLogin.TestLogin();
                 if (!testLogin)
                     UiMessages.Warning(@"Revocation failed: login not yet initiated");
                 else if (Global.InitToken != null)
@@ -786,16 +788,16 @@ namespace ArcConfigViewer.UI
             try
             {
                 //test authentication
-                var testLogin = CgiLogin.TestLogin();
+                var testLogin = ArcLogin.TestLogin();
                 if (testLogin)
                     UiMessages.Warning(@"Authentication failed: user is already authenticated");
                 else if (Global.InitToken == null)
                 {
                     //LH1000 default is admin:Telstra
-                    var defaultLogin = new Credential(@"admin", @"Telstra");
+                    var defaultLogin = new ArcCredential(@"admin", @"Telstra");
 
                     //login with default credentials
-                    var loginSuccess = CgiLogin.DoLogin(defaultLogin);
+                    var loginSuccess = ArcLogin.DoLogin(defaultLogin);
                     if (loginSuccess)
                     {
                         UpdateUIAuthenticate(true);

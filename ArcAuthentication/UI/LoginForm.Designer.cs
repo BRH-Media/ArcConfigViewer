@@ -1,4 +1,4 @@
-﻿namespace ArcAuthentication
+﻿namespace ArcAuthentication.UI
 {
     partial class LoginForm
     {

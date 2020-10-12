@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Text;
 
-namespace ArcAuthentication
+namespace ArcAuthentication.Net
 {
     public static class ResourceGrab
     {
