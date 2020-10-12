@@ -8,10 +8,14 @@
         public string Username { get; }
         public string Password { get; }
 
-        public ArcCredential(string un, string pw)
+        public ArcCredential(string un, string pw, bool hash = true)
         {
-            Username = ArcMd5.ArcadyanMd5(un);
-            Password = ArcMd5.ArcadyanMd5(pw);
+            Username = hash
+                ? ArcMd5.ArcadyanMd5(un)
+                : un;
+            Password = hash
+                ? ArcMd5.ArcadyanMd5(pw)
+                : pw;
         }
     }
 }
