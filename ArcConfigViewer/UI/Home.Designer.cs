@@ -46,9 +46,9 @@ namespace ArcConfigViewer.UI
             this.itmFetchFromModem = new System.Windows.Forms.ToolStripMenuItem();
             this.itmFetchCallLog = new System.Windows.Forms.ToolStripMenuItem();
             this.itmFetchSystemLogs = new System.Windows.Forms.ToolStripMenuItem();
+            this.itmFirmwareVersion = new System.Windows.Forms.ToolStripMenuItem();
             this.itmExploits = new System.Windows.Forms.ToolStripMenuItem();
             this.itmExploitTelnet = new System.Windows.Forms.ToolStripMenuItem();
-            this.itmFirmwareVersion = new System.Windows.Forms.ToolStripMenuItem();
             this.itmSearch = new System.Windows.Forms.ToolStripMenuItem();
             this.itmRefreshConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.itmExport = new System.Windows.Forms.ToolStripMenuItem();
@@ -127,7 +127,7 @@ namespace ArcConfigViewer.UI
             this.itmTryDefault,
             this.itmAuthenticateRevoke});
             this.itmAuthentication.Name = "itmAuthentication";
-            this.itmAuthentication.Size = new System.Drawing.Size(196, 22);
+            this.itmAuthentication.Size = new System.Drawing.Size(164, 22);
             this.itmAuthentication.Text = "Authentication";
             // 
             // itmAuthenticateGrant
@@ -160,7 +160,7 @@ namespace ArcConfigViewer.UI
             this.itmFetchCallLog,
             this.itmFetchSystemLogs});
             this.itmOperation.Name = "itmOperation";
-            this.itmOperation.Size = new System.Drawing.Size(196, 22);
+            this.itmOperation.Size = new System.Drawing.Size(164, 22);
             this.itmOperation.Text = "Operation";
             // 
             // itmFetchConnectedDevicesList
@@ -191,12 +191,19 @@ namespace ArcConfigViewer.UI
             this.itmFetchSystemLogs.Text = "Fetch System Logs";
             this.itmFetchSystemLogs.Click += new System.EventHandler(this.ItmFetchSystemLogs_Click);
             // 
+            // itmFirmwareVersion
+            // 
+            this.itmFirmwareVersion.Name = "itmFirmwareVersion";
+            this.itmFirmwareVersion.Size = new System.Drawing.Size(164, 22);
+            this.itmFirmwareVersion.Text = "Firmware Version";
+            this.itmFirmwareVersion.Click += new System.EventHandler(this.ItmFirmwareVersion_Click);
+            // 
             // itmExploits
             // 
             this.itmExploits.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.itmExploitTelnet});
             this.itmExploits.Name = "itmExploits";
-            this.itmExploits.Size = new System.Drawing.Size(196, 22);
+            this.itmExploits.Size = new System.Drawing.Size(164, 22);
             this.itmExploits.Text = "Exploits";
             this.itmExploits.Click += new System.EventHandler(this.ItmExploits_Click);
             // 
@@ -206,13 +213,6 @@ namespace ArcConfigViewer.UI
             this.itmExploitTelnet.Size = new System.Drawing.Size(105, 22);
             this.itmExploitTelnet.Text = "Telnet";
             this.itmExploitTelnet.Click += new System.EventHandler(this.ItmExploitTelnet_Click);
-            // 
-            // itmFirmwareVersion
-            // 
-            this.itmFirmwareVersion.Name = "itmFirmwareVersion";
-            this.itmFirmwareVersion.Size = new System.Drawing.Size(180, 22);
-            this.itmFirmwareVersion.Text = "Firmware Version";
-            this.itmFirmwareVersion.Click += new System.EventHandler(this.ItmFirmwareVersion_Click);
             // 
             // itmSearch
             // 
@@ -370,6 +370,7 @@ namespace ArcConfigViewer.UI
             this.dgvMain.Location = new System.Drawing.Point(0, 0);
             this.dgvMain.Name = "dgvMain";
             this.dgvMain.ReadOnly = true;
+            this.dgvMain.RowHeadersVisible = false;
             this.dgvMain.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvMain.ShowCellErrors = false;
             this.dgvMain.ShowCellToolTips = false;

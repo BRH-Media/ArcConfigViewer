@@ -1,11 +1,14 @@
 ﻿using ArcAuthentication.CGI.ScriptService.Scripts;
 using ArcAuthentication.StationHandlers;
+using ArcProcessor;
 using Newtonsoft.Json;
 using System;
 using System.Data;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
+// ReSharper disable RedundantIfElseBlock
 // ReSharper disable CoVariantArrayConversion
 // ReSharper disable InconsistentNaming
 
@@ -22,17 +25,27 @@ namespace ArcAuthentication.CGI.DataService
                 //download from modem
                 var jsResult = GrabJS(waitWindow);
 
+                File.WriteAllText(@"cgi_topology_info.js", jsResult);
+
+                //validation
                 if (!string.IsNullOrEmpty(jsResult))
                 {
-                    var regExp = new Regex(@"station_info.*?=\s*(.*?);");
-
-                    var rawJsonCol = regExp.Matches(jsResult);
-                    var rawJson = rawJsonCol[rawJsonCol.Count - 1].Groups[1].Value; //last match
-
-                    if (!string.IsNullOrWhiteSpace(rawJson))
+                    if (jsResult == @"404")
+                        return @"404";
+                    else
                     {
-                        RawJSON = rawJson;
-                        return rawJson;
+                        var regExp = new Regex(@"station_info=({\s.*?\s}\s\]\s})", RegexOptions.Singleline);
+
+                        var rawJsonCol = regExp.Matches(jsResult);
+                        var rawJson = rawJsonCol[rawJsonCol.Count - 1].Groups[1].Value; //last match
+
+                        //MessageBox.Show(rawJson);
+
+                        if (!string.IsNullOrWhiteSpace(rawJson))
+                        {
+                            RawJSON = rawJson;
+                            return rawJson;
+                        }
                     }
                 }
             }
@@ -52,7 +65,10 @@ namespace ArcAuthentication.CGI.DataService
                 var jsonRaw = GrabJSON();
 
                 if (!string.IsNullOrEmpty(jsonRaw))
-                    return JsonConvert.DeserializeObject<StationList>(jsonRaw, GenericJsonSettings.Settings)?.Stations;
+                    if (jsonRaw == @"404")
+                        UiMessages.Warning(@"Modem reported inaccessible (404 result)");
+                    else
+                        return JsonConvert.DeserializeObject<StationList>(jsonRaw, GenericJsonSettings.Settings)?.Stations;
             }
             catch (Exception ex)
             {

@@ -225,6 +225,7 @@
             this.dgvMain.Location = new System.Drawing.Point(0, 24);
             this.dgvMain.Name = "dgvMain";
             this.dgvMain.ReadOnly = true;
+            this.dgvMain.RowHeadersVisible = false;
             this.dgvMain.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvMain.ShowCellErrors = false;
             this.dgvMain.ShowCellToolTips = false;

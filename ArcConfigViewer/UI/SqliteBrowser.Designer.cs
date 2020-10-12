@@ -75,6 +75,7 @@
             this.dgvMain.Location = new System.Drawing.Point(167, 3);
             this.dgvMain.Name = "dgvMain";
             this.dgvMain.ReadOnly = true;
+            this.dgvMain.RowHeadersVisible = false;
             this.tableLayoutPanel1.SetRowSpan(this.dgvMain, 2);
             this.dgvMain.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvMain.ShowCellErrors = false;

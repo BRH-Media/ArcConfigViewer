@@ -13,6 +13,7 @@ namespace ArcAuthentication
         public static string IndexHtm { get; } = $@"{Origin}/index.htm";
         public static string HomeHtm { get; } = $@"{Origin}/home.htm";
         public static string SystemLogHtm { get; } = $@"{Origin}/diagnostics_logviewer.htm?m=adv";
+        public static string DevicesHtm { get; } = $@"{Origin}/owl_lan_device.htm?m=adv";
         public static string BackupHtm { get; } = $@"{Origin}/sys_backup.htm?m=adv";
         public static string CallLogHtm { get; } = $@"{Origin}/mmpbx_book.htm?m=adv";
         public static ArcToken InitToken { get; set; } = null;

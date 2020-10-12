@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 
+// ReSharper disable RedundantIfElseBlock
 // ReSharper disable UnusedMember.Local
 // ReSharper disable CoVariantArrayConversion
 // ReSharper disable InconsistentNaming
@@ -74,15 +75,21 @@ namespace ArcAuthentication.CGI.ScriptService
                 //apply ArcToken generated above to the global
                 AuthenticationToken = newToken;
 
+                //download result from modem
                 var jsResult = ResourceGrab.GrabString(jsUri, ServiceAuthInfo.RefererPage);
 
+                //ensure checks for this are made to avoid invalid content
+                const string notFoundMsg = @"The requested page was not found on this server.";
+
                 //validate (LH1000 fakes a not found on failure)
-                if (!jsResult.Contains(@"404") && !string.IsNullOrEmpty(
+                if (!jsResult.Contains(notFoundMsg) && !string.IsNullOrEmpty(
                     jsResult))
                 {
                     RawJS = jsResult;
                     return jsResult;
                 }
+                else
+                    return @"404";
             }
             catch (Exception ex)
             {

@@ -31,12 +31,16 @@
             this.components = new System.ComponentModel.Container();
             this.dgvMain = new System.Windows.Forms.DataGridView();
             this.tsMain = new System.Windows.Forms.ToolStrip();
+            this.cxtIncludeOffline = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.itmAvgOnlineOnly = new System.Windows.Forms.ToolStripMenuItem();
             this.lblAvgLinkRate = new System.Windows.Forms.ToolStripLabel();
             this.lblAvgLinkRateValue = new System.Windows.Forms.ToolStripLabel();
             this.sepAvgLinkRate = new System.Windows.Forms.ToolStripSeparator();
             this.lblViewing = new System.Windows.Forms.ToolStripLabel();
             this.lblViewingValue = new System.Windows.Forms.ToolStripLabel();
             this.sepViewing = new System.Windows.Forms.ToolStripSeparator();
+            this.lblOnlinePerc = new System.Windows.Forms.ToolStripLabel();
+            this.sepOnlineOfflinePerc = new System.Windows.Forms.ToolStripSeparator();
             this.lblOfflineCount = new System.Windows.Forms.ToolStripLabel();
             this.lblOffline = new System.Windows.Forms.ToolStripLabel();
             this.sepOfflineOnline = new System.Windows.Forms.ToolStripSeparator();
@@ -49,14 +53,10 @@
             this.itmExportJSON = new System.Windows.Forms.ToolStripMenuItem();
             this.itmExportXML = new System.Windows.Forms.ToolStripMenuItem();
             this.itmSearch = new System.Windows.Forms.ToolStripMenuItem();
-            this.cxtIncludeOffline = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.itmAvgOnlineOnly = new System.Windows.Forms.ToolStripMenuItem();
-            this.lblOnlinePerc = new System.Windows.Forms.ToolStripLabel();
-            this.sepOnlineOfflinePerc = new System.Windows.Forms.ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMain)).BeginInit();
             this.tsMain.SuspendLayout();
-            this.menuMain.SuspendLayout();
             this.cxtIncludeOffline.SuspendLayout();
+            this.menuMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // dgvMain
@@ -64,6 +64,7 @@
             this.dgvMain.AllowUserToAddRows = false;
             this.dgvMain.AllowUserToDeleteRows = false;
             this.dgvMain.AllowUserToResizeRows = false;
+            this.dgvMain.ColumnHeaderMouseClick += this.DgvMain_ColumnHeaderMouseClick;
             this.dgvMain.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvMain.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dgvMain.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -72,6 +73,7 @@
             this.dgvMain.Location = new System.Drawing.Point(0, 24);
             this.dgvMain.Name = "dgvMain";
             this.dgvMain.ReadOnly = true;
+            this.dgvMain.RowHeadersVisible = false;
             this.dgvMain.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvMain.ShowCellErrors = false;
             this.dgvMain.ShowCellToolTips = false;
@@ -103,6 +105,24 @@
             this.tsMain.Size = new System.Drawing.Size(1264, 25);
             this.tsMain.TabIndex = 7;
             this.tsMain.Text = "toolStrip1";
+            // 
+            // cxtIncludeOffline
+            // 
+            this.cxtIncludeOffline.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.itmAvgOnlineOnly});
+            this.cxtIncludeOffline.Name = "cxtIncludeOffline";
+            this.cxtIncludeOffline.Size = new System.Drawing.Size(165, 26);
+            // 
+            // itmAvgOnlineOnly
+            // 
+            this.itmAvgOnlineOnly.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.itmAvgOnlineOnly.Checked = true;
+            this.itmAvgOnlineOnly.CheckOnClick = true;
+            this.itmAvgOnlineOnly.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.itmAvgOnlineOnly.Name = "itmAvgOnlineOnly";
+            this.itmAvgOnlineOnly.Size = new System.Drawing.Size(164, 22);
+            this.itmAvgOnlineOnly.Text = "Avg. Online Only";
+            this.itmAvgOnlineOnly.Click += new System.EventHandler(this.ItmAvgOnlineOnly_Click);
             // 
             // lblAvgLinkRate
             // 
@@ -137,6 +157,19 @@
             // 
             this.sepViewing.Name = "sepViewing";
             this.sepViewing.Size = new System.Drawing.Size(6, 25);
+            // 
+            // lblOnlinePerc
+            // 
+            this.lblOnlinePerc.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.lblOnlinePerc.Name = "lblOnlinePerc";
+            this.lblOnlinePerc.Size = new System.Drawing.Size(38, 22);
+            this.lblOnlinePerc.Text = "0.00%";
+            // 
+            // sepOnlineOfflinePerc
+            // 
+            this.sepOnlineOfflinePerc.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.sepOnlineOfflinePerc.Name = "sepOnlineOfflinePerc";
+            this.sepOnlineOfflinePerc.Size = new System.Drawing.Size(6, 25);
             // 
             // lblOfflineCount
             // 
@@ -235,37 +268,6 @@
             this.itmSearch.Text = "Search";
             this.itmSearch.Click += new System.EventHandler(this.ItmSearch_Click);
             // 
-            // cxtIncludeOffline
-            // 
-            this.cxtIncludeOffline.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.itmAvgOnlineOnly});
-            this.cxtIncludeOffline.Name = "cxtIncludeOffline";
-            this.cxtIncludeOffline.Size = new System.Drawing.Size(165, 26);
-            // 
-            // itmAvgOnlineOnly
-            // 
-            this.itmAvgOnlineOnly.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.itmAvgOnlineOnly.Checked = true;
-            this.itmAvgOnlineOnly.CheckOnClick = true;
-            this.itmAvgOnlineOnly.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.itmAvgOnlineOnly.Name = "itmAvgOnlineOnly";
-            this.itmAvgOnlineOnly.Size = new System.Drawing.Size(164, 22);
-            this.itmAvgOnlineOnly.Text = "Avg. Online Only";
-            this.itmAvgOnlineOnly.Click += new System.EventHandler(this.ItmAvgOnlineOnly_Click);
-            // 
-            // lblOnlinePerc
-            // 
-            this.lblOnlinePerc.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.lblOnlinePerc.Name = "lblOnlinePerc";
-            this.lblOnlinePerc.Size = new System.Drawing.Size(38, 22);
-            this.lblOnlinePerc.Text = "0.00%";
-            // 
-            // sepOnlineOfflinePerc
-            // 
-            this.sepOnlineOfflinePerc.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.sepOnlineOfflinePerc.Name = "sepOnlineOfflinePerc";
-            this.sepOnlineOfflinePerc.Size = new System.Drawing.Size(6, 25);
-            // 
             // ConnectedDevices
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -286,9 +288,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvMain)).EndInit();
             this.tsMain.ResumeLayout(false);
             this.tsMain.PerformLayout();
+            this.cxtIncludeOffline.ResumeLayout(false);
             this.menuMain.ResumeLayout(false);
             this.menuMain.PerformLayout();
-            this.cxtIncludeOffline.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

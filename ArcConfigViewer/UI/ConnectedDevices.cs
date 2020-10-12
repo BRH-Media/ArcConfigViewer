@@ -4,6 +4,7 @@ using ArcProcessor;
 using System;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 
 namespace ArcConfigViewer.UI
@@ -21,6 +22,11 @@ namespace ArcConfigViewer.UI
         private void ConnectedDevices_Load(object sender, EventArgs e)
         {
             SetDataSource(Data);
+        }
+
+        private void DgvMain_ColumnHeaderMouseClick(object sender, EventArgs e)
+        {
+            UpdateOnlineColour();
         }
 
         private void UpdateOnlineOfflineCount()
@@ -47,8 +53,8 @@ namespace ArcConfigViewer.UI
                     : 0;
 
                 //apply new values
-                lblOfflineCount.Text = countOffline.ToString();
-                lblOnlineCount.Text = countOnline.ToString();
+                lblOfflineCount.Text = countOffline.ToString(CultureInfo.CurrentCulture);
+                lblOnlineCount.Text = countOnline.ToString(CultureInfo.CurrentCulture);
                 lblOnlinePerc.Text = $"{onlinePercentage}%";
             }
             catch
@@ -66,24 +72,28 @@ namespace ArcConfigViewer.UI
             {
                 foreach (DataGridViewRow r in dgvMain.Rows)
                 {
-                    if (r.Cells[0] != null)
-                    {
-                        if (bool.TryParse(r.Cells[0].Value.ToString(), out var b))
+                    if (r.Cells.Count > 0)
+                        if (r.Cells[0] != null)
                         {
+                            var val = (string)r.Cells[0].Value;
+                            var online = val == @"Online";
+
+                            if (bool.TryParse(val, out var b))
+                                online = b;
+
                             var style = new DataGridViewCellStyle
                             {
-                                BackColor = b ? Color.Green : Color.Red,
-                                SelectionBackColor = b ? Color.Green : Color.Red,
+                                BackColor = online ? Color.Green : Color.Red,
+                                SelectionBackColor = online ? Color.Green : Color.Red,
                                 Font = new Font(FontFamily.GenericSansSerif, 8, FontStyle.Bold),
                                 ForeColor = Color.White
                             };
-                            r.Cells[0].Value = b ? @"Online" : @"Offline";
+                            r.Cells[0].Value = online ? @"Online" : @"Offline";
                             r.Cells[0].Style = style;
                         }
-                    }
                 }
             }
-            catch
+            catch (Exception)
             {
                 //ignore
             }
