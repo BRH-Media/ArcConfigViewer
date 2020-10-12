@@ -100,6 +100,12 @@
     <Compile Include="Extensions\ExportThisExtension.cs" />
     <Compile Include="Extensions\JsonUtility.cs" />
     <Compile Include="Extensions\XmlUtility.cs" />
+    <Compile Include="UI\FirmwareVersion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FirmwareVersion.Designer.cs">
+      <DependentUpon>FirmwareVersion.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Home.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -135,6 +141,9 @@
     </Compile>
     <EmbeddedResource Include="UI\ConnectedDevices.resx">
       <DependentUpon>ConnectedDevices.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\FirmwareVersion.resx">
+      <DependentUpon>FirmwareVersion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Home.resx">
       <DependentUpon>Home.cs</DependentUpon>

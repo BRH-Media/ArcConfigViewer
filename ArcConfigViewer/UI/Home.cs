@@ -651,6 +651,24 @@ namespace ArcConfigViewer.UI
             }
         }
 
+        private void ItmFetchFirmwareVersion_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //test authentication
+                var success = Authenticated();
+
+                if (success)
+                    FirmwareVersion.ShowVersionInfo();
+                else
+                    UiMessages.Warning(@"Authentication required; please authenticate first.");
+            }
+            catch (Exception ex)
+            {
+                UiMessages.Error(ex.ToString());
+            }
+        }
+
         private void UpdateUIAuthenticate(bool authenticated = false)
         {
             try

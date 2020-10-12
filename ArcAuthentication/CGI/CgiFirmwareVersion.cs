@@ -1,4 +1,5 @@
 ﻿using ArcProcessor;
+using ArcWaitWindow;
 using System;
 using System.Text.RegularExpressions;
 
@@ -10,13 +11,26 @@ namespace ArcAuthentication.CGI
         public string VersionString { get; set; } = @"";
         public string ModelString { get; set; } = @"";
 
-        public static CgiFirmwareVersion GetFwVersion(bool silent = false)
+        private static void GetFwVersion(object sender, ArcWaitWindowEventArgs e)
+        {
+            if (e.Arguments.Count == 1)
+            {
+                var silent = (bool)e.Arguments[0];
+                e.Result = GetFwVersion(false, silent);
+            }
+        }
+
+        public static CgiFirmwareVersion GetFwVersion(bool waitWindow = true, bool silent = false)
         {
             try
             {
+                //multi-threaded
+                if (waitWindow)
+                    return (CgiFirmwareVersion)ArcWaitWindow.ArcWaitWindow.Show(GetFwVersion, @"Grabbing firmware version...", silent);
+
                 //download cgi_init.js
                 var initHandler = new CgiInit();
-                var init = initHandler.GrabJS(!silent);
+                var init = initHandler.GrabJS(false);
 
                 //validation
                 if (!string.IsNullOrEmpty(init))
