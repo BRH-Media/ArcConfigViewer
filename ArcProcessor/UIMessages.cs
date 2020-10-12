@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace ArcConfigViewer
+namespace ArcProcessor
 {
     public static class UiMessages
     {

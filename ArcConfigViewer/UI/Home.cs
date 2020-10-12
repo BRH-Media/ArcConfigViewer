@@ -803,12 +803,10 @@ namespace ArcConfigViewer.UI
 
         private void ItmExploits_Click(object sender, EventArgs e)
         {
-
         }
 
         private void ItmExploitTelnet_Click(object sender, EventArgs e)
         {
-
         }
     }
 }

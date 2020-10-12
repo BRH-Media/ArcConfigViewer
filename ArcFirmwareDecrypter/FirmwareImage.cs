@@ -1,5 +1,4 @@
-﻿using ArcConfigViewer;
-using ArcProcessor;
+﻿using ArcProcessor;
 using System;
 using System.IO;
 
