@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<packages>
+  <package id="DerConverter" version="3.0.0.82" targetFramework="net472" />
+  <package id="PemUtils" version="3.0.0.82" targetFramework="net472" />
+  <package id="System.Security.Cryptography.OpenSsl" version="4.7.0" targetFramework="net472" />
+</packages>
