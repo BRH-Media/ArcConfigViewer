@@ -651,7 +651,7 @@ namespace ArcConfigViewer.UI
             }
         }
 
-        private void ItmFetchFirmwareVersion_Click(object sender, EventArgs e)
+        private void ItmFirmwareVersion_Click(object sender, EventArgs e)
         {
             try
             {
