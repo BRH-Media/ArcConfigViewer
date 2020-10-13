@@ -116,6 +116,8 @@ if you may request that resource.<br /><br />
         }
     }
 ```
+*\*Where '<ServiceName>' is the name of your CgiScriptService, e.g. 'Init' for 'CgiInitScript'*
+
 **After creating your ScriptService, you can access it exactly like the default ScriptServices:**
 ```csharp
   var serviceHandler = new Cgi<ServiceName>Script();
