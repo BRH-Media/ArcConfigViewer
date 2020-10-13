@@ -40,44 +40,92 @@ we **must** include the httoken of the relevant HTML page; this means we cannot 
 simply download a copy of the respective HTM page, extract its token, and then execute the *.cgi page with that token; the modem will be none-the-wiser.
 
 #### Some issues we faced whilst developing this solution
-1. Every single piece of data sent via the modem (even JSON data) is sent a JavaScript file (*.js). Sometimes, data is even generated upon requesting these scripts too; as is
-the case when downloading the encrypted config file bytes from the modem, since one must execute three queries to get the final result.
-  - *How did we solve it?* Through the black magic of Regular Expressions (RegEx) of course! Simply download the script, and filter out the data we want.
+1. Every single piece of data sent via the modem (even JSON data) is sent as a JavaScript file (*.js). Sometimes, data is even generated upon requesting these scripts too; as is
+the case when downloading the encrypted config file bytes from the modem, since one must execute three queries to get the final result.<br /><br />
+  ***How did we solve it?*** Through the black magic of Regular Expressions (RegEx) of course! Simply download the script, and filter out the data we want.
 2. The modem will keep you logged in not via a session cookie, but instead, simply recording your `User-Agent` string and noting your next request; it will determine then
-if you may request that resource.
-  - *How did we slve it?* By simply requesting `login.htm` and noting the `Location` header and its contents; if it included `/home.htm`, we're logged in, otherwise check
+if you may request that resource.<br /><br />
+  ***How did we solve it?*** By simply requesting `login.htm` and noting the `Location` header and its contents; if it included `/home.htm`, we're logged in, otherwise check
   other details to ensure our authentication status. By doing this, we can inform the program on our authentication status, and hence, we will know when we need to request
   a new 'session' from `/login.cgi`. This process can be easily observed when the `Testing authentication...` loading bar appears.
 
 #### Implementation guide
-*Executing an authentication request*
+***Executing an authentication request***
 
 ```csharp
   using ArcAuthentication.Security;
+  using ArcAuthentication.CGI.ScriptService.Scripts;
   using ArcAuthentication.Net;
   
   public static class Program {
-    public static void Main(string[] args) {
-      Console.WriteLine(@"Default credentials are being applied");
+      public static void Main(string[] args) {
+          Console.WriteLine(@"Default credentials are being applied");
       
-      //The 'hash' flag determines whether to apply the 'ArcMd5' function.
-      //This is, of course, true by default. Disable only if you wish to store in plain-text
-      //and hash later.
-      var auth = new ArcCredential(@"admin", @"Telstra");
+          //The 'hash' flag determines whether to apply the 'ArcMd5' function.
+          //This is, of course, true by default. Disable only if you wish to store in plain-text
+          //and hash later.
+          var auth = new ArcCredential(@"admin", @"Telstra");
       
-      //Execute the request to '/login.cgi' and automate the 'httoken' extraction.
-      var authSuccess = ArcLogin.DoLogin(auth);
+          //Execute the request to '/login.cgi' and automate the 'httoken' extraction.
+          var authSuccess = ArcLogin.DoLogin(auth);
       
-      //authSuccess is a boolean, and determines, as the name implies,
-      //whether or not the modem accepted your request as legitimate.
-      Console.WriteLine(authSuccess
-        ? @"Authentication was successful"
-        : @"Authentication failed");
-    }
+          //authSuccess is a boolean, and determines, as the name implies,
+          //whether or not the modem accepted your request as legitimate.
+          Console.WriteLine(authSuccess
+            ? @"Authentication was successful"
+            : @"Authentication failed");
+      }
   }
 ```
 
-*Executing a request for information (after you have authenticated)*
+***Executing a request for information (after you have authenticated; extends on the above)***
 ```csharp
+  //request cgi_init.js
+  var handler = new CgiInitScript();
+  var jsResult = handler.GrabJS();
   
+  //validation (important!)
+  if (!string.IsNullOrEmpty(jsResult) {
+      if (jsResult != @"404")
+          Console.WriteLine(jsResult);
+      else
+          Console.WriteLine(@"Data error: modem reported 404 not found");
+  }
+  else
+      Console.WriteLine(@"Data error: invalid response");
+```
+*Notes on the above: The interface will return "404" if the modem reports such. Thus, it is crucial to provide the correct validation in your implementation.*
+
+***Extending the ScriptService and providing your own interfaces for obtaining scripts***<br />
+***Side notes: Must inherit from CgiScriptService; must follow Cgi* naming convention.***
+```csharp
+  using ArcAuthentication.CGI.ScriptService;
+  
+  public class Cgi<ServiceName>Script : CgiScriptService
+    {
+        public Cgi<ServiceName>Script()
+        {
+            //parameters needed for communication
+            const string serviceMessage = @"Retrieving script..."; //message shown to user in loading bar
+            var serviceEndpoint = $@"{Global.Origin}<ScriptLocation>"; //the location of the script
+            var serviceTokeniser = Global.HomeHtm; //the married HTM page for the JavaScript you are obtaining
+            var serviceInformation = new CgiScriptServiceInfo(serviceTokeniser, serviceEndpoint, serviceMessage); //final object
+
+            //apply the service object
+            ServiceAuthInfo = serviceInformation;
+        }
+    }
+```
+**After creating your ScriptService, you can access it exactly like the default ScriptServices:**
+```csharp
+  var serviceHandler = new Cgi<ServiceName>Script();
+  var jsResult = serviceHandler.GrabJS();
+  //...... logic ......//
+  
+  //If you need access to the 'httoken' that was created, access it like so:
+  var tokenHandler = serviceHandler.AuthenticationToken;
+  
+  //Note that if you use the AuthenticationToken property, you need to run GrabJS() at least once to prompt a token refresh; hence avoiding it being null.
+  //The Token property of ArcToken will provide the decoded base64 token, whereas TokenRaw provides the encoded token.
+  var httoken = tokenHandler.Token;
 ```
