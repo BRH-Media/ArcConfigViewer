@@ -1,19 +1,20 @@
 ﻿using ArcAuthentication;
-using ArcAuthentication.CGI;
+using ArcAuthentication.CGI.DataService;
 using ArcAuthentication.Security;
+using ArcAuthentication.UI;
 using ArcConfigKeyExtractor;
 using ArcConfigViewer.Enums;
 using ArcConfigViewer.Extensions;
 using ArcProcessor;
+using ArcWaitWindow;
 using System;
+using System.Collections;
 using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
-using ArcAuthentication.CGI.DataService;
-using ArcAuthentication.UI;
 
 // ReSharper disable UnusedMember.Local
 // ReSharper disable InconsistentNaming
@@ -74,60 +75,66 @@ namespace ArcConfigViewer.UI
             }
         }
 
-        private void LoadTreeView(string directory)
+        private void TreeViewRepaint(IEnumerable nodes, bool expandFirst = true)
         {
-            if (Directory.Exists(directory))
+            //if thread invoke is needed, call this again on the UI thread
+            if (trvMain.InvokeRequired)
+                trvMain.BeginInvoke((MethodInvoker)delegate
+                {
+                    TreeViewRepaint(nodes, expandFirst);
+                });
+            else
             {
-                if (InvokeRequired)
+                //empty tree view
+                trvMain.Nodes.Clear();
+
+                //repopulate tree view with new values
+                foreach (TreeNode n in nodes)
+                    trvMain.Nodes.Add(n);
+
+                //do node transform if any exist
+                if (trvMain.Nodes.Count > 0 && expandFirst)
                 {
-                    BeginInvoke((MethodInvoker)delegate
+                    //reference root node
+                    var root = trvMain.Nodes[0];
+
+                    //expand root node
+                    root.Expand();
+
+                    //select first sub node if there are any
+                    if (root.Nodes.Count > 0)
                     {
-                        //load tree view
-                        trvMain.Nodes.Clear();
-                        TreeBuilder.BuildTree(new DirectoryInfo(directory), trvMain.Nodes);
-
-                        //do node transform if any exist
-                        if (trvMain.Nodes.Count > 0)
-                        {
-                            //reference root node
-                            var root = trvMain.Nodes[0];
-
-                            //expand root node
-                            root.Expand();
-
-                            //select first sub node if there are any
-                            if (root.Nodes.Count > 0)
-                            {
-                                var firstSubNode = root.Nodes[0];
-                                trvMain.SelectedNode = firstSubNode;
-                                TrvMain_AfterSelect(firstSubNode);
-                            }
-                        }
-                    });
-                }
-                else
-                {
-                    //load tree view
-                    trvMain.Nodes.Clear();
-                    TreeBuilder.BuildTree(new DirectoryInfo(directory), trvMain.Nodes);
-
-                    //do node transform if any exist
-                    if (trvMain.Nodes.Count > 0)
-                    {
-                        //reference root node
-                        var root = trvMain.Nodes[0];
-
-                        //expand root node
-                        root.Expand();
-
-                        //select first sub node if there are any
-                        if (root.Nodes.Count > 0)
-                        {
-                            var firstSubNode = root.Nodes[0];
-                            trvMain.SelectedNode = firstSubNode;
-                            TrvMain_AfterSelect(firstSubNode);
-                        }
+                        var firstSubNode = root.Nodes[0];
+                        trvMain.SelectedNode = firstSubNode;
+                        TrvMain_AfterSelect(firstSubNode);
                     }
+                }
+            }
+        }
+
+        private void LoadTreeView(object sender, ArcWaitWindowEventArgs e)
+        {
+            if (e.Arguments.Count == 1)
+            {
+                var directory = (string)e.Arguments[0];
+                LoadTreeView(directory, false);
+            }
+        }
+
+        private void LoadTreeView(string directory, bool waitWindow = true)
+        {
+            if (waitWindow)
+                ArcWaitWindow.ArcWaitWindow.Show(LoadTreeView, @"Building file tree...", directory);
+            else
+            {
+                if (Directory.Exists(directory))
+                {
+                    //temporarily offload to a variable in order to keep UI responsive when it finally gets updated
+                    var rootNode = new TreeNode();
+                    TreeBuilder.BuildTree(new DirectoryInfo(directory), rootNode.Nodes);
+
+                    //refresh TreeView
+                    TreeViewRepaint(rootNode.Nodes);
                 }
             }
         }

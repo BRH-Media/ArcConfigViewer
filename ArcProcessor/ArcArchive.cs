@@ -3,6 +3,7 @@ using ICSharpCode.SharpZipLib.Tar;
 using System;
 using System.IO;
 using System.IO.Compression;
+using System.Text;
 
 // ReSharper disable UnusedMember.Local
 
@@ -12,6 +13,29 @@ namespace ArcProcessor
     {
         public const string ExtractDir = @"config";
         public const string Password = @"2&15u69A";
+
+        private static bool IsEncrypted(this byte[] data)
+        {
+            try
+            {
+                //OpenSSL-encrypted files usually include this text prefix before the encrypted buffer
+                const string prefix = @"Salted__";
+                var prefixLength = prefix.Length;
+                var relevantBytes = new byte[prefixLength];
+                Buffer.BlockCopy(data, 0, relevantBytes, 0, prefixLength);
+
+                var prefixData = Encoding.Default.GetString(relevantBytes);
+
+                return prefixData == prefix;
+            }
+            catch (Exception ex)
+            {
+                UiMessages.Error($"Determination error:\n\n{ex}");
+            }
+
+            //default
+            return false;
+        }
 
         private static void ProcessConfigArchive(object sender, ArcWaitWindowEventArgs e)
         {
@@ -29,24 +53,18 @@ namespace ArcProcessor
             }
 
             if (waitWindow)
-            {
                 ArcWaitWindow.ArcWaitWindow.Show(ProcessConfigArchive, @"Processing archive...", cipherBytes);
-            }
             else
-            {
-                ProcessConfigArchive(cipherBytes);
-            }
+                ProcessConfigArchive(cipherBytes, false);
         }
 
         public static void ProcessConfigArchive(byte[] archive, bool waitWindow = true)
         {
             if (waitWindow)
-            {
                 ArcWaitWindow.ArcWaitWindow.Show(ProcessConfigArchive, @"Processing archive...", archive);
-            }
             else
             {
-                var tar = DecryptDecompress(archive);
+                var tar = archive.IsEncrypted() ? DecryptDecompress(archive) : DecompressGzBytes(archive);
                 using (var sourceStream = new MemoryStream(tar))
                 {
                     using (var tarArchive =
