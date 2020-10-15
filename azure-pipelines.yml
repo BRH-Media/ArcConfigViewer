@@ -37,13 +37,6 @@ steps:
     #exclude obj folder
     contents: '**/bin/$(BuildConfiguration)/**/?(*.exe|*.dll|*.pdb)'
     targetFolder: '$(Build.ArtifactStagingDirectory)'
-- task: ArchiveFiles@2
-  inputs:
-    rootFolderOrFile: '**/bin/$(BuildConfiguration)/**/?(*.exe|*.dll|*.pdb)'
-    includeRootFolder: false
-    archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-bin.zip'
-    replaceExistingArchive: true
 - task: PublishBuildArtifacts@1
   inputs:
     pathToPublish: '$(Build.ArtifactStagingDirectory)'
