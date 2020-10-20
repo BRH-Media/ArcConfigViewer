@@ -116,7 +116,10 @@ if you may request that resource.<br /><br />
         }
     }
 ```
-*\*Where '<ServiceName>' is the name of your CgiScriptService, e.g. 'Init' for 'CgiInitScript'*
+*\*Where '\<ServiceName>' is the name of your `CgiScriptService`, e.g. 'Init' for 'CgiInitScript'*
+
+Alternatively, you can also instantiate a new `CgiScriptService` object and manually assign it values like the above example; but it is much easier to use pre-defined variables
+in an inherited class.
 
 **After creating your ScriptService, you can access it exactly like the default ScriptServices:**
 ```csharp
