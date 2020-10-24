@@ -11,7 +11,7 @@ pool:
 
 variables:
   solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
+  buildPlatform: 'x86' #must be x86 for TTGames.UnComp.dll to work
   buildConfiguration: 'Release'
 
 #run at midnight
@@ -46,7 +46,11 @@ steps:
     #exclude obj folder
     contents: '**/bin/$(BuildConfiguration)/**/?(*.exe|*.dll|*.pdb)'
     targetFolder: '$(Build.ArtifactStagingDirectory)'
-
+- task: CopyFiles@2
+  inputs:
+    sourceFolder: '$(Build.SourcesDirectory)'
+    contents: '**/lib/?(*.dll|*.pdb)'
+    targetFolder: '$(Build.ArtifactStagingDirectory)'
 - task: PublishBuildArtifacts@1
   inputs:
     pathToPublish: '$(Build.ArtifactStagingDirectory)'
