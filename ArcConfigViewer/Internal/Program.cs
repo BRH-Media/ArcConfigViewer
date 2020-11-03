@@ -2,7 +2,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace ArcConfigViewer
+namespace ArcConfigViewer.Internal
 {
     internal static class Program
     {
