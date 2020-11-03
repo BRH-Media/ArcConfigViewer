@@ -1,11 +1,14 @@
-﻿namespace ArcAuthentication.UI
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace ArcAuthentication.UI
 {
     partial class LoginForm
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -123,11 +126,11 @@
 
         #endregion
 
-        private System.Windows.Forms.GroupBox gbUsername;
-        private System.Windows.Forms.TextBox txtUsername;
-        private System.Windows.Forms.GroupBox gbPassword;
-        private System.Windows.Forms.TextBox txtPassword;
-        private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.Button btnLogin;
+        private GroupBox gbUsername;
+        private TextBox txtUsername;
+        private GroupBox gbPassword;
+        private TextBox txtPassword;
+        private Button btnCancel;
+        private Button btnLogin;
     }
 }

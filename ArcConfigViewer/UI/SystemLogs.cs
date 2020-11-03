@@ -1,4 +1,4 @@
-﻿using ArcAuthentication.CGI;
+﻿using ArcAuthentication.CGI.DataService;
 using ArcAuthentication.Enums;
 using ArcConfigViewer.Enums;
 using ArcConfigViewer.Extensions;
@@ -6,7 +6,6 @@ using ArcProcessor;
 using System;
 using System.Data;
 using System.Windows.Forms;
-using ArcAuthentication.CGI.DataService;
 
 namespace ArcConfigViewer.UI
 {

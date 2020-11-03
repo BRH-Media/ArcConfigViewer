@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using ArcAuthentication.Globals;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 
@@ -29,10 +30,10 @@ namespace ArcAuthentication.Net
             request.Headers.TryAddWithoutValidation("Upgrade-Insecure-Requests", "1");
             request.Headers.TryAddWithoutValidation("Cookie", "disableLogout=0");
             request.Headers.TryAddWithoutValidation("User-Agent", Global.UserAgent);
-            request.Headers.TryAddWithoutValidation("Host", Global.Gateway);
+            request.Headers.TryAddWithoutValidation("Host", Endpoints.GatewayAddress);
             if (!string.IsNullOrEmpty(referer))
                 request.Headers.TryAddWithoutValidation("Referer", referer);
-            request.Headers.TryAddWithoutValidation(@"Origin", Global.Origin);
+            request.Headers.TryAddWithoutValidation(@"Origin", Endpoints.Origin);
 
             var response = Global.GlobalClient.SendAsync(request).Result;
             var body = response.Content.ReadAsByteArrayAsync().Result;

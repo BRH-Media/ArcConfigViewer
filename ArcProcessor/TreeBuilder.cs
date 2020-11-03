@@ -1,45 +1,10 @@
-﻿using System;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 using System.Windows.Forms;
 
 namespace ArcProcessor
 {
     public static class TreeBuilder
     {
-        private static char[] ReadChars(string filename, int count)
-        {
-            if (!File.Exists(filename)) return null;
-
-            using (var stream = File.OpenRead(filename))
-            using (var reader = new StreamReader(stream, Encoding.UTF8))
-            {
-                var buffer = new char[count];
-                var n = reader.ReadBlock(buffer, 0, count);
-
-                var result = new char[n];
-
-                Array.Copy(buffer, result, n);
-
-                return result;
-            }
-        }
-
-        private static bool IsBashScript(string fileName)
-        {
-            var ext = Path.GetExtension(fileName);
-            const string searchTerm = @"#!/bin/sh";
-            var length = searchTerm.Length;
-
-            var actual = new string(ReadChars(fileName, length));
-
-            if (!string.IsNullOrEmpty(actual))
-                return actual == searchTerm || ext == @".sh";
-
-            //default
-            return false;
-        }
-
         public static void BuildTree(DirectoryInfo directoryInfo, TreeNodeCollection addInMe)
         {
             var curNode = addInMe.Add(directoryInfo.Name, directoryInfo.Name, 1, 1); //folder image
@@ -78,7 +43,8 @@ namespace ArcProcessor
 
                     case @".sqlite":
                     case @".db":
-                        curNode.Nodes.Add(file.FullName, name, 3, 3); //database image
+                        if (FileVerify.IsSqlLiteDatabase(file.FullName))
+                            curNode.Nodes.Add(file.FullName, name, 3, 3); //database image
                         break;
 
                     case @".srl":
@@ -97,7 +63,7 @@ namespace ArcProcessor
                         break;
 
                     default:
-                        if (IsBashScript(file.FullName))
+                        if (FileVerify.IsBashScript(file.FullName))
                             curNode.Nodes.Add(file.FullName, name, 8, 8); //script image
                         else
                             curNode.Nodes.Add(file.FullName, name, 0, 0); //file image

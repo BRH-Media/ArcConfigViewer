@@ -58,6 +58,8 @@
     <Compile Include="CGI\ScriptService\Scripts\CgiStationsScript.cs" />
     <Compile Include="CGI\ScriptService\Scripts\CgiSystemLogScript.cs" />
     <Compile Include="CGI\ScriptService\Scripts\CgiWifiScript.cs" />
+    <Compile Include="Globals\AddressFile.cs" />
+    <Compile Include="Globals\Endpoints.cs" />
     <Compile Include="Security\ArcMd5.cs" />
     <Compile Include="CGI\DataService\CgiCallLog.cs" />
     <Compile Include="CGI\ScriptService\Scripts\CgiInitScript.cs" />
@@ -69,7 +71,7 @@
     <Compile Include="CGI\DataService\CgiConfigFile.cs" />
     <Compile Include="Security\ArcCredential.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="Global.cs" />
+    <Compile Include="Globals\Global.cs" />
     <Compile Include="Security\ArcLogin.cs" />
     <Compile Include="UI\LoginForm.cs">
       <SubType>Form</SubType>

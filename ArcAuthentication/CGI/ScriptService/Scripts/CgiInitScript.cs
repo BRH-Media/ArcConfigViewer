@@ -1,6 +1,8 @@
 ﻿// ReSharper disable CoVariantArrayConversion
 // ReSharper disable InconsistentNaming
 
+using ArcAuthentication.Globals;
+
 namespace ArcAuthentication.CGI.ScriptService.Scripts
 {
     public class CgiInitScript : CgiScriptService
@@ -9,8 +11,8 @@ namespace ArcAuthentication.CGI.ScriptService.Scripts
         {
             //parameters needed for communication
             const string serviceMessage = @"Retrieving modem initialisation information...";
-            var serviceEndpoint = $@"{Global.Origin}/cgi/cgi_init.js";
-            var serviceTokeniser = Global.HomeHtm;
+            var serviceEndpoint = $@"{Endpoints.Origin}/cgi/cgi_init.js";
+            var serviceTokeniser = Endpoints.HomeHtm;
             var serviceInformation = new CgiScriptServiceInfo(serviceTokeniser, serviceEndpoint, serviceMessage);
 
             //set the global service parameters

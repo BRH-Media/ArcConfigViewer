@@ -1,4 +1,5 @@
 ﻿using ArcAuthentication.CGI.ScriptService.Scripts;
+using ArcAuthentication.Globals;
 using ArcAuthentication.Net;
 using ArcWaitWindow;
 using System;
@@ -30,7 +31,7 @@ namespace ArcAuthentication.CGI.DataService
 
                     //construct fileName and URI
                     var fileName = regExp.Match(jsResult).Groups[1];
-                    var fileUri = $@"{Global.Origin}/tmp/{fileName}";
+                    var fileUri = $@"{Endpoints.Origin}/tmp/{fileName}";
 
                     //tokenise from the CGI token contained in the script service handler above
                     fileUri = jsResultHandler.AuthenticationToken.TokeniseUrl(fileUri);
@@ -38,7 +39,7 @@ namespace ArcAuthentication.CGI.DataService
                     //MessageBox.Show(fileUri);
 
                     //download config file
-                    var file = ResourceGrab.GrabBytes(fileUri, Global.BackupHtm);
+                    var file = ResourceGrab.GrabBytes(fileUri, Endpoints.BackupHtm);
 
                     //verification
                     if (file != null)

@@ -1,6 +1,7 @@
 ﻿using ArcAuthentication.CGI.ScriptService;
 using ArcAuthentication.CGI.ScriptService.Scripts;
 using ArcAuthentication.Enums;
+using ArcAuthentication.Globals;
 using Newtonsoft.Json;
 using System;
 using System.Data;
@@ -24,7 +25,7 @@ namespace ArcAuthentication.CGI.DataService
             //parameters needed for communication
             const string serviceMessage = @"Retrieving log...";
             var serviceEndpoint = EndpointFromLogType();
-            var serviceTokeniser = Global.SystemLogHtm;
+            var serviceTokeniser = Endpoints.SystemLogHtm;
             var serviceInformation = new CgiScriptServiceInfo(serviceTokeniser, serviceEndpoint, serviceMessage);
 
             //set the global service parameters

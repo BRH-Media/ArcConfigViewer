@@ -1,4 +1,5 @@
 ﻿using ArcAuthentication.Enums;
+using ArcAuthentication.Globals;
 
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 // ReSharper disable CoVariantArrayConversion
@@ -18,7 +19,7 @@ namespace ArcAuthentication.CGI.ScriptService.Scripts
             //parameters needed for communication
             const string serviceMessage = @"Retrieving log...";
             var serviceEndpoint = EndpointFromLogType();
-            var serviceTokeniser = Global.SystemLogHtm;
+            var serviceTokeniser = Endpoints.SystemLogHtm;
             var serviceInformation = new CgiScriptServiceInfo(serviceTokeniser, serviceEndpoint, serviceMessage);
 
             //set the global service parameters
@@ -37,28 +38,28 @@ namespace ArcAuthentication.CGI.ScriptService.Scripts
                 switch (Log)
                 {
                     case LogType.FullLog:
-                        return $@"{Global.Origin}/cgi/cgi_syslog_by_function.js?fun_str=system,ntp,hw,voip,wan,dhcp,tr69,owl,wlan";
+                        return $@"{Endpoints.Origin}/cgi/cgi_syslog_by_function.js?fun_str=system,ntp,hw,voip,wan,dhcp,tr69,owl,wlan";
 
                     case LogType.TR069Log:
-                        return $@"{Global.Origin}/cgi/cgi_syslog_by_function.js?fun_str=tr69";
+                        return $@"{Endpoints.Origin}/cgi/cgi_syslog_by_function.js?fun_str=tr69";
 
                     case LogType.SystemLog:
-                        return $@"{Global.Origin}/cgi/cgi_syslog_by_function.js?fun_str=system,ntp";
+                        return $@"{Endpoints.Origin}/cgi/cgi_syslog_by_function.js?fun_str=system,ntp";
 
                     case LogType.HardwareLog:
-                        return $@"{Global.Origin}/cgi/cgi_syslog_by_function.js?fun_str=hw";
+                        return $@"{Endpoints.Origin}/cgi/cgi_syslog_by_function.js?fun_str=hw";
 
                     case LogType.VOIPLog:
-                        return $@"{Global.Origin}/cgi/cgi_syslog_by_function.js?fun_str=voip";
+                        return $@"{Endpoints.Origin}/cgi/cgi_syslog_by_function.js?fun_str=voip";
 
                     case LogType.WANLog:
-                        return $@"{Global.Origin}/cgi/cgi_syslog_by_function.js?fun_str=wan,dhcp";
+                        return $@"{Endpoints.Origin}/cgi/cgi_syslog_by_function.js?fun_str=wan,dhcp";
 
                     case LogType.WLANLog:
-                        return $@"{Global.Origin}/cgi/cgi_syslog_by_function.js?fun_str=wlan";
+                        return $@"{Endpoints.Origin}/cgi/cgi_syslog_by_function.js?fun_str=wlan";
 
                     case LogType.BoosterLog:
-                        return $@"{Global.Origin}/cgi/cgi_syslog_by_function.js?fun_str=owl";
+                        return $@"{Endpoints.Origin}/cgi/cgi_syslog_by_function.js?fun_str=owl";
                 }
             }
             catch

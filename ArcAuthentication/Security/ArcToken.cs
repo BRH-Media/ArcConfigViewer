@@ -1,4 +1,5 @@
-﻿using ArcAuthentication.Net;
+﻿using ArcAuthentication.Globals;
+using ArcAuthentication.Net;
 using ArcWaitWindow;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Net.Http;
 using System.Windows.Forms;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
+// ReSharper disable LocalizableElement
 // ReSharper disable InconsistentNaming
 
 namespace ArcAuthentication.Security
@@ -23,7 +25,7 @@ namespace ArcAuthentication.Security
         /// Defaults to login.htm<br />
         /// Note: Don't use this after login! Specify a relevant URL instead
         /// </summary>
-        public ArcToken() : this(Global.LoginHtm)
+        public ArcToken() : this(Endpoints.LoginHtm)
         {
             //blank intialiser
         }
@@ -82,8 +84,8 @@ namespace ArcAuthentication.Security
             {
                 //important information for the request
                 var t = DateTime.UtcNow.ConvertToUnixTimestamp();
-                var referer = $@"{Global.Origin}/logout.htm?t={t}&m=";
-                var logout = $@"{Global.Origin}/logout.cgi";
+                var referer = $@"{Endpoints.Origin}/logout.htm?t={t}&m=";
+                var logout = $@"{Endpoints.Origin}/logout.cgi";
 
                 //download logout.htm for the access token
                 var logoutToken = new ArcToken(referer);
@@ -125,8 +127,8 @@ namespace ArcAuthentication.Security
                     request.Headers.TryAddWithoutValidation(@"Cookie", @"disableLogout=0");
                     request.Headers.TryAddWithoutValidation(@"User-Agent", Global.UserAgent);
                     request.Headers.TryAddWithoutValidation(@"Referer", referer);
-                    request.Headers.TryAddWithoutValidation(@"Host", Global.Gateway);
-                    request.Headers.TryAddWithoutValidation(@"Origin", Global.Origin);
+                    request.Headers.TryAddWithoutValidation(@"Host", Endpoints.GatewayAddress);
+                    request.Headers.TryAddWithoutValidation(@"Origin", Endpoints.Origin);
 
                     //apply cookie container
                     handler.CookieContainer = cookies;
@@ -144,9 +146,9 @@ namespace ArcAuthentication.Security
                     //on success, logout redirects user to login page
                     return locationHeader == @"/login.htm";
                 }
-                else
-                    MessageBox.Show($"Logout token was empty; revocation failed.", @"Revoke Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                MessageBox.Show("Logout token was empty; revocation failed.", @"Revoke Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {

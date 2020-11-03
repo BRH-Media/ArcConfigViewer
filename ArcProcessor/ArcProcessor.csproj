@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="ArcArchive.cs" />
     <Compile Include="CryptoHandler.cs" />
+    <Compile Include="FileVerify.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TreeBuilder.cs" />
     <Compile Include="UIMessages.cs" />

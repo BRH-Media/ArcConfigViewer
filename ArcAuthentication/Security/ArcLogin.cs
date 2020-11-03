@@ -1,4 +1,7 @@
-﻿using ArcAuthentication.Net;
+﻿using ArcAuthentication.Globals;
+using ArcAuthentication.Net;
+using ArcAuthentication.UI;
+using ArcProcessor;
 using ArcWaitWindow;
 using System;
 using System.Collections.Generic;
@@ -7,15 +10,57 @@ using System.Net.Http;
 using System.Text;
 using System.Windows.Forms;
 
+// ReSharper disable InvertIf
+// ReSharper disable LocalizableElement
+
 namespace ArcAuthentication.Security
 {
     public static class ArcLogin
     {
+        /// <summary>
+        /// Runs a status check on whether we're authenticated; can prompt for a login if needed.
+        /// </summary>
+        /// <param name="tryLogin"></param>
+        /// <param name="silent"></param>
+        /// <returns></returns>
+        public static bool IsAuthenticated(bool tryLogin = false, bool silent = false)
+        {
+            try
+            {
+                var testLogin = TestLogin(silent);
+                if (!testLogin && tryLogin)
+                {
+                    var loginTry = LoginForm.ShowLogin();
+                    return loginTry;
+                }
+
+                return testLogin;
+            }
+            catch (Exception ex)
+            {
+                if (!silent)
+                    UiMessages.Error(ex.ToString());
+            }
+
+            //default
+            return false;
+        }
+
+        /// <summary>
+        /// Multi-threaded callback. Don't call this; it's automatic.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private static void TestLogin(object sender, ArcWaitWindowEventArgs e)
         {
             e.Result = TestLogin(false);
         }
 
+        /// <summary>
+        /// Polls the modem to find out whether authentication is needed (new login request)
+        /// </summary>
+        /// <param name="waitWindow"></param>
+        /// <returns></returns>
         public static bool TestLogin(bool waitWindow = true)
         {
             if (waitWindow)
@@ -39,6 +84,11 @@ namespace ArcAuthentication.Security
             return false;
         }
 
+        /// <summary>
+        /// Multi-threaded callback. Don't call this; it's automatic.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private static void DoLogin(object sender, ArcWaitWindowEventArgs e)
         {
             if (e.Arguments.Count == 1)
@@ -51,6 +101,12 @@ namespace ArcAuthentication.Security
             }
         }
 
+        /// <summary>
+        /// Perform a new CGI login request which will emulate a user logging into the web portal
+        /// </summary>
+        /// <param name="auth"></param>
+        /// <param name="waitWindow"></param>
+        /// <returns></returns>
         public static bool DoLogin(ArcCredential auth = null, bool waitWindow = true)
         {
             //waitwindow activation
@@ -63,22 +119,18 @@ namespace ArcAuthentication.Security
             try
             {
                 //this will trigger a secondary request
-                var ArcToken = new ArcToken();
+                var arcToken = new ArcToken();
 
                 //authentication credentials (they get hashed when loaded into the Credential object)
                 var unEncoded = auth?.Username;
                 var pwEncoded = auth?.Password;
-
-                //MessageBox.Show(ArcToken.Token);
-                //MessageBox.Show(unEncoded);
-                //MessageBox.Show(pwEncoded);
 
                 //data to send alongside request
                 var requestBody =
                     new FormUrlEncodedContent(
                         new Dictionary<string, string>
                         {
-                            {@"httoken", ArcToken.Token},
+                            {@"httoken", arcToken.Token},
                             {@"usr", unEncoded},
                             {@"pws", pwEncoded}
                         });
@@ -93,15 +145,13 @@ namespace ArcAuthentication.Security
                 //set global client
                 Global.GlobalClient = client;
 
-                //not fazed by Location headers
-                //handler.AllowAutoRedirect = false;
-
                 //add request credentials
-                var request = new HttpRequestMessage(new HttpMethod(@"POST"), Global.LoginCgi)
+                var request = new HttpRequestMessage(new HttpMethod(@"POST"), Endpoints.LoginCgi)
                 {
                     Content = requestBody
                 };
 
+                //create the needed headers
                 request.Headers.TryAddWithoutValidation(@"Accept",
                     @"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
                 request.Headers.TryAddWithoutValidation(@"Accept-Language", @"en-US,en;q=0.5");
@@ -109,9 +159,9 @@ namespace ArcAuthentication.Security
                 request.Headers.TryAddWithoutValidation(@"Upgrade-Insecure-Requests", @"1");
                 request.Headers.TryAddWithoutValidation(@"Cookie", @"disableLogout=0");
                 request.Headers.TryAddWithoutValidation(@"User-Agent", Global.UserAgent);
-                request.Headers.TryAddWithoutValidation(@"Referer", Global.LoginHtm);
-                request.Headers.TryAddWithoutValidation(@"Host", Global.Gateway);
-                request.Headers.TryAddWithoutValidation(@"Origin", Global.Origin);
+                request.Headers.TryAddWithoutValidation(@"Referer", Endpoints.LoginHtm);
+                request.Headers.TryAddWithoutValidation(@"Host", Endpoints.GatewayAddress);
+                request.Headers.TryAddWithoutValidation(@"Origin", Endpoints.Origin);
 
                 //apply cookie container
                 handler.CookieContainer = cookies;
@@ -121,26 +171,19 @@ namespace ArcAuthentication.Security
                 var body = response.Content.ReadAsByteArrayAsync().Result;
                 var reply = Encoding.ASCII.GetString(body);
 
-                //File.WriteAllText(@"login.log", reply);
-
                 //validation
                 if (string.IsNullOrEmpty(reply)) return false;
                 if (!reply.Contains(@"home.htm")) return false;
 
                 //download home page
-                var homeGrab = ResourceGrab.GrabString(Global.HomeHtm, Global.IndexHtm);
-
-                //debugging
-                //File.WriteAllText(@"home.log", homeGrab);
-
-                //MessageBox.Show(homeGrab);
+                var homeGrab = ResourceGrab.GrabString(Endpoints.HomeHtm, Endpoints.IndexHtm);
 
                 //make sure we didn't get redirected to the login page
                 var success = !homeGrab.Contains(@"Telstra Login") && !homeGrab.Contains(@"login.htm");
 
                 //apply global token if successful
                 if (success)
-                    Global.InitToken = ArcToken;
+                    Global.InitToken = arcToken;
 
                 //report status
                 return success;

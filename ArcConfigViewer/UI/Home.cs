@@ -1,5 +1,5 @@
-﻿using ArcAuthentication;
-using ArcAuthentication.CGI.DataService;
+﻿using ArcAuthentication.CGI.DataService;
+using ArcAuthentication.Globals;
 using ArcAuthentication.Security;
 using ArcAuthentication.UI;
 using ArcConfigKeyExtractor;
@@ -55,14 +55,12 @@ namespace ArcConfigViewer.UI
                 }
                 //Arcadyan config
                 else if (e.Node.Name.EndsWith(@".dft") || e.Node.Name.EndsWith(@".glbcfg"))
-                {
                     SetTable(FileToDataTable(e.Node.Name));
-                }
+
                 //SQLite Databases
                 else if (e.Node.Name.EndsWith(@".db") || e.Node.Name.EndsWith(@".sqlite"))
-                {
                     SqliteBrowser.ShowBrowser(e.Node.Name);
-                }
+
                 //Anything else is treated as a text file
                 else
                 {
@@ -70,9 +68,7 @@ namespace ArcConfigViewer.UI
                     SetText(File.ReadAllText(e.Node.Name));
                 }
             else
-            {
                 SetClear();
-            }
         }
 
         private void TreeViewRepaint(IEnumerable nodes, bool expandFirst = true)
@@ -539,7 +535,7 @@ namespace ArcConfigViewer.UI
             try
             {
                 //test authentication
-                var success = Authenticated();
+                var success = ArcLogin.IsAuthenticated();
 
                 if (success)
                 {
@@ -576,7 +572,7 @@ namespace ArcConfigViewer.UI
             try
             {
                 //test authentication
-                var success = Authenticated();
+                var success = ArcLogin.IsAuthenticated();
 
                 if (success)
                 {
@@ -614,7 +610,7 @@ namespace ArcConfigViewer.UI
             try
             {
                 //test authentication
-                var success = Authenticated();
+                var success = ArcLogin.IsAuthenticated();
 
                 if (success)
                 {
@@ -624,9 +620,7 @@ namespace ArcConfigViewer.UI
                     if (table != null)
                     {
                         if (table.Rows.Count > 0)
-                        {
                             PhoneLog.LoadLog(table);
-                        }
                         else
                             UiMessages.Warning(@"Call log from modem returned 0 rows; operation failed.", @"Data Error");
                     }
@@ -647,7 +641,7 @@ namespace ArcConfigViewer.UI
             try
             {
                 //test authentication
-                var success = Authenticated();
+                var success = ArcLogin.IsAuthenticated();
 
                 if (success)
                     SystemLogs.ShowSystemLogViewer();
@@ -665,7 +659,7 @@ namespace ArcConfigViewer.UI
             try
             {
                 //test authentication
-                var success = Authenticated();
+                var success = ArcLogin.IsAuthenticated();
 
                 if (success)
                     FirmwareVersion.ShowVersionInfo();
@@ -692,28 +686,6 @@ namespace ArcConfigViewer.UI
             }
         }
 
-        private static bool Authenticated(bool tryLogin = false)
-        {
-            try
-            {
-                var testLogin = ArcLogin.TestLogin();
-                if (!testLogin && tryLogin)
-                {
-                    var loginTry = LoginForm.ShowLogin();
-                    return loginTry;
-                }
-
-                return testLogin;
-            }
-            catch (Exception ex)
-            {
-                UiMessages.Error(ex.ToString());
-            }
-
-            //default
-            return false;
-        }
-
         private void UIAuthUpdate()
         {
             try
@@ -722,8 +694,6 @@ namespace ArcConfigViewer.UI
                 var testLogin = ArcLogin.TestLogin();
                 if (testLogin)
                     UpdateUIAuthenticate(true);
-                else if (Global.InitToken == null)
-                    UpdateUIAuthenticate();
                 else
                     UpdateUIAuthenticate();
             }
@@ -834,6 +804,7 @@ namespace ArcConfigViewer.UI
 
         private void ItmExploitTelnet_Click(object sender, EventArgs e)
         {
+            UiMessages.Error(@"Telnet exploit functionality is yet to be added. This is an undisclosed vulnerability that I'd rather not risk at this point; the recent firmware patched it partially.");
         }
     }
 }

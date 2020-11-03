@@ -6,7 +6,7 @@ namespace ArcAuthentication.UI
 {
     public partial class LoginForm : Form
     {
-        public bool Success { get; set; } = false;
+        public bool Success { get; set; }
 
         public LoginForm()
         {

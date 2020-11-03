@@ -1,9 +1,8 @@
-﻿using ArcAuthentication.CGI;
+﻿using ArcAuthentication.CGI.DataService;
 using ArcProcessor;
 using System;
 using System.Data;
 using System.Windows.Forms;
-using ArcAuthentication.CGI.DataService;
 
 // ReSharper disable InvertIf
 

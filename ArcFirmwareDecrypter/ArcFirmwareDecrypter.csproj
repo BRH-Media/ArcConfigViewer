@@ -89,10 +89,6 @@
       <Project>{853f252f-bf42-4bed-8ce2-1a52454611a8}</Project>
       <Name>ArcProcessor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WaitWindow\ArcWaitWindow.csproj">
-      <Project>{9da0e57e-16c2-4f74-9669-24ff0cddc268}</Project>
-      <Name>ArcWaitWindow</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

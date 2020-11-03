@@ -104,6 +104,7 @@ namespace ArcConfigViewer.UI
             // 
             // itmElfDecryptionKey
             // 
+            this.itmElfDecryptionKey.Enabled = false;
             this.itmElfDecryptionKey.Name = "itmElfDecryptionKey";
             this.itmElfDecryptionKey.Size = new System.Drawing.Size(185, 22);
             this.itmElfDecryptionKey.Text = "ELF Decryption Key";

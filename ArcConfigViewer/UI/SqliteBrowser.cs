@@ -77,9 +77,7 @@ namespace ArcConfigViewer.UI
         private DataSet LoadEntireDatabase(bool waitWindow = true)
         {
             if (waitWindow)
-            {
                 return (DataSet)ArcWaitWindow.ArcWaitWindow.Show(LoadEntireDatabase, @"Loading SQLite database...");
-            }
 
             try
             {
@@ -123,8 +121,20 @@ namespace ArcConfigViewer.UI
 
         private void SqliteBrowser_Load(object sender, EventArgs e)
         {
-            Database = LoadEntireDatabase();
-            PopulateTables();
+            //verify SQLite ASCII header
+            var valid = FileVerify.IsSqlLiteDatabase(DbFile);
+
+            //only launch the window and load data if it was valid
+            if (valid)
+            {
+                Database = LoadEntireDatabase();
+                PopulateTables();
+            }
+            else
+            {
+                UiMessages.Error(@"Invalid SQLite database; ASCII header was incorrect.");
+                Close();
+            }
         }
 
         public static void ShowBrowser(string dbFilePath)
