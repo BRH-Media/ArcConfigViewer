@@ -27,8 +27,12 @@ namespace ArcAuthentication.Net
             //new request message for this session
             using var request = new HttpRequestMessage(new HttpMethod(method), uri);
 
+            //current timeout
+            var timeout = Global.GlobalClient.Timeout.TotalMilliseconds;
+
             //apply global timeout
-            Global.GlobalClient.Timeout = TimeSpan.FromMilliseconds(Global.RequestTimeout);
+            if (timeout < 1)
+                Global.GlobalClient.Timeout = TimeSpan.FromMilliseconds(Global.RequestTimeout);
 
             //apply request headers that emulate a browser
             request.Headers.TryAddWithoutValidation("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");

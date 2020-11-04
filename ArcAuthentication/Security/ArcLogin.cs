@@ -153,8 +153,12 @@ namespace ArcAuthentication.Security
                 //set global client
                 Global.GlobalClient = client;
 
+                //current timeout
+                var timeout = Global.GlobalClient.Timeout.TotalMilliseconds;
+
                 //apply global timeout
-                Global.GlobalClient.Timeout = TimeSpan.FromMilliseconds(Global.RequestTimeout);
+                if (timeout < 1)
+                    Global.GlobalClient.Timeout = TimeSpan.FromMilliseconds(Global.RequestTimeout);
 
                 //add request credentials
                 var request = new HttpRequestMessage(new HttpMethod(@"POST"), Endpoints.LoginCgi)
