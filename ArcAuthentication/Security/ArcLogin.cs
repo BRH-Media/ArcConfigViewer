@@ -72,6 +72,8 @@ namespace ArcAuthentication.Security
                 //even when you quit the app; making it authorise logins
                 //if you don't provide credentials.
                 var dummyAuth = new ArcCredential(@"", @"");
+
+                //attempt dummy login if the session token is empty
                 return Global.InitToken != null || DoLogin(dummyAuth, false);
             }
             catch (Exception ex)
@@ -111,10 +113,8 @@ namespace ArcAuthentication.Security
         {
             //waitwindow activation
             if (waitWindow)
-            {
                 //offloads to another thread and returns the result once it's done
                 return (bool)ArcWaitWindow.ArcWaitWindow.Show(DoLogin, @"Authenticating...", auth);
-            }
 
             try
             {
@@ -144,6 +144,9 @@ namespace ArcAuthentication.Security
 
                 //set global client
                 Global.GlobalClient = client;
+
+                //apply global timeout
+                Global.GlobalClient.Timeout = TimeSpan.FromMilliseconds(Global.RequestTimeout);
 
                 //add request credentials
                 var request = new HttpRequestMessage(new HttpMethod(@"POST"), Endpoints.LoginCgi)
