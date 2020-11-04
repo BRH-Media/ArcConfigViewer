@@ -691,7 +691,7 @@ namespace ArcConfigViewer.UI
             try
             {
                 //test authentication
-                var testLogin = ArcLogin.TestLogin();
+                var testLogin = ArcLogin.TestLogin(true, true);
                 if (testLogin)
                     UpdateUIAuthenticate(true);
                 else

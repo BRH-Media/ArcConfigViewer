@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Windows.Forms;
 
 // ReSharper disable InvertIf
 // ReSharper disable LocalizableElement
@@ -39,7 +38,7 @@ namespace ArcAuthentication.Security
             catch (Exception ex)
             {
                 if (!silent)
-                    UiMessages.Error(ex.ToString());
+                    UiMessages.Error($"Authentication check error\n\n{ex}");
             }
 
             //default
@@ -53,18 +52,20 @@ namespace ArcAuthentication.Security
         /// <param name="e"></param>
         private static void TestLogin(object sender, ArcWaitWindowEventArgs e)
         {
-            e.Result = TestLogin(false);
+            if (e.Arguments.Count == 1)
+                e.Result = TestLogin(false, (bool)e.Arguments[0]);
         }
 
         /// <summary>
         /// Polls the modem to find out whether authentication is needed (new login request)
         /// </summary>
         /// <param name="waitWindow"></param>
+        /// <param name="warningMode"></param>
         /// <returns></returns>
-        public static bool TestLogin(bool waitWindow = true)
+        public static bool TestLogin(bool waitWindow = true, bool warningMode = false)
         {
             if (waitWindow)
-                return (bool)ArcWaitWindow.ArcWaitWindow.Show(TestLogin, @"Testing authentication...");
+                return (bool)ArcWaitWindow.ArcWaitWindow.Show(TestLogin, @"Testing authentication...", warningMode);
 
             try
             {
@@ -74,12 +75,15 @@ namespace ArcAuthentication.Security
                 var dummyAuth = new ArcCredential(@"", @"");
 
                 //attempt dummy login if the session token is empty
-                return Global.InitToken != null || DoLogin(dummyAuth, false);
+                return Global.InitToken != null || DoLogin(dummyAuth, false, warningMode);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Login test error\n\n{ex}", @"Login Test Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (!warningMode)
+                    UiMessages.Error($"Login test error\n\n{ex}");
+                else
+                    UiMessages.Warning("We couldn't verify your authentication status; this will affect your " +
+                                       "ability to connect to the modem's CGI pages. Please verify if the modem is reachable.");
             }
 
             //default
@@ -93,13 +97,16 @@ namespace ArcAuthentication.Security
         /// <param name="e"></param>
         private static void DoLogin(object sender, ArcWaitWindowEventArgs e)
         {
-            if (e.Arguments.Count == 1)
+            if (e.Arguments.Count == 2)
             {
                 //credentials
                 var auth = (ArcCredential)e.Arguments[0];
 
+                //warning mode
+                var warn = (bool)e.Arguments[1];
+
                 //return result from offloaded thread
-                e.Result = DoLogin(auth, false);
+                e.Result = DoLogin(auth, false, warn);
             }
         }
 
@@ -108,13 +115,14 @@ namespace ArcAuthentication.Security
         /// </summary>
         /// <param name="auth"></param>
         /// <param name="waitWindow"></param>
+        /// <param name="warningMode"></param>
         /// <returns></returns>
-        public static bool DoLogin(ArcCredential auth = null, bool waitWindow = true)
+        public static bool DoLogin(ArcCredential auth = null, bool waitWindow = true, bool warningMode = false)
         {
             //waitwindow activation
             if (waitWindow)
                 //offloads to another thread and returns the result once it's done
-                return (bool)ArcWaitWindow.ArcWaitWindow.Show(DoLogin, @"Authenticating...", auth);
+                return (bool)ArcWaitWindow.ArcWaitWindow.Show(DoLogin, @"Authenticating...", auth, warningMode);
 
             try
             {
@@ -193,8 +201,11 @@ namespace ArcAuthentication.Security
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Login error\n\n{ex}", @"Login Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (!warningMode)
+                    UiMessages.Error($"Login error\n\n{ex}");
+                else
+                    UiMessages.Warning("We couldn't authenticate the application; this will affect your " +
+                                       "ability to connect to the modem's CGI pages. Please verify if the modem is reachable.");
             }
 
             //default
