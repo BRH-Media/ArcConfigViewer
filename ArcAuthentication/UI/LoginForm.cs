@@ -36,13 +36,16 @@ namespace ArcAuthentication.UI
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
         public static bool ShowLogin()
         {
             var frm = new LoginForm();
             frm.ShowDialog();
-            return frm.Success;
+
+            return frm.Success && frm.DialogResult == DialogResult.OK;
         }
 
         private void LoginForm_Load(object sender, EventArgs e)

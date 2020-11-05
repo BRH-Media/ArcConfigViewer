@@ -1,5 +1,6 @@
 ﻿using ArcAuthentication.CGI.ScriptService.Scripts;
-using ArcAuthentication.StationHandlers;
+using ArcAuthentication.JSON;
+using ArcAuthentication.JSON.StationHandlers;
 using ArcProcessor;
 using Newtonsoft.Json;
 using System;

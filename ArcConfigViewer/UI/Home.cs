@@ -10,6 +10,7 @@ using ArcWaitWindow;
 using System;
 using System.Collections;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -467,11 +468,23 @@ namespace ArcConfigViewer.UI
 
         private void Home_Load(object sender, EventArgs e)
         {
+            //updates the position of text field 'Copy' label relative to the form sizing
             CopyLabelPosition();
 
-            //update menu to reflect auth status
-            //this retains the status after the program is closed
-            UIAuthUpdate();
+            //the application will only continue loading if the modem is found to be the Arcadyan LH1000
+            var validModem = ArcModem.IsArcadyanModem();
+
+            if (validModem)
+            {
+                //update menu to reflect auth status
+                //this retains the status after the program is closed
+                UIAuthUpdate();
+            }
+            else
+            {
+                UiMessages.Warning(@"Your modem isn't an Arcadyan LH1000. Please use a different application to suit your device.");
+                Process.GetCurrentProcess().Kill();
+            }
         }
 
         private void ItmRefreshConfig_Click(object sender, EventArgs e)
@@ -691,7 +704,7 @@ namespace ArcConfigViewer.UI
             try
             {
                 //test authentication
-                var testLogin = ArcLogin.TestLogin(true, true);
+                var testLogin = ArcLogin.TestLogin();
                 if (testLogin)
                     UpdateUIAuthenticate(true);
                 else
@@ -805,6 +818,10 @@ namespace ArcConfigViewer.UI
         private void ItmExploitTelnet_Click(object sender, EventArgs e)
         {
             UiMessages.Error(@"Telnet exploit functionality is yet to be added. This is an undisclosed vulnerability that I'd rather not risk at this point; the recent firmware patched it partially.");
+        }
+
+        private void menuMain_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
         }
     }
 }

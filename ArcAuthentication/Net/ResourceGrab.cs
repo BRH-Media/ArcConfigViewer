@@ -10,19 +10,24 @@ namespace ArcAuthentication.Net
     {
         public static string GrabString(string uri, string referer = @"", string method = @"GET")
         {
-            return Encoding.ASCII.GetString(GrabBytes(uri, referer, method));
+            //download raw bytes
+            var data = GrabBytes(uri, referer, method);
+
+            //convert bytes to string then return the result
+            return Encoding.Default.GetString(data);
         }
 
         public static byte[] GrabBytes(string uri, string referer = @"", string method = @"GET")
         {
+            //new handler
             using var handler = new HttpClientHandler
             {
                 AutomaticDecompression = ~DecompressionMethods.None,
                 AllowAutoRedirect = true
             };
 
-            //if the global handler is null, assign it a new value
-            Global.GlobalClient ??= new HttpClient(handler);
+            //assign the global handler a new value
+            Global.GlobalClient = new HttpClient(handler);
 
             //new request message for this session
             using var request = new HttpRequestMessage(new HttpMethod(method), uri);

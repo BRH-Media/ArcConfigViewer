@@ -31,57 +31,66 @@ namespace ArcAuthentication.UI
         /// </summary>
         private void InitializeComponent()
         {
-            this.gbUsername = new System.Windows.Forms.GroupBox();
             this.txtUsername = new System.Windows.Forms.TextBox();
-            this.gbPassword = new System.Windows.Forms.GroupBox();
+            this.gbUsername = new System.Windows.Forms.GroupBox();
             this.txtPassword = new System.Windows.Forms.TextBox();
+            this.gbPassword = new System.Windows.Forms.GroupBox();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnLogin = new System.Windows.Forms.Button();
+            this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
             this.gbUsername.SuspendLayout();
             this.gbPassword.SuspendLayout();
+            this.tlpMain.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // txtUsername
+            // 
+            this.txtUsername.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtUsername.Location = new System.Drawing.Point(3, 16);
+            this.txtUsername.Name = "txtUsername";
+            this.txtUsername.Size = new System.Drawing.Size(395, 20);
+            this.txtUsername.TabIndex = 0;
             // 
             // gbUsername
             // 
+            this.tlpMain.SetColumnSpan(this.gbUsername, 2);
             this.gbUsername.Controls.Add(this.txtUsername);
-            this.gbUsername.Location = new System.Drawing.Point(12, 12);
+            this.gbUsername.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gbUsername.Location = new System.Drawing.Point(6, 6);
             this.gbUsername.Name = "gbUsername";
-            this.gbUsername.Size = new System.Drawing.Size(304, 46);
+            this.gbUsername.Size = new System.Drawing.Size(401, 43);
             this.gbUsername.TabIndex = 0;
             this.gbUsername.TabStop = false;
             this.gbUsername.Text = "Username";
             // 
-            // txtUsername
+            // txtPassword
             // 
-            this.txtUsername.Location = new System.Drawing.Point(6, 19);
-            this.txtUsername.Name = "txtUsername";
-            this.txtUsername.Size = new System.Drawing.Size(288, 20);
-            this.txtUsername.TabIndex = 0;
+            this.txtPassword.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtPassword.Location = new System.Drawing.Point(3, 16);
+            this.txtPassword.Name = "txtPassword";
+            this.txtPassword.Size = new System.Drawing.Size(395, 20);
+            this.txtPassword.TabIndex = 0;
+            this.txtPassword.UseSystemPasswordChar = true;
             // 
             // gbPassword
             // 
+            this.tlpMain.SetColumnSpan(this.gbPassword, 2);
             this.gbPassword.Controls.Add(this.txtPassword);
-            this.gbPassword.Location = new System.Drawing.Point(12, 64);
+            this.gbPassword.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gbPassword.Location = new System.Drawing.Point(6, 55);
             this.gbPassword.Name = "gbPassword";
-            this.gbPassword.Size = new System.Drawing.Size(304, 46);
+            this.gbPassword.Size = new System.Drawing.Size(401, 43);
             this.gbPassword.TabIndex = 1;
             this.gbPassword.TabStop = false;
             this.gbPassword.Text = "Password";
             // 
-            // txtPassword
-            // 
-            this.txtPassword.Location = new System.Drawing.Point(6, 19);
-            this.txtPassword.Name = "txtPassword";
-            this.txtPassword.Size = new System.Drawing.Size(288, 20);
-            this.txtPassword.TabIndex = 0;
-            this.txtPassword.UseSystemPasswordChar = true;
-            // 
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(12, 116);
+            this.btnCancel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnCancel.Location = new System.Drawing.Point(6, 104);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(150, 23);
+            this.btnCancel.Size = new System.Drawing.Size(197, 24);
             this.btnCancel.TabIndex = 2;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -89,13 +98,34 @@ namespace ArcAuthentication.UI
             // 
             // btnLogin
             // 
-            this.btnLogin.Location = new System.Drawing.Point(166, 116);
+            this.btnLogin.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnLogin.Location = new System.Drawing.Point(209, 104);
             this.btnLogin.Name = "btnLogin";
-            this.btnLogin.Size = new System.Drawing.Size(150, 23);
+            this.btnLogin.Size = new System.Drawing.Size(198, 24);
             this.btnLogin.TabIndex = 3;
             this.btnLogin.Text = "Login";
             this.btnLogin.UseVisualStyleBackColor = true;
             this.btnLogin.Click += new System.EventHandler(this.BtnLogin_Click);
+            // 
+            // tlpMain
+            // 
+            this.tlpMain.ColumnCount = 2;
+            this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpMain.Controls.Add(this.gbUsername, 0, 0);
+            this.tlpMain.Controls.Add(this.btnLogin, 1, 2);
+            this.tlpMain.Controls.Add(this.gbPassword, 0, 1);
+            this.tlpMain.Controls.Add(this.btnCancel, 0, 2);
+            this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpMain.Location = new System.Drawing.Point(0, 0);
+            this.tlpMain.Name = "tlpMain";
+            this.tlpMain.Padding = new System.Windows.Forms.Padding(3);
+            this.tlpMain.RowCount = 3;
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.00001F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpMain.Size = new System.Drawing.Size(413, 134);
+            this.tlpMain.TabIndex = 4;
             // 
             // LoginForm
             // 
@@ -103,12 +133,9 @@ namespace ArcAuthentication.UI
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(330, 151);
+            this.ClientSize = new System.Drawing.Size(413, 134);
             this.ControlBox = false;
-            this.Controls.Add(this.btnLogin);
-            this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.gbPassword);
-            this.Controls.Add(this.gbUsername);
+            this.Controls.Add(this.tlpMain);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "LoginForm";
             this.ShowIcon = false;
@@ -120,17 +147,19 @@ namespace ArcAuthentication.UI
             this.gbUsername.PerformLayout();
             this.gbPassword.ResumeLayout(false);
             this.gbPassword.PerformLayout();
+            this.tlpMain.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private GroupBox gbUsername;
         private TextBox txtUsername;
-        private GroupBox gbPassword;
+        private GroupBox gbUsername;
         private TextBox txtPassword;
+        private GroupBox gbPassword;
         private Button btnCancel;
         private Button btnLogin;
+        private TableLayoutPanel tlpMain;
     }
 }

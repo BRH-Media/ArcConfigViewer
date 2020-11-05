@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace ArcAuthentication.StationHandlers
+namespace ArcAuthentication.JSON.StationHandlers
 {
     public class StationList
     {

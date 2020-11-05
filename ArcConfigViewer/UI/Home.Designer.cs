@@ -84,6 +84,7 @@ namespace ArcConfigViewer.UI
             this.menuMain.Size = new System.Drawing.Size(800, 24);
             this.menuMain.TabIndex = 1;
             this.menuMain.Text = "menuStrip1";
+            this.menuMain.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuMain_ItemClicked);
             // 
             // itmFile
             // 

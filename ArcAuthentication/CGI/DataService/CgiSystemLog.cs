@@ -2,6 +2,7 @@
 using ArcAuthentication.CGI.ScriptService.Scripts;
 using ArcAuthentication.Enums;
 using ArcAuthentication.Globals;
+using ArcAuthentication.JSON;
 using Newtonsoft.Json;
 using System;
 using System.Data;

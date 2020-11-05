@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace ArcAuthentication.StationHandlers
+namespace ArcAuthentication.JSON.StationHandlers
 {
     internal class ParseStringConverter : JsonConverter
     {

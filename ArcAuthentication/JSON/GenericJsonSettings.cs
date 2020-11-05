@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Converters;
 using System.Globalization;
 
-namespace ArcAuthentication
+namespace ArcAuthentication.JSON
 {
     internal static class GenericJsonSettings
     {
