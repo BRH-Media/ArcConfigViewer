@@ -20,7 +20,10 @@ namespace ArcAuthentication.CGI.ScriptService.Scripts
             const string serviceMessage = @"Retrieving log...";
             var serviceEndpoint = EndpointFromLogType();
             var serviceTokeniser = Endpoints.SystemLogHtm;
-            var serviceInformation = new CgiScriptServiceInfo(serviceTokeniser, serviceEndpoint, serviceMessage);
+            var serviceInformation = new CgiScriptServiceInfo(serviceTokeniser, serviceEndpoint, serviceMessage)
+            {
+                ServiceName = @"CgiSystemLogScript"
+            };
 
             //set the global service parameters
             ServiceAuthInfo = serviceInformation;

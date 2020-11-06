@@ -1,4 +1,6 @@
-﻿namespace ArcAuthentication.CGI.ScriptService
+﻿// ReSharper disable UnusedMember.Global
+
+namespace ArcAuthentication.CGI.ScriptService
 {
     /// <summary>
     /// Stores values used for simplifying the modem HTTP script fetch process
@@ -17,6 +19,12 @@
         /// NOTE: By default, if this is not set, the default is TokeniserPage.
         /// </summary>
         public string RefererPage { get; }
+
+        /// <summary>
+        /// What's this?<br />
+        /// The internal CgiScriptService name used for identification
+        /// </summary>
+        public string ServiceName { get; set; } = @"ScriptService";
 
         /// <summary>
         /// What's this?<br />

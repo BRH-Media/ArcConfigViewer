@@ -6,6 +6,8 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 
+// ReSharper disable UnusedMember.Global
+// ReSharper disable LocalizableElement
 // ReSharper disable RedundantIfElseBlock
 // ReSharper disable UnusedMember.Local
 // ReSharper disable CoVariantArrayConversion
@@ -68,8 +70,13 @@ namespace ArcAuthentication.CGI.ScriptService
                 if (waitWindow)
                     return (string)ArcWaitWindow.ArcWaitWindow.Show(GrabJS, ServiceAuthInfo.ServiceMessage);
 
+                //fetch a new httoken
                 var newToken = new ArcToken(ServiceAuthInfo.TokeniserPage);
+
+                //endpoint to call
                 var jsUri = ServiceAuthInfo.ServiceEndpoint;
+
+                //apply the httoken and related information to the endpoint
                 jsUri = newToken.TokeniseUrl(jsUri);
 
                 //apply ArcToken generated above to the global

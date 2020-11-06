@@ -1,7 +1,7 @@
-﻿// ReSharper disable CoVariantArrayConversion
-// ReSharper disable InconsistentNaming
+﻿using ArcAuthentication.Globals;
 
-using ArcAuthentication.Globals;
+// ReSharper disable CoVariantArrayConversion
+// ReSharper disable InconsistentNaming
 
 namespace ArcAuthentication.CGI.ScriptService.Scripts
 {
@@ -13,7 +13,10 @@ namespace ArcAuthentication.CGI.ScriptService.Scripts
             const string serviceMessage = @"Retrieving call log..";
             var serviceEndpoint = $@"{Endpoints.Origin}/cgi/cgi_tel_call_list.js";
             var serviceTokeniser = Endpoints.CallLogHtm;
-            var serviceInformation = new CgiScriptServiceInfo(serviceTokeniser, serviceEndpoint, serviceMessage);
+            var serviceInformation = new CgiScriptServiceInfo(serviceTokeniser, serviceEndpoint, serviceMessage)
+            {
+                ServiceName = @"CgiCallLogScript"
+            };
 
             //set the global service parameters
             ServiceAuthInfo = serviceInformation;

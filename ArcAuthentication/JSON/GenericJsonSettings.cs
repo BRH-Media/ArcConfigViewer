@@ -6,7 +6,7 @@ namespace ArcAuthentication.JSON
 {
     internal static class GenericJsonSettings
     {
-        public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
+        public static JsonSerializerSettings Settings { get; } = new JsonSerializerSettings
         {
             MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
             DateParseHandling = DateParseHandling.None,

@@ -27,7 +27,12 @@ namespace ArcAuthentication.CGI.DataService
             const string serviceMessage = @"Retrieving log...";
             var serviceEndpoint = EndpointFromLogType();
             var serviceTokeniser = Endpoints.SystemLogHtm;
-            var serviceInformation = new CgiScriptServiceInfo(serviceTokeniser, serviceEndpoint, serviceMessage);
+            var serviceInformation = new CgiScriptServiceInfo(serviceTokeniser, serviceEndpoint, serviceMessage)
+            {
+                ServiceName = @"CgiSystemLog"
+            };
+
+            //service name information
 
             //set the global service parameters
             ServiceAuthInfo = serviceInformation;
