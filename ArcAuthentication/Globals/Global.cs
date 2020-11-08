@@ -29,6 +29,11 @@ namespace ArcAuthentication.Globals
         public static HttpClient GlobalClient { get; set; } = null;
 
         /// <summary>
+        /// What's this? This is the global HttpClientHandler to simulate the same session.
+        /// </summary>
+        public static HttpClientHandler GlobalHandler { get; set; } = null;
+
+        /// <summary>
         /// What's this? This is the HTTP request timeout (milliseconds) expressed across all requests in the solution
         /// </summary>
         public static int RequestTimeout { get; set; } = 3000;

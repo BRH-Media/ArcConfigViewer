@@ -31,27 +31,27 @@
         public static string LoginHtm { get; } = $@"{Origin}/login.htm";
 
         /// <summary>
-        /// What's this? This is the client-side (HTML) index page to use as a referer.
+        /// What's this? This is the client-side (HTML) index page to use as a referrer.
         /// </summary>
         public static string IndexHtm { get; } = $@"{Origin}/index.htm";
 
         /// <summary>
-        /// What's this? This is the client-side (HTML) home page to extract a token from and use as a generic referer.
+        /// What's this? This is the client-side (HTML) home page to extract a token from and use as a generic referrer.
         /// </summary>
         public static string HomeHtm { get; } = $@"{Origin}/home.htm";
 
         /// <summary>
-        /// What's this? This is the client-side (HTML) system log page to extract a token from and use as a referer.
+        /// What's this? This is the client-side (HTML) system log page to extract a token from and use as a referrer.
         /// </summary>
         public static string SystemLogHtm { get; } = $@"{Origin}/diagnostics_logviewer.htm?m=adv";
 
         /// <summary>
-        /// What's this? This is the client-side (HTML) connected devices page to extract a token from and use as a referer.
+        /// What's this? This is the client-side (HTML) connected devices page to extract a token from and use as a referrer.
         /// </summary>
         public static string DevicesHtm { get; } = $@"{Origin}/owl_lan_device.htm?m=adv";
 
         /// <summary>
-        /// What's this? This is the client-side (HTML) configuration backup page to extract a token from and use as a referer.
+        /// What's this? This is the client-side (HTML) configuration backup page to extract a token from and use as a referrer.
         /// </summary>
         public static string BackupHtm { get; } = $@"{Origin}/sys_backup.htm?m=adv";
 

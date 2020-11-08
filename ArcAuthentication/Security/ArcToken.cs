@@ -84,11 +84,11 @@ namespace ArcAuthentication.Security
             {
                 //important information for the request
                 var t = DateTime.UtcNow.ConvertToUnixTimestamp();
-                var referer = $@"{Endpoints.Origin}/logout.htm?t={t}&m=";
+                var referrer = $@"{Endpoints.Origin}/logout.htm?t={t}&m=";
                 var logout = $@"{Endpoints.Origin}/logout.cgi";
 
                 //download logout.htm for the access token
-                var logoutToken = new ArcToken(referer);
+                var logoutToken = new ArcToken(referrer);
 
                 if (!string.IsNullOrEmpty(logoutToken.Token))
                 {
@@ -126,7 +126,7 @@ namespace ArcAuthentication.Security
                     request.Headers.TryAddWithoutValidation(@"Upgrade-Insecure-Requests", @"1");
                     request.Headers.TryAddWithoutValidation(@"Cookie", @"disableLogout=0");
                     request.Headers.TryAddWithoutValidation(@"User-Agent", Global.UserAgent);
-                    request.Headers.TryAddWithoutValidation(@"Referer", referer);
+                    request.Headers.TryAddWithoutValidation(@"Referrer", referrer);
                     request.Headers.TryAddWithoutValidation(@"Host", Endpoints.GatewayAddress);
                     request.Headers.TryAddWithoutValidation(@"Origin", Endpoints.Origin);
 

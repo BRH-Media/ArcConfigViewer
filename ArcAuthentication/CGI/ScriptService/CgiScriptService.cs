@@ -83,7 +83,7 @@ namespace ArcAuthentication.CGI.ScriptService
                 AuthenticationToken = newToken;
 
                 //download result from modem
-                var jsResult = ResourceGrab.GrabString(jsUri, ServiceAuthInfo.RefererPage);
+                var jsResult = ResourceGrab.GrabString(jsUri, ServiceAuthInfo.ReferrerPage);
 
                 //ensure checks for this are made to avoid invalid content
                 const string notFoundMsg = @"The requested page was not found on this server.";

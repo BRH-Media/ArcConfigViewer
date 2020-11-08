@@ -129,79 +129,79 @@ namespace ArcAuthentication.Security
                 //this will trigger a secondary request
                 var arcToken = new ArcToken();
 
-                //authentication credentials (they get hashed when loaded into the Credential object)
-                var unEncoded = auth?.Username;
-                var pwEncoded = auth?.Password;
-
-                //data to send alongside request
-                var requestBody =
-                    new FormUrlEncodedContent(
-                        new Dictionary<string, string>
-                        {
-                            {@"httoken", arcToken.Token},
-                            {@"usr", unEncoded},
-                            {@"pws", pwEncoded}
-                        });
-
-                //session handler for cookies
-                var cookies = new CookieContainer();
-
-                //request handlers
-                var handler = new HttpClientHandler();
-                var client = new HttpClient(handler);
-
-                //set global client
-                Global.GlobalClient = client;
-
-                //current timeout
-                var timeout = Global.GlobalClient.Timeout.TotalMilliseconds;
-
-                //apply global timeout
-                if (timeout < 1)
-                    Global.GlobalClient.Timeout = TimeSpan.FromMilliseconds(Global.RequestTimeout);
-
-                //add request credentials
-                var request = new HttpRequestMessage(new HttpMethod(@"POST"), Endpoints.LoginCgi)
+                //verify authentication token
+                if (!string.IsNullOrWhiteSpace(arcToken.Token))
                 {
-                    Content = requestBody
-                };
+                    //authentication credentials (they get hashed when loaded into the Credential object)
+                    var unEncoded = auth?.Username;
+                    var pwEncoded = auth?.Password;
 
-                //create the needed headers
-                request.Headers.TryAddWithoutValidation(@"Accept",
-                    @"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
-                request.Headers.TryAddWithoutValidation(@"Accept-Language", @"en-US,en;q=0.5");
-                request.Headers.TryAddWithoutValidation(@"Connection", @"keep-alive");
-                request.Headers.TryAddWithoutValidation(@"Upgrade-Insecure-Requests", @"1");
-                request.Headers.TryAddWithoutValidation(@"Cookie", @"disableLogout=0");
-                request.Headers.TryAddWithoutValidation(@"User-Agent", Global.UserAgent);
-                request.Headers.TryAddWithoutValidation(@"Referer", Endpoints.LoginHtm);
-                request.Headers.TryAddWithoutValidation(@"Host", Endpoints.GatewayAddress);
-                request.Headers.TryAddWithoutValidation(@"Origin", Endpoints.Origin);
+                    //data to send alongside request
+                    var requestBody =
+                        new FormUrlEncodedContent(
+                            new Dictionary<string, string>
+                            {
+                                { @"httoken", arcToken.Token },
+                                { @"usr", unEncoded },
+                                { @"pws", pwEncoded }
+                            });
 
-                //apply cookie container
-                handler.CookieContainer = cookies;
+                    //request handler
+                    Global.GlobalHandler ??= new HttpClientHandler
+                    {
+                        AutomaticDecompression = ~DecompressionMethods.None,
+                        AllowAutoRedirect = true,
+                        CookieContainer = new CookieContainer()
+                    };
 
-                //receive and format response
-                var response = client.SendAsync(request).Result;
-                var body = response.Content.ReadAsByteArrayAsync().Result;
-                var reply = Encoding.ASCII.GetString(body);
+                    //request client
+                    Global.GlobalClient ??= new HttpClient(Global.GlobalHandler)
+                    {
+                        Timeout = TimeSpan.FromMilliseconds(Global.RequestTimeout)
+                    };
 
-                //validation
-                if (string.IsNullOrEmpty(reply)) return false;
-                if (!reply.Contains(@"home.htm")) return false;
+                    //add request credentials
+                    var request = new HttpRequestMessage(new HttpMethod(@"POST"), Endpoints.LoginCgi)
+                    {
+                        Content = requestBody
+                    };
 
-                //download home page
-                var homeGrab = ResourceGrab.GrabString(Endpoints.HomeHtm, Endpoints.IndexHtm);
+                    //create the needed headers
+                    request.Headers.TryAddWithoutValidation(@"Accept",
+                        @"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+                    request.Headers.TryAddWithoutValidation(@"Accept-Language", @"en-US,en;q=0.5");
+                    request.Headers.TryAddWithoutValidation(@"Connection", @"keep-alive");
+                    request.Headers.TryAddWithoutValidation(@"Upgrade-Insecure-Requests", @"1");
+                    request.Headers.TryAddWithoutValidation(@"Cookie", @"disableLogout=0");
+                    request.Headers.TryAddWithoutValidation(@"User-Agent", Global.UserAgent);
+                    request.Headers.TryAddWithoutValidation(@"Referer", Endpoints.LoginHtm);
+                    request.Headers.TryAddWithoutValidation(@"Host", Endpoints.GatewayAddress);
+                    request.Headers.TryAddWithoutValidation(@"Origin", Endpoints.Origin);
 
-                //make sure we didn't get redirected to the login page
-                var success = !homeGrab.Contains(@"Telstra Login") && !homeGrab.Contains(@"login.htm");
+                    //receive and format response
+                    var response = Global.GlobalClient.SendAsync(request).Result;
+                    var body = response.Content.ReadAsByteArrayAsync().Result;
+                    var reply = Encoding.ASCII.GetString(body);
 
-                //apply global token if successful
-                if (success)
-                    Global.InitToken = arcToken;
+                    //validation
+                    if (string.IsNullOrEmpty(reply)) return false;
+                    if (!reply.Contains(@"home.htm")) return false;
 
-                //report status
-                return success;
+                    //download home page
+                    var homeGrab = ResourceGrab.GrabString(Endpoints.HomeHtm, Endpoints.IndexHtm);
+
+                    //make sure we didn't get redirected to the login page
+                    var success = !homeGrab.Contains(@"Telstra Login") && !homeGrab.Contains(@"login.htm");
+
+                    //apply global token if successful
+                    if (success)
+                        Global.InitToken = arcToken;
+
+                    //report status
+                    return success;
+                }
+                else
+                    UiMessages.Warning(@"Authentication error; CSRF token was invalid.");
             }
             catch (Exception ex)
             {

@@ -820,8 +820,26 @@ namespace ArcConfigViewer.UI
             UiMessages.Error(@"Telnet exploit functionality is yet to be added. This is an undisclosed vulnerability that I'd rather not risk at this point; the recent firmware patched it partially.");
         }
 
-        private void menuMain_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        private void MenuMain_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
+        }
+
+        private void ItmJsonScript_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //test authentication
+                var success = ArcLogin.IsAuthenticated();
+
+                if (success)
+                    ScriptExecute.ShowScriptExecute();
+                else
+                    UiMessages.Warning(@"Authentication required; please authenticate first.");
+            }
+            catch (Exception ex)
+            {
+                UiMessages.Error(ex.ToString());
+            }
         }
     }
 }

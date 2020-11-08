@@ -11,14 +11,14 @@ namespace ArcAuthentication.CGI.ScriptService
         /// What's this?<br />
         /// The HTML page that is to be downloaded and its token extracted
         /// </summary>
-        public string TokeniserPage { get; }
+        public string TokeniserPage { get; set; }
 
         /// <summary>
         /// What's this<br />
-        /// The HTML referer page that the script expects.<br />
+        /// The HTML referrer page that the script expects.<br />
         /// NOTE: By default, if this is not set, the default is TokeniserPage.
         /// </summary>
-        public string RefererPage { get; }
+        public string ReferrerPage { get; set; }
 
         /// <summary>
         /// What's this?<br />
@@ -30,28 +30,33 @@ namespace ArcAuthentication.CGI.ScriptService
         /// What's this?<br />
         /// This stores the script endpoint (e.g. ~/cgi_init.js) to contact; this should also be a FULL URI (not just the directory).
         /// </summary>
-        public string ServiceEndpoint { get; }
+        public string ServiceEndpoint { get; set; }
 
         /// <summary>
         /// What's this?<br />
         /// This stores the wait window message to display to the user while fetching
         /// </summary>
-        public string ServiceMessage { get; }
+        public string ServiceMessage { get; set; }
+
+        public CgiScriptServiceInfo()
+        {
+            //default constructor
+        }
 
         public CgiScriptServiceInfo(string tokeniserPage, string serviceEndpoint,
             string serviceMessage = @"Retrieving modem information...")
         {
             TokeniserPage = tokeniserPage;
-            RefererPage = tokeniserPage;
+            ReferrerPage = tokeniserPage;
             ServiceEndpoint = serviceEndpoint;
             ServiceMessage = serviceMessage;
         }
 
-        public CgiScriptServiceInfo(string tokeniserPage, string refererPage,
+        public CgiScriptServiceInfo(string tokeniserPage, string referrerPage,
             string serviceEndpoint, string serviceMessage = @"Retrieving modem information...")
         {
             TokeniserPage = tokeniserPage;
-            RefererPage = refererPage;
+            ReferrerPage = referrerPage;
             ServiceEndpoint = serviceEndpoint;
             ServiceMessage = serviceMessage;
         }

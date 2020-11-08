@@ -1,6 +1,8 @@
 ﻿using ArcAuthentication.CGI.ScriptService;
 using ArcAuthentication.JSON;
+using ArcProcessor;
 using Newtonsoft.Json;
+using System;
 using System.IO;
 using System.Text;
 
@@ -115,9 +117,9 @@ namespace ArcAuthentication.CGI.FileLoaderService
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                //nothing
+                UiMessages.Error(ex.ToString());
             }
 
             //default
@@ -156,9 +158,9 @@ namespace ArcAuthentication.CGI.FileLoaderService
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                //exception
+                UiMessages.Error(ex.ToString());
             }
 
             //default
@@ -187,9 +189,9 @@ namespace ArcAuthentication.CGI.FileLoaderService
                         return jsonString;
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                //nothing
+                UiMessages.Error(ex.ToString());
             }
 
             //default
@@ -218,9 +220,9 @@ namespace ArcAuthentication.CGI.FileLoaderService
                         return jsonObject;
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                //nothing
+                UiMessages.Error(ex.ToString());
             }
 
             //default

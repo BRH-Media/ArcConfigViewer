@@ -65,6 +65,7 @@ namespace ArcConfigViewer.UI
             this.txtMain = new System.Windows.Forms.RichTextBox();
             this.dgvMain = new System.Windows.Forms.DataGridView();
             this.sfdExport = new System.Windows.Forms.SaveFileDialog();
+            this.itmJsonScript = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMain.SuspendLayout();
             this.tlpMain.SuspendLayout();
             this.pnlMain.SuspendLayout();
@@ -84,7 +85,7 @@ namespace ArcConfigViewer.UI
             this.menuMain.Size = new System.Drawing.Size(800, 24);
             this.menuMain.TabIndex = 1;
             this.menuMain.Text = "menuStrip1";
-            this.menuMain.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuMain_ItemClicked);
+            this.menuMain.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.MenuMain_ItemClicked);
             // 
             // itmFile
             // 
@@ -129,7 +130,7 @@ namespace ArcConfigViewer.UI
             this.itmTryDefault,
             this.itmAuthenticateRevoke});
             this.itmAuthentication.Name = "itmAuthentication";
-            this.itmAuthentication.Size = new System.Drawing.Size(164, 22);
+            this.itmAuthentication.Size = new System.Drawing.Size(180, 22);
             this.itmAuthentication.Text = "Authentication";
             // 
             // itmAuthenticateGrant
@@ -160,9 +161,10 @@ namespace ArcConfigViewer.UI
             this.itmFetchConnectedDevicesList,
             this.itmFetchFromModem,
             this.itmFetchCallLog,
-            this.itmFetchSystemLogs});
+            this.itmFetchSystemLogs,
+            this.itmJsonScript});
             this.itmOperation.Name = "itmOperation";
-            this.itmOperation.Size = new System.Drawing.Size(164, 22);
+            this.itmOperation.Size = new System.Drawing.Size(180, 22);
             this.itmOperation.Text = "Operation";
             // 
             // itmFetchConnectedDevicesList
@@ -196,7 +198,7 @@ namespace ArcConfigViewer.UI
             // itmFirmwareVersion
             // 
             this.itmFirmwareVersion.Name = "itmFirmwareVersion";
-            this.itmFirmwareVersion.Size = new System.Drawing.Size(164, 22);
+            this.itmFirmwareVersion.Size = new System.Drawing.Size(180, 22);
             this.itmFirmwareVersion.Text = "Firmware Version";
             this.itmFirmwareVersion.Click += new System.EventHandler(this.ItmFirmwareVersion_Click);
             // 
@@ -205,7 +207,7 @@ namespace ArcConfigViewer.UI
             this.itmExploits.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.itmExploitTelnet});
             this.itmExploits.Name = "itmExploits";
-            this.itmExploits.Size = new System.Drawing.Size(164, 22);
+            this.itmExploits.Size = new System.Drawing.Size(180, 22);
             this.itmExploits.Text = "Exploits";
             this.itmExploits.Click += new System.EventHandler(this.ItmExploits_Click);
             // 
@@ -386,6 +388,13 @@ namespace ArcConfigViewer.UI
             // 
             this.sfdExport.Title = "Export Configuration";
             // 
+            // itmJsonScript
+            // 
+            this.itmJsonScript.Name = "itmJsonScript";
+            this.itmJsonScript.Size = new System.Drawing.Size(228, 22);
+            this.itmJsonScript.Text = "JSON Script";
+            this.itmJsonScript.Click += new System.EventHandler(this.ItmJsonScript_Click);
+            // 
             // Home
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -445,6 +454,7 @@ namespace ArcConfigViewer.UI
         private ToolStripMenuItem itmOperation;
         private ToolStripMenuItem itmExploitTelnet;
         private ToolStripMenuItem itmFirmwareVersion;
+        private ToolStripMenuItem itmJsonScript;
     }
 }
 
