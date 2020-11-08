@@ -6,6 +6,7 @@ using System.Data;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
+// ReSharper disable LocalizableElement
 // ReSharper disable CoVariantArrayConversion
 // ReSharper disable InconsistentNaming
 

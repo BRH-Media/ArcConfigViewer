@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 
 // ReSharper disable InvertIf
 // ReSharper disable LocalizableElement
@@ -147,15 +146,15 @@ namespace ArcAuthentication.Security
                             });
 
                     //request handler
-                    Global.GlobalHandler ??= new HttpClientHandler
+                    Global.GlobalHandler = new HttpClientHandler
                     {
                         AutomaticDecompression = ~DecompressionMethods.None,
-                        AllowAutoRedirect = true,
+                        AllowAutoRedirect = false,
                         CookieContainer = new CookieContainer()
                     };
 
                     //request client
-                    Global.GlobalClient ??= new HttpClient(Global.GlobalHandler)
+                    Global.GlobalClient = new HttpClient(Global.GlobalHandler)
                     {
                         Timeout = TimeSpan.FromMilliseconds(Global.RequestTimeout)
                     };
@@ -180,12 +179,14 @@ namespace ArcAuthentication.Security
 
                     //receive and format response
                     var response = Global.GlobalClient.SendAsync(request).Result;
-                    var body = response.Content.ReadAsByteArrayAsync().Result;
-                    var reply = Encoding.ASCII.GetString(body);
+                    var locationHeader =
+                        response.Headers.Location != null
+                            ? response.Headers.Location.ToString()
+                            : @"";
 
                     //validation
-                    if (string.IsNullOrEmpty(reply)) return false;
-                    if (!reply.Contains(@"home.htm")) return false;
+                    if (string.IsNullOrEmpty(locationHeader)) return false;
+                    if (locationHeader != @"/index.htm") return false;
 
                     //download home page
                     var homeGrab = ResourceGrab.GrabString(Endpoints.HomeHtm, Endpoints.IndexHtm);

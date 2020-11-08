@@ -20,7 +20,7 @@ namespace ArcAuthentication.Net
         public static byte[] GrabBytes(string uri, string referrer = @"", string method = @"GET")
         {
             //request handler
-            Global.GlobalHandler ??= new HttpClientHandler
+            Global.GlobalHandler = new HttpClientHandler
             {
                 AutomaticDecompression = ~DecompressionMethods.None,
                 AllowAutoRedirect = true,
@@ -28,7 +28,7 @@ namespace ArcAuthentication.Net
             };
 
             //request client
-            Global.GlobalClient ??= new HttpClient(Global.GlobalHandler)
+            Global.GlobalClient = new HttpClient(Global.GlobalHandler)
             {
                 Timeout = TimeSpan.FromMilliseconds(Global.RequestTimeout)
             };
