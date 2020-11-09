@@ -1,6 +1,7 @@
 ﻿using ArcAuthentication.CGI.FileLoaderService;
 using ArcAuthentication.CGI.ScriptService;
 using ArcProcessor;
+using ColorCode;
 using System;
 using System.Windows.Forms;
 
@@ -63,27 +64,99 @@ namespace ArcAuthentication.UI
             }
         }
 
+        private void AllTextReadOnly(bool readOnly)
+        {
+            foreach (var c in gbValues.Controls)
+            {
+                //only TextBoxes apply in this loop
+                if (c.GetType() != typeof(TextBox)) continue;
+
+                //apply TextBox properties to the control
+                var recast = (TextBox)c;
+
+                //apply readonly status
+                if (InvokeRequired)
+                {
+                    //thread-safe
+                    BeginInvoke((MethodInvoker)delegate
+                    {
+                        recast.ReadOnly = readOnly;
+                    });
+                }
+                else
+                    recast.ReadOnly = readOnly;
+            }
+        }
+
+        private void ScriptServiceRefresh()
+        {
+            //Service Endpoint URI
+            if (!string.IsNullOrWhiteSpace(txtServiceEndpoint.Text))
+                if (Uri.IsWellFormedUriString(txtServiceEndpoint.Text, UriKind.Absolute))
+                    ScriptService.ServiceAuthInfo.ServiceEndpoint = txtServiceEndpoint.Text;
+
+            //Service Tokeniser Endpoint URI
+            if (!string.IsNullOrWhiteSpace(txtTokeniserEndpoint.Text))
+                if (Uri.IsWellFormedUriString(txtTokeniserEndpoint.Text, UriKind.Absolute))
+                    ScriptService.ServiceAuthInfo.TokeniserPage = txtTokeniserEndpoint.Text;
+
+            //Service Referrer URI
+            if (!string.IsNullOrWhiteSpace(txtReferrer.Text))
+                if (Uri.IsWellFormedUriString(txtReferrer.Text, UriKind.Absolute))
+                    ScriptService.ServiceAuthInfo.ReferrerPage = txtReferrer.Text;
+
+            //Service Name
+            if (!string.IsNullOrWhiteSpace(txtServiceName.Text))
+                ScriptService.ServiceAuthInfo.ServiceName = txtServiceName.Text;
+
+            //Service Message
+            if (!string.IsNullOrWhiteSpace(txtServiceMessage.Text))
+                ScriptService.ServiceAuthInfo.ServiceMessage = txtServiceMessage.Text;
+        }
+
         private void DoScriptFetch()
         {
             try
             {
+                //UI set
+                AllTextReadOnly(true);
+
                 //validation
                 if (FetchEnabled && ScriptService != null)
                 {
+                    //script service refresh updates the values according to valid text entries
+                    ScriptServiceRefresh();
+
                     //attempt script grab
                     var script = ScriptService.GrabJS();
 
                     //validation
                     if (!string.IsNullOrWhiteSpace(script))
                     {
+                        //colourise source
+                        var colorizedSourceCode = new CodeColorizer().Colorize(script, Languages.JavaScript);
+
+                        //HTML constructor
+                        var html = "<html>" +
+                                   "<head>" +
+                                   "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=10\">" +
+                                   "</head>" +
+                                   "<body>" +
+                                   $"{colorizedSourceCode}" +
+                                   "</body>" +
+                                   "</html>";
+
                         //display the script in the TextBox
-                        txtScriptResult.Text = script;
+                        browserMain.DocumentText = html;
                     }
                     else
                         UiMessages.Error(@"Couldn't load the received script because it was null or empty");
                 }
                 else
                     UiMessages.Error(@"Fetch failed because the application was not in the correct state");
+
+                //UI set
+                AllTextReadOnly(false);
             }
             catch (Exception ex)
             {
@@ -95,6 +168,9 @@ namespace ArcAuthentication.UI
         {
             try
             {
+                //UI set
+                AllTextReadOnly(true);
+
                 //show open file dialog to locate a JSON file
                 var jsonFile = FindJson();
 
@@ -112,7 +188,7 @@ namespace ArcAuthentication.UI
                         FillValues(jsonObject);
 
                         //clear script box
-                        txtScriptResult.Clear();
+                        browserMain.DocumentText = @"";
 
                         //unlock fetch button
                         btnFetchScript.Enabled = true;
@@ -127,6 +203,9 @@ namespace ArcAuthentication.UI
                     else
                         UiMessages.Error(@"Deserialisation failed; service information was null");
                 }
+
+                //UI set
+                AllTextReadOnly(false);
             }
             catch (Exception ex)
             {
@@ -146,6 +225,8 @@ namespace ArcAuthentication.UI
 
         private void ScriptExecute_Load(object sender, EventArgs e)
         {
+            //all TextBoxes to ReadOnly until a script is loaded
+            AllTextReadOnly(true);
         }
     }
 }

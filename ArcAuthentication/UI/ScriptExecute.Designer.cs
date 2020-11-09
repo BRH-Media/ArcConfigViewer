@@ -30,7 +30,6 @@
         {
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
             this.gbScriptResult = new System.Windows.Forms.GroupBox();
-            this.txtScriptResult = new System.Windows.Forms.RichTextBox();
             this.gbValues = new System.Windows.Forms.GroupBox();
             this.lblServiceMessage = new System.Windows.Forms.Label();
             this.lblReferrer = new System.Windows.Forms.Label();
@@ -46,6 +45,7 @@
             this.btnFetchScript = new System.Windows.Forms.Button();
             this.btnLoadJSON = new System.Windows.Forms.Button();
             this.ofdLoadJSON = new System.Windows.Forms.OpenFileDialog();
+            this.browserMain = new System.Windows.Forms.WebBrowser();
             this.tlpMain.SuspendLayout();
             this.gbScriptResult.SuspendLayout();
             this.gbValues.SuspendLayout();
@@ -71,7 +71,7 @@
             // 
             // gbScriptResult
             // 
-            this.gbScriptResult.Controls.Add(this.txtScriptResult);
+            this.gbScriptResult.Controls.Add(this.browserMain);
             this.gbScriptResult.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gbScriptResult.Location = new System.Drawing.Point(230, 3);
             this.gbScriptResult.Name = "gbScriptResult";
@@ -80,18 +80,6 @@
             this.gbScriptResult.TabIndex = 1;
             this.gbScriptResult.TabStop = false;
             this.gbScriptResult.Text = "Script Result";
-            // 
-            // txtScriptResult
-            // 
-            this.txtScriptResult.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtScriptResult.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtScriptResult.Location = new System.Drawing.Point(3, 16);
-            this.txtScriptResult.Name = "txtScriptResult";
-            this.txtScriptResult.ReadOnly = true;
-            this.txtScriptResult.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.txtScriptResult.Size = new System.Drawing.Size(561, 425);
-            this.txtScriptResult.TabIndex = 0;
-            this.txtScriptResult.Text = "";
             // 
             // gbValues
             // 
@@ -105,9 +93,10 @@
             this.gbValues.Controls.Add(this.txtServiceEndpoint);
             this.gbValues.Controls.Add(this.txtTokeniserEndpoint);
             this.gbValues.Controls.Add(this.txtServiceName);
+            this.gbValues.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gbValues.Location = new System.Drawing.Point(3, 86);
             this.gbValues.Name = "gbValues";
-            this.gbValues.Size = new System.Drawing.Size(221, 230);
+            this.gbValues.Size = new System.Drawing.Size(221, 361);
             this.gbValues.TabIndex = 0;
             this.gbValues.TabStop = false;
             this.gbValues.Text = "Values";
@@ -161,7 +150,6 @@
             // 
             this.txtServiceMessage.Location = new System.Drawing.Point(9, 200);
             this.txtServiceMessage.Name = "txtServiceMessage";
-            this.txtServiceMessage.ReadOnly = true;
             this.txtServiceMessage.Size = new System.Drawing.Size(206, 20);
             this.txtServiceMessage.TabIndex = 4;
             this.txtServiceMessage.Text = "<Message>";
@@ -170,7 +158,6 @@
             // 
             this.txtReferrer.Location = new System.Drawing.Point(9, 158);
             this.txtReferrer.Name = "txtReferrer";
-            this.txtReferrer.ReadOnly = true;
             this.txtReferrer.Size = new System.Drawing.Size(206, 20);
             this.txtReferrer.TabIndex = 3;
             this.txtReferrer.Text = "<Referrer>";
@@ -179,7 +166,6 @@
             // 
             this.txtServiceEndpoint.Location = new System.Drawing.Point(9, 116);
             this.txtServiceEndpoint.Name = "txtServiceEndpoint";
-            this.txtServiceEndpoint.ReadOnly = true;
             this.txtServiceEndpoint.Size = new System.Drawing.Size(206, 20);
             this.txtServiceEndpoint.TabIndex = 2;
             this.txtServiceEndpoint.Text = "<ServiceEndpoint>";
@@ -188,7 +174,6 @@
             // 
             this.txtTokeniserEndpoint.Location = new System.Drawing.Point(9, 74);
             this.txtTokeniserEndpoint.Name = "txtTokeniserEndpoint";
-            this.txtTokeniserEndpoint.ReadOnly = true;
             this.txtTokeniserEndpoint.Size = new System.Drawing.Size(206, 20);
             this.txtTokeniserEndpoint.TabIndex = 1;
             this.txtTokeniserEndpoint.Text = "<TokenEndpoint>";
@@ -197,7 +182,6 @@
             // 
             this.txtServiceName.Location = new System.Drawing.Point(9, 32);
             this.txtServiceName.Name = "txtServiceName";
-            this.txtServiceName.ReadOnly = true;
             this.txtServiceName.Size = new System.Drawing.Size(206, 20);
             this.txtServiceName.TabIndex = 0;
             this.txtServiceName.Text = "<ServiceName>";
@@ -240,6 +224,15 @@
             this.ofdLoadJSON.Filter = "JSON Files|*.json";
             this.ofdLoadJSON.Title = "Load JSON";
             // 
+            // browserMain
+            // 
+            this.browserMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.browserMain.Location = new System.Drawing.Point(3, 16);
+            this.browserMain.MinimumSize = new System.Drawing.Size(20, 20);
+            this.browserMain.Name = "browserMain";
+            this.browserMain.Size = new System.Drawing.Size(561, 425);
+            this.browserMain.TabIndex = 0;
+            // 
             // ScriptExecute
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -266,7 +259,6 @@
         private System.Windows.Forms.TableLayoutPanel tlpMain;
         private System.Windows.Forms.GroupBox gbValues;
         private System.Windows.Forms.GroupBox gbScriptResult;
-        private System.Windows.Forms.RichTextBox txtScriptResult;
         private System.Windows.Forms.TextBox txtServiceName;
         private System.Windows.Forms.TextBox txtTokeniserEndpoint;
         private System.Windows.Forms.TextBox txtServiceEndpoint;
@@ -281,5 +273,6 @@
         private System.Windows.Forms.Button btnLoadJSON;
         private System.Windows.Forms.Button btnFetchScript;
         private System.Windows.Forms.OpenFileDialog ofdLoadJSON;
+        private System.Windows.Forms.WebBrowser browserMain;
     }
 }
