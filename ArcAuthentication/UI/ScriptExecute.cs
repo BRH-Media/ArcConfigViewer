@@ -3,6 +3,7 @@ using ArcAuthentication.CGI.ScriptService;
 using ArcProcessor;
 using ColorCode;
 using System;
+using System.IO;
 using System.Windows.Forms;
 
 // ReSharper disable RedundantDefaultMemberInitializer
@@ -133,21 +134,30 @@ namespace ArcAuthentication.UI
                     //validation
                     if (!string.IsNullOrWhiteSpace(script))
                     {
-                        //colourise source
-                        var colorizedSourceCode = new CodeColorizer().Colorize(script, Languages.JavaScript);
+                        //attempt language identification
+                        var lang = LanguageFromEndpoint(ScriptService.ServiceAuthInfo.ServiceEndpoint);
 
-                        //HTML constructor
-                        var html = "<html>" +
-                                   "<head>" +
-                                   "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=10\">" +
-                                   "</head>" +
-                                   "<body>" +
-                                   $"{colorizedSourceCode}" +
-                                   "</body>" +
-                                   "</html>";
+                        //validation
+                        if (lang != null)
+                        {
+                            //colourise source
+                            var colorizedSourceCode = new CodeColorizer().Colorize(script, Languages.JavaScript);
 
-                        //display the script in the TextBox
-                        browserMain.DocumentText = html;
+                            //HTML constructor
+                            var html = "<html>" +
+                                       "<head>" +
+                                       "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=10\">" +
+                                       "</head>" +
+                                       "<body>" +
+                                       $"{colorizedSourceCode}" +
+                                       "</body>" +
+                                       "</html>";
+
+                            //display the script in the TextBox
+                            browserMain.DocumentText = html;
+                        }
+                        else
+                            UiMessages.Error(@"Language ID error; language colourisation object was null");
                     }
                     else
                         UiMessages.Error(@"Couldn't load the received script because it was null or empty");
@@ -227,6 +237,108 @@ namespace ArcAuthentication.UI
         {
             //all TextBoxes to ReadOnly until a script is loaded
             AllTextReadOnly(true);
+        }
+
+        private static string FileNameFromUri(string uri)
+        {
+            //validation
+            if (!string.IsNullOrWhiteSpace(uri))
+            {
+                //load URI into the proper handler
+                var handler = new Uri(uri);
+
+                //verify URI
+                if (handler.IsFile)
+                {
+                    //parse out the file name from the URI
+                    var fileName = Path.GetFileName(handler.LocalPath);
+
+                    //return parsed file name
+                    return fileName;
+                }
+            }
+
+            //default
+            return @"";
+        }
+
+        private ILanguage LanguageFromEndpoint(string endpoint)
+        {
+            try
+            {
+                //validation
+                if (!string.IsNullOrWhiteSpace(endpoint))
+                {
+                    //file name from URI
+                    var fileName = FileNameFromUri(endpoint);
+
+                    //validation
+                    if (!string.IsNullOrWhiteSpace(fileName))
+                    {
+                        //parse out just the file extension
+                        var ext = Path.GetExtension(fileName);
+
+                        //validation
+                        if (!string.IsNullOrWhiteSpace(ext))
+                        {
+                            //switch through and attempt to parse out the language
+                            switch (ext)
+                            {
+                                //JavaScript
+                                case @".js":
+                                    return Languages.JavaScript;
+
+                                //C#
+                                case @".cs":
+                                    return Languages.CSharp;
+
+                                //HTML
+                                case @".cgi":
+                                case @".htm":
+                                case @".html":
+                                    return Languages.Html;
+
+                                //CSS
+                                case @".css":
+                                    return Languages.Css;
+
+                                //PHP
+                                case @".php":
+                                    return Languages.Php;
+
+                                //C++
+                                case @".cc":
+                                case @".cxx":
+                                case @".h":
+                                case @".c":
+                                case @".cpp":
+                                    return Languages.Cpp;
+
+                                //Java
+                                case @".java":
+                                    return Languages.Java;
+
+                                //PowerShell
+                                case @".psd1":
+                                case @".psm1":
+                                case @".ps1":
+                                    return Languages.PowerShell;
+
+                                //XML
+                                case @".xml":
+                                    return Languages.Xml;
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                //nothing
+            }
+
+            //default
+            return null;
         }
     }
 }

@@ -5,8 +5,11 @@ using ArcProcessor;
 using ArcWaitWindow;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 
 // ReSharper disable InvertIf
 // ReSharper disable LocalizableElement
@@ -74,7 +77,7 @@ namespace ArcAuthentication.Security
                 var dummyAuth = new ArcCredential(@"", @"");
 
                 //attempt dummy login if the session token is empty
-                return Global.InitToken != null || DoLogin(dummyAuth, false, warningMode);
+                return Global.InitToken != null || DoLogin(dummyAuth, false, warningMode, true);
             }
             catch (Exception ex)
             {
@@ -109,17 +112,37 @@ namespace ArcAuthentication.Security
             }
         }
 
+        private static NameValueCollection ParametersFromUrl(string url)
+        {
+            try
+            {
+                var queryString = url.Substring(url.IndexOf('?')).Split('#')[0];
+                var queryDictionary = HttpUtility.ParseQueryString(queryString);
+
+                //return result
+                return queryDictionary;
+            }
+            catch
+            {
+                //nothing
+            }
+
+            //default
+            return null;
+        }
+
         /// <summary>
         /// Perform a new CGI login request which will emulate a user logging into the web portal
         /// </summary>
         /// <param name="auth"></param>
         /// <param name="waitWindow"></param>
         /// <param name="warningMode"></param>
+        /// <param name="silent"></param>
         /// <returns></returns>
-        public static bool DoLogin(ArcCredential auth = null, bool waitWindow = true, bool warningMode = false)
+        public static bool DoLogin(ArcCredential auth = null, bool waitWindow = true, bool warningMode = false, bool silent = false)
         {
             //waitwindow activation
-            if (waitWindow)
+            if (waitWindow && !silent)
                 //offloads to another thread and returns the result once it's done
                 return (bool)ArcWaitWindow.ArcWaitWindow.Show(DoLogin, @"Authenticating...", auth, warningMode);
 
@@ -184,33 +207,78 @@ namespace ArcAuthentication.Security
                             ? response.Headers.Location.ToString()
                             : @"";
 
-                    //validation
-                    if (string.IsNullOrEmpty(locationHeader)) return false;
-                    if (locationHeader != @"/index.htm") return false;
+                    //null validation
+                    if (string.IsNullOrWhiteSpace(locationHeader)) return false;
 
-                    //download home page
-                    var homeGrab = ResourceGrab.GrabString(Endpoints.HomeHtm, Endpoints.IndexHtm);
+                    //header return page validation
+                    if (locationHeader.StartsWith(@"/login.htm"))
+                    {
+                        //figure out what the error code was
+                        var parameters = ParametersFromUrl(locationHeader);
 
-                    //make sure we didn't get redirected to the login page
-                    var success = !homeGrab.Contains(@"Telstra Login") && !homeGrab.Contains(@"login.htm");
+                        //null validation
+                        if (parameters != null)
+                        {
+                            //convert NameValueCollection to generic IDictionary
+                            var dict = parameters.AllKeys.ToDictionary(t => t, t => parameters[t]);
 
-                    //apply global token if successful
-                    if (success)
-                        Global.InitToken = arcToken;
+                            //verify if the 'err' (error code) parameter exists
+                            if (dict.ContainsKey(@"err"))
+                            {
+                                //parse out error code
+                                var err = dict[@"err"];
 
-                    //report status
-                    return success;
+                                //ensure we can display error messages
+                                if (!silent)
+                                    //figure out what error message to display via a switch-case
+                                    switch (err)
+                                    {
+                                        case @"4":
+                                            UiMessages.Error("Modem login error:\n\nYou are not allowed to login device's GUI now,\nsince the user number had reached its limit.");
+                                            break;
+
+                                        case @"3":
+                                            UiMessages.Error("Modem login error:\n\nYour session has timed out or login status has changed.\nPlease sign in again.");
+                                            break;
+
+                                        case @"2":
+                                            UiMessages.Error("Modem login error:\n\nAnother user has already login.");
+                                            break;
+
+                                        case @"1":
+                                            UiMessages.Error("Modem login error:\n\nInvalid Username/Password.");
+                                            break;
+                                    }
+                            }
+                        }
+                    }
+                    else if (locationHeader == @"/index.htm")
+                    {
+                        //download home page
+                        var homeGrab = ResourceGrab.GrabString(Endpoints.HomeHtm, Endpoints.IndexHtm);
+
+                        //make sure we didn't get redirected to the login page
+                        var success = !homeGrab.Contains(@"Telstra Login") && !homeGrab.Contains(@"login.htm");
+
+                        //apply global token if successful
+                        if (success)
+                            Global.InitToken = arcToken;
+
+                        //report status
+                        return success;
+                    }
                 }
                 else
                     UiMessages.Warning(@"Authentication error; CSRF token was invalid.");
             }
             catch (Exception ex)
             {
-                if (!warningMode)
-                    UiMessages.Error($"Login error\n\n{ex}");
-                else
-                    UiMessages.Warning("We couldn't authenticate the application; this will affect your " +
-                                       "ability to connect to the modem's CGI pages. Please verify if the modem is reachable.");
+                if (!silent)
+                    if (!warningMode)
+                        UiMessages.Error($"Login error\n\n{ex}");
+                    else
+                        UiMessages.Warning("We couldn't authenticate the application; this will affect your " +
+                                           "ability to connect to the modem's CGI pages. Please verify if the modem is reachable.");
             }
 
             //default
